@@ -1,6 +1,17 @@
-function DarkModeSwitch(){
-    return(
-        <div>Dark Mode Switch Goes Here</div>
+import { useTheme } from "./ThemeContext";
+
+function DarkModeSwitch() {
+    const { theme, toggleTheme } = useTheme();
+
+    return (
+
+        <label className="DarkModeSwitch">Dark Mode?
+            <input
+                type="checkbox"
+                checked={theme === "light"}
+                onChange={toggleTheme}
+            />
+        </label>
     )
 }
 
