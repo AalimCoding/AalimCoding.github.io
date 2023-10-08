@@ -1,12 +1,13 @@
-import { ThemeProvider, useTheme } from "./ThemeContext";
-import DarkModeSwitch from "./DarkModeSwitch";
+import { useTheme } from "./ThemeContext";
 
 function Body() {
     const { theme } = useTheme();
     return (
-        <div       style={{
-            color: theme === "light" ? "black" : "white",
-          }}>This is the body element</div>
+        <div
+            style={{
+                background: theme === "light" ? "white" : "black",
+                color: theme === "light" ? "black" : "white",
+            }}>This is the body element</div>
     )
 }
 

@@ -8,7 +8,7 @@ function DarkModeSwitch() {
         <label className="DarkModeSwitch">Dark Mode?
             <input
                 type="checkbox"
-                checked={theme === "light"}
+                checked={theme === "dark"}
                 onChange={toggleTheme}
             />
         </label>
