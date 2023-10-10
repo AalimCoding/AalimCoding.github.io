@@ -13,7 +13,7 @@ function DarkModeSwitch() {
         <Box onClick={toggleTheme}  >
             <FontAwesomeIcon icon={faMoon} size="2x"  style={{
                             background: theme === "light" ? "white" : "black",
-                            color: theme === "light" ? "black" : "lime",
+                            color: theme === "light" ? "black" : "green",
                         }} />
                         </Box>
         </label>

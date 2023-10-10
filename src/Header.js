@@ -10,7 +10,7 @@ function Header() {
             background: theme === "light" ? "white" : "black",
             color: theme === "light" ? "black" : "white",
         }}>
-            <Flex spacing={20} alignItems="center">
+            <Flex spacing={20} alignItems="center" padding={10}>
                 <Nav />
                 <Spacer/>
                 <DarkModeSwitch />
