@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/AalimCoding/AalimCoding.github.io/static/css/main.073c9b0a.css",
+    "main.js": "/AalimCoding/AalimCoding.github.io/static/js/main.dab5aa6c.js",
+    "static/js/787.28610aa7.chunk.js": "/AalimCoding/AalimCoding.github.io/static/js/787.28610aa7.chunk.js",
+    "index.html": "/AalimCoding/AalimCoding.github.io/index.html",
+    "main.073c9b0a.css.map": "/AalimCoding/AalimCoding.github.io/static/css/main.073c9b0a.css.map",
+    "main.dab5aa6c.js.map": "/AalimCoding/AalimCoding.github.io/static/js/main.dab5aa6c.js.map",
+    "787.28610aa7.chunk.js.map": "/AalimCoding/AalimCoding.github.io/static/js/787.28610aa7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.dab5aa6c.js"
+  ]
+}
