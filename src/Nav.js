@@ -27,7 +27,7 @@ const socials = [
 function Nav() {
         const { theme } = useTheme();
     return (
-        <div>NavBar Goes Here
+        <div>
 
             <HStack>
                 {socials.map(({ icon, url }) => (
