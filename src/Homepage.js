@@ -10,6 +10,7 @@ function Homepage() {
                 background: theme === "light" ? "white" : "black",
                 color: theme === "light" ? "black" : "white",
                 display: grid,
+                paddingBottom: 20
 
             }}>Welcome To My Project Page! Click Below To See My Portfolio!
 
