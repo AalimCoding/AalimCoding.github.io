@@ -1,5 +1,4 @@
 import { useTheme } from "./ThemeContext"
-import { Box, grid } from "@chakra-ui/react";
 
 function WordleStyleGame(){
     const { theme } = useTheme();

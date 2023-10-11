@@ -1,7 +1,6 @@
 import { useTheme } from "./ThemeContext";
-import { Box, Center, HStack, Flex, Spacer } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faHome} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 function Footer() {
