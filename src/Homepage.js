@@ -21,7 +21,7 @@ function Homepage() {
                     borderRadius: 20,
                     padding: 40,
                     margin: 20
-                }}>Wordle Style Game</Box>
+                }}>New Song Everyday - hows much of the lyrics can you fill in ?</Box>
             </Link>
 
             <Link to="/Battleships">
