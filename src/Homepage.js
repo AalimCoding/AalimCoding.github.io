@@ -51,7 +51,7 @@ function Homepage() {
                     borderRadius: 20,
                     padding: 40,
                     margin: 20
-                }}>Project 4</Box>
+                }}>Economics Related Project</Box>
             </Link>
 
         </div>

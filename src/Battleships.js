@@ -11,6 +11,7 @@ function Battleships() {
     var [message, setMessage] = useState('Display info here');
     var boatsToPlace = 7;
     var areShipsLeft = 1;
+    var [turnCount, setTurnCount] = useState(0);
 
     // Set up an array to check if each co-ordinate has been hit. Initally fill the array with eroes.
 
@@ -53,10 +54,12 @@ function Battleships() {
 
 
     // Define a handleClick function
+
     function handleClick(i, j) {
         const updatedHit = hit.map(row => [...row]);
         // We set both results to 1 so that they cannot go from hit to unhit.Changing the second 1 to a 0 allows toggling moves.
         updatedHit[i][j] = updatedHit[i][j] === 0 ? 1 : 1;
+        setTurnCount(turnCount + 1);
         setHit(updatedHit);
 
         // check if there are any ships left
@@ -70,13 +73,13 @@ function Battleships() {
             }
         }
         // Check if any battleships are left, and otherwise display victory message.
-        if (areShipsLeft === 0) 
         setMessage(areShipsLeft > 0 ? 'Keep going, there are still ships left!' : 'Well done, all battleships destroyed!')
     }
 
 
 
     // Create a grid of items to populate the grid.
+
     for (let i = 0; i < numColumns; i++) {
         for (let j = 0; j < numRows; j++) {
             gridItems.push(
@@ -96,6 +99,7 @@ function Battleships() {
 
 
     // Return the elements
+
     return (
         <div style={{
             color: theme === "light" ? "black" : "white",
@@ -112,7 +116,7 @@ function Battleships() {
                     padding={5}>
                     {gridItems}
                 </Grid>
-                <Box width={20}>{message}</Box>
+                <Box width={200}>{message + '\n Turns Taken: ' + turnCount}</Box>
             </HStack>
 
         </div>
