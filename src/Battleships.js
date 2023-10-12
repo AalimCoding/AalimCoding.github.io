@@ -1,6 +1,6 @@
 import { useTheme } from "./ThemeContext"
 import { useState } from "react";
-import { Box, Grid, GridItem, HStack } from "@chakra-ui/react";
+import { Box, Grid, GridItem, HStack, Radio, RadioGroup } from "@chakra-ui/react";
 
 function Battleships() {
     const { theme } = useTheme();
@@ -12,6 +12,7 @@ function Battleships() {
     var boatsToPlace = 7;
     var areShipsLeft = 1;
     var [turnCount, setTurnCount] = useState(0);
+    var [weaponType, setWeaponType] = useState(1)
 
     // Set up an array to check if each co-ordinate has been hit. Initally fill the array with eroes.
 
@@ -57,10 +58,13 @@ function Battleships() {
 
     function handleClick(i, j) {
         const updatedHit = hit.map(row => [...row]);
-        // We set both results to 1 so that they cannot go from hit to unhit.Changing the second 1 to a 0 allows toggling moves.
-        updatedHit[i][j] = updatedHit[i][j] === 0 ? 1 : 1;
-        setTurnCount(turnCount + 1);
-        setHit(updatedHit);
+
+        // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
+        if (updatedHit[i][j] === 0) {
+            updatedHit[i][j] = 1
+            setTurnCount(turnCount + 1);
+            setHit(updatedHit);
+        }
 
         // check if there are any ships left
         if (areShipsLeft === 1) {
@@ -116,7 +120,18 @@ function Battleships() {
                     padding={5}>
                     {gridItems}
                 </Grid>
-                <Box width={200}>{message + '\n Turns Taken: ' + turnCount}</Box>
+
+
+                <Box>
+                    <RadioGroup onChange={setWeaponType} value={weaponType}>
+                        <Radio value='1'>Normal Shot</Radio>
+                        <Radio value='2'>Big Shot</Radio>
+                        <Radio value='3'>Scatter Shot</Radio>
+                    </RadioGroup>
+                </Box>
+
+
+                <Box width={200}>{message + '\n Turns Taken: ' + turnCount + '\n Weapon Type is currently: ' + weaponType}</Box>
             </HStack>
 
         </div>
