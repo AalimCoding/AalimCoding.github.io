@@ -12,7 +12,11 @@ function Battleships() {
     var boatsToPlace = 7;
     var areShipsLeft = 1;
     var [turnCount, setTurnCount] = useState(0);
-    var [weaponType, setWeaponType] = useState(1)
+    var [weaponType, setWeaponType] = useState('1')
+
+
+
+
 
     // Set up an array to check if each co-ordinate has been hit. Initally fill the array with eroes.
 
@@ -24,6 +28,10 @@ function Battleships() {
         return initialHitState;
     });
 
+
+
+
+
     // Set up useState for the ships locations to be stored in an arry
 
     const [ship, setShip] = useState(() => {
@@ -31,6 +39,20 @@ function Battleships() {
         for (let i = 0; i < numColumns; i++) {
             initialShipState.push(Array(numRows).fill(0));
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         // Create random boat placement.
@@ -54,6 +76,23 @@ function Battleships() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Define a handleClick function
 
     function handleClick(i, j) {
@@ -61,23 +100,53 @@ function Battleships() {
 
         // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
         if (updatedHit[i][j] === 0) {
-            updatedHit[i][j] = 1
-            setTurnCount(turnCount + 1);
-            setHit(updatedHit);
-        }
 
-        // check if there are any ships left
-        if (areShipsLeft === 1) {
-            // set areShipsLeft to 0 and then check if there are any ships.
-            areShipsLeft = 0
-            for (let q = 0; q < numColumns; q++) {
-                for (let r = 0; r < numRows; r++) {
-                    if (ship[q][r] === 1 && hit[q][r] === 0) { areShipsLeft = 1 }
+            if (weaponType === '1') { updatedHit[i][j] = 1 }
+
+            if (weaponType === '2') {//Hit everything within a one tile radius.
+                for (var l = -1; l <= 1; l++) {
+                    for (var m = -1; m <= 1; m++) {
+                        //Check that the hit tiles can't be outside the grid.
+                        if (i + l >= 0 && i + l < numRows) {
+                            if (j + m >= 0 && j + m < numColumns) {
+                                (updatedHit[i + l][j + m] = 1)
+                            }
+                        }
+                    }
                 }
             }
+
+            if (weaponType === '3') {  //Hit the original target and another numRows/2 - 1 targets.              
+                updatedHit[i][j] = 1
+                for (var targetsToHit = 0; targetsToHit < numRows / 2 - 1; targetsToHit++) {
+                    var randomTargetX = Math.floor(Math.random() * numColumns)
+                    var randomTargetY = Math.floor(Math.random() * numRows)
+                    updatedHit[randomTargetX][randomTargetY] = 1
+                }
+            }
+
+
+
+
+
+            setTurnCount(turnCount + 1);
+            setHit(updatedHit);
+
+
+
+            // check if there are any ships left
+            if (areShipsLeft === 1) {
+                // set areShipsLeft to 0 and then check if there are any ships.
+                areShipsLeft = 0
+                for (let q = 0; q < numColumns; q++) {
+                    for (let r = 0; r < numRows; r++) {
+                        if (ship[q][r] === 1 && hit[q][r] === 0) { areShipsLeft = 1 }
+                    }
+                }
+            }
+            // Check if any battleships are left, and otherwise display victory message.
+            setMessage(areShipsLeft > 0 ? 'Keep going, there are still ships left!' : 'Well done, all battleships destroyed!')
         }
-        // Check if any battleships are left, and otherwise display victory message.
-        setMessage(areShipsLeft > 0 ? 'Keep going, there are still ships left!' : 'Well done, all battleships destroyed!')
     }
 
 
@@ -90,13 +159,30 @@ function Battleships() {
                 <GridItem key={`${i}-${j}`}
                     w='100%'
                     aspectRatio='1/1'
-                    // Set the background to green if it is hit and theres a boat, set it to red if its ben hit but no boat is present, or otherwise set it to grey.
-                    bg={ship[i][j] && hit[i][j] ? 'green' : (hit[i][j] ? 'red' : 'grey')}
+                    // Set the background to orange if it is hit and theres a boat, set it to blue if its ben hit but no boat is present, or otherwise set it to grey.
+                    bg={ship[i][j] && hit[i][j] ? 'orange' : (hit[i][j] ? 'blue' : 'grey')}
                     borderRadius={3}
                     onClick={() => handleClick(i, j)} />
             );
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -109,13 +195,13 @@ function Battleships() {
             color: theme === "light" ? "black" : "white",
             background: theme === "light" ? "white" : "black"
         }}>
-            This is the Battleships
+            This is the Battleships Practice Project In React
             <HStack height={300}>
                 <Grid width={300}
                     height={300}
                     templateColumns='repeat(10, 1fr)'
                     templateRows='repeat(10, 1fr)'
-                    gap={3}
+                    gap={2}
                     background={"blue"}
                     padding={5}>
                     {gridItems}
@@ -123,7 +209,7 @@ function Battleships() {
 
 
                 <Box>
-                    <RadioGroup onChange={setWeaponType} value={weaponType}>
+                    <RadioGroup display onChange={setWeaponType} value={weaponType}>
                         <Radio value='1'>Normal Shot</Radio>
                         <Radio value='2'>Big Shot</Radio>
                         <Radio value='3'>Scatter Shot</Radio>
