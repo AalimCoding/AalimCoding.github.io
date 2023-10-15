@@ -13,10 +13,15 @@ function Battleships() {
     var areShipsLeft = 1;
     var [turnCount, setTurnCount] = useState(0);
     var [weaponType, setWeaponType] = useState('1')
+    var [Gamemode, setGamemode] = useState('1')
     var [w2Ammo, setW2Ammo] = useState(99)
     var [w3Ammo, setW3Ammo] = useState(99)
+    var [whoseTurnIsIt, setWhoseTurnIsIt] = useState(0)
 
-
+    function updateWhoseTurn(callback) {
+        whoseTurnIsIt = whoseTurnIsIt === 0 ? 1 : 0;
+        callback(whoseTurnIsIt);
+    }
 
     // Set up an array to check if each co-ordinate has been hit. Initially fill the array with zeroes.
 
@@ -69,60 +74,124 @@ function Battleships() {
     // Define a handleClick function
 
     function handleClick(noOfGrid, i, j) {
-        const updatedHit = hit.map(row => [...row]);
 
-        // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
-        if (updatedHit[noOfGrid][i][j] === 0) {
+        if (whoseTurnIsIt === noOfGrid) {
 
-            if (weaponType === '1') { updatedHit[noOfGrid][i][j] = 1 }
+            //FIX THIS LINE
+            if (Gamemode === 2 || whoseTurnIsIt === 0) {
 
-            if (weaponType === '2' && w2Ammo > 0) {//Hit everything within a one tile radius.
-                for (var l = -1; l <= 1; l++) {
-                    for (var m = -1; m <= 1; m++) {
-                        //Check that the hit tiles can't be outside the grid.
-                        if (i + l >= 0 && i + l < numRows) {
-                            if (j + m >= 0 && j + m < numColumns) {
-                                (updatedHit[noOfGrid][i + l][j + m] = 1)
+                const updatedHit = hit.map(row => [...row]);
+
+                // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
+                if (updatedHit[noOfGrid][i][j] === 0) {
+
+                    if (weaponType === '1') { updatedHit[noOfGrid][i][j] = 1 }
+
+                    if (weaponType === '2' && w2Ammo > 0) {//Hit everything within a one tile radius.
+                        for (var l = -1; l <= 1; l++) {
+                            for (var m = -1; m <= 1; m++) {
+                                //Check that the hit tiles can't be outside the grid.
+                                if (i + l >= 0 && i + l < numRows) {
+                                    if (j + m >= 0 && j + m < numColumns) {
+                                        (updatedHit[noOfGrid][i + l][j + m] = 1)
+                                    }
+                                }
+                            }
+                        }
+                        setW2Ammo(w2Ammo - 1)
+                    }
+
+                    if (weaponType === '3' && w3Ammo > 0) {  //Hit the original target and another numRows/2 - 1 targets.              
+                        updatedHit[noOfGrid][i][j] = 1
+                        for (var targetsToHit = 0; targetsToHit < numRows / 2 - 1; targetsToHit++) {
+                            var randomTargetX = Math.floor(Math.random() * numColumns)
+                            var randomTargetY = Math.floor(Math.random() * numRows)
+                            updatedHit[noOfGrid][randomTargetX][randomTargetY] = 1
+                        }
+                        setW3Ammo(w3Ammo - 1)
+                    }
+
+                    // If there is no ammo for the selected weapon, we only hit the one slected tile.
+                    else {
+                        updatedHit[noOfGrid][i][j] = 1
+                    }
+
+                    setTurnCount(turnCount + 1);
+                    setHit(updatedHit);
+
+                    // check if there are any ships left
+                    if (areShipsLeft === 1) {
+                        // set areShipsLeft to 0 and then check if there are any ships.
+                        areShipsLeft = 0
+                        for (let q = 0; q < numColumns; q++) {
+                            for (let r = 0; r < numRows; r++) {
+                                if (ship[noOfGrid][q][r] === 1 && hit[noOfGrid][q][r] === 0) { areShipsLeft = 1 }
                             }
                         }
                     }
+                    // Check if any battleships are left, and otherwise display victory message.
+                    setMessage(areShipsLeft > 0 ? message : 'Well done, all battleships destroyed!')
+
+
+
+
+                    //This segement of code makes sure that whoseTurnIsIt updates before we check its value below.
+                    //It uses the function decalred at the top of the code.
+                    updateWhoseTurn(function (updatedValue) {
+                        setWhoseTurnIsIt(updatedValue);
+                    });
                 }
-                setW2Ammo(w2Ammo - 1)
-            }
 
-            if (weaponType === '3' && w3Ammo > 0) {  //Hit the original target and another numRows/2 - 1 targets.              
-                updatedHit[noOfGrid][i][j] = 1
-                for (var targetsToHit = 0; targetsToHit < numRows / 2 - 1; targetsToHit++) {
-                    var randomTargetX = Math.floor(Math.random() * numColumns)
-                    var randomTargetY = Math.floor(Math.random() * numRows)
-                    updatedHit[noOfGrid][randomTargetX][randomTargetY] = 1
-                }
-                setW3Ammo(w3Ammo - 1)
-            }
 
-            // If there is no ammo for the selected weapon, we only hit the one slected tile.
-            else {
-                updatedHit[noOfGrid][i][j] = 1
-            }
 
-            setTurnCount(turnCount + 1);
-            setHit(updatedHit);
 
-            // check if there are any ships left
-            if (areShipsLeft === 1) {
-                // set areShipsLeft to 0 and then check if there are any ships.
-                areShipsLeft = 0
-                for (let q = 0; q < numColumns; q++) {
-                    for (let r = 0; r < numRows; r++) {
-                        if (ship[noOfGrid][q][r] === 1 && hit[noOfGrid][q][r] === 0) { areShipsLeft = 1 }
+
+
+
+
+
+
+
+                // If this makes it the CPU's turn, this code should run  to take the CPU's shot.
+
+
+                console.log('Its turn:', whoseTurnIsIt)
+                console.log('Gamemode:', Gamemode)
+                if (Gamemode == 1 && whoseTurnIsIt == 1) {
+                    console.log('b')
+
+                    let shotFired = false;
+
+
+                    while (!shotFired) {
+                        const updatedHit = hit.map(row => [...row]);
+
+                        let xTarget = Math.floor(Math.random() * numColumns)
+                        let yTarget = Math.floor(Math.random() * numRows)
+                        if (updatedHit[1][xTarget][yTarget] === 0) {
+                            updatedHit[1][xTarget][yTarget] = 1
+                            setHit(updatedHit)
+
+                            shotFired = true
+                        }
                     }
+
+
+                    // Use our earlier code to make sure the update happens.
+                    updateWhoseTurn(function (updatedValue) {
+                        setWhoseTurnIsIt(updatedValue);
+                    });
                 }
             }
-            // Check if any battleships are left, and otherwise display victory message.
-            setMessage(areShipsLeft > 0 ? message : 'Well done, all battleships destroyed!')
+
+
+
+
+            else {
+                setMessage('Not Your Turn!')
+            }
         }
     }
-
 
     // Create a grid of items to populate the grid.
     for (let noOfGrid = 0; noOfGrid < 2; noOfGrid++) {
@@ -145,7 +214,7 @@ function Battleships() {
 
 
     // Return the elements
-
+    // IF ON MOBILE RENDER EVERYTHING IN A VERTICAL STACK NOT HORIZONTAL STACK
     return (
         <div style={{
             color: theme === "light" ? "black" : "white",
@@ -153,35 +222,51 @@ function Battleships() {
         }}>
             This is the Battleships Practice Project In React
             <HStack height={300}>
-                <Grid width={300}
-                    height={300}
-                    templateColumns='repeat(10, 1fr)'
-                    templateRows='repeat(10, 1fr)'
-                    gap={2}
-                    background={"blue"}
-                    padding={5}>
-                    {gridItems[0]}
-                </Grid>
+                <Box style={{
+                    background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
+                    color: theme === "light" ? "white" : "black"
+                }}>Your Targets
+                    <Grid width={300}
+                        height={300}
+                        templateColumns='repeat(10, 1fr)'
+                        templateRows='repeat(10, 1fr)'
+                        gap={2}
+                        background={"blue"}
+                        padding={5}>
+                        {gridItems[0]}
+                    </Grid>
+                </Box>
+                <Box >Opponent:
+                    <RadioGroup display onChange={setGamemode} value={Gamemode}>
+                        <Radio value='1'>CPU</Radio>
+                        <Radio value='2'>Player</Radio>
 
-
-                <Box>
+                    </RadioGroup>
+                </Box>
+                <Box>Weapons:
                     <RadioGroup display onChange={setWeaponType} value={weaponType}>
                         <Radio value='1'>Normal Shot</Radio>
                         <Radio value='2'>Big Shot: Ammo = {w2Ammo}</Radio>
                         <Radio value='3'>Scatter Shot: Ammo = {w3Ammo}</Radio>
                     </RadioGroup>
-                    <Box width={200}>{message + '\n Turns Taken: ' + turnCount + '\n Weapon Type is currently: ' + weaponType}</Box>
+                    <Box width={200}>{message}</Box>
+                    <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
                 </Box>
 
-                <Grid width={300}
-                    height={300}
-                    templateColumns='repeat(10, 1fr)'
-                    templateRows='repeat(10, 1fr)'
-                    gap={2}
-                    background={"blue"}
-                    padding={5}>
-                    {gridItems[1]}
-                </Grid>
+                <Box style={{
+                    background: whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"),
+                    color: theme === "light" ? "white" : "black"
+                }}>Your Opponent's Targets
+                    <Grid width={300}
+                        height={300}
+                        templateColumns='repeat(10, 1fr)'
+                        templateRows='repeat(10, 1fr)'
+                        gap={2}
+                        background={"blue"}
+                        padding={5}>
+                        {gridItems[1]}
+                    </Grid>
+                </Box>
             </HStack>
 
         </div>
