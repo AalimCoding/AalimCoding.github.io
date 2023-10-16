@@ -1,6 +1,8 @@
 import { useTheme } from "./ThemeContext"
 import { useState } from "react";
-import { Box, Grid, GridItem, HStack, Radio, RadioGroup } from "@chakra-ui/react";
+import { useRadioGroup } from "@chakra-ui/react";
+import RadioCardWeapons from "./RadioCardWeapons";
+import { Box, Grid, GridItem, HStack, Radio, RadioGroup, Stack } from "@chakra-ui/react";
 
 function Battleships() {
     const { theme } = useTheme();
@@ -14,8 +16,7 @@ function Battleships() {
     var [turnCount, setTurnCount] = useState(0);
     var [weaponType, setWeaponType] = useState('1')
     var [Gamemode, setGamemode] = useState('1')
-    var [w2Ammo, setW2Ammo] = useState(99)
-    var [w3Ammo, setW3Ammo] = useState(99)
+    var [Ammo, setAmmo] = useState([[50, 90], [50, 90]])
     var [whoseTurnIsIt, setWhoseTurnIsIt] = useState(0)
 
     function updateWhoseTurn(callback) {
@@ -75,19 +76,19 @@ function Battleships() {
 
     function handleClick(noOfGrid, i, j) {
 
-        if (whoseTurnIsIt === noOfGrid) {
+        if (whoseTurnIsIt == noOfGrid) {
 
             //FIX THIS LINE
-            if (Gamemode === 2 || whoseTurnIsIt === 0) {
+            if (Gamemode == 2 || whoseTurnIsIt == 0) {
 
                 const updatedHit = hit.map(row => [...row]);
 
                 // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
                 if (updatedHit[noOfGrid][i][j] === 0) {
 
-                    if (weaponType === '1') { updatedHit[noOfGrid][i][j] = 1 }
+                    if (weaponType == '1') { updatedHit[noOfGrid][i][j] = 1 }
 
-                    if (weaponType === '2' && w2Ammo > 0) {//Hit everything within a one tile radius.
+                    if (weaponType == '2' && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
                         for (var l = -1; l <= 1; l++) {
                             for (var m = -1; m <= 1; m++) {
                                 //Check that the hit tiles can't be outside the grid.
@@ -98,17 +99,25 @@ function Battleships() {
                                 }
                             }
                         }
-                        setW2Ammo(w2Ammo - 1)
+                        setAmmo(prevAmmo => {
+                            const updatedAmmo = [...prevAmmo];
+                            updatedAmmo[noOfGrid][0] -= 1;
+                            return updatedAmmo;
+                        });
                     }
 
-                    if (weaponType === '3' && w3Ammo > 0) {  //Hit the original target and another numRows/2 - 1 targets.              
+                    if (weaponType === '3' && Ammo[noOfGrid][1] > 0) {  //Hit the original target and another numRows/2 - 1 targets.              
                         updatedHit[noOfGrid][i][j] = 1
                         for (var targetsToHit = 0; targetsToHit < numRows / 2 - 1; targetsToHit++) {
                             var randomTargetX = Math.floor(Math.random() * numColumns)
                             var randomTargetY = Math.floor(Math.random() * numRows)
                             updatedHit[noOfGrid][randomTargetX][randomTargetY] = 1
                         }
-                        setW3Ammo(w3Ammo - 1)
+                        setAmmo(prevAmmo => {
+                            const updatedAmmo = [...prevAmmo];
+                            updatedAmmo[noOfGrid][1] -= 1;
+                            return updatedAmmo;
+                        });
                     }
 
                     // If there is no ammo for the selected weapon, we only hit the one slected tile.
@@ -155,27 +164,18 @@ function Battleships() {
                 // If this makes it the CPU's turn, this code should run  to take the CPU's shot.
 
 
-                console.log('Its turn:', whoseTurnIsIt)
-                console.log('Gamemode:', Gamemode)
                 if (Gamemode == 1 && whoseTurnIsIt == 1) {
-                    console.log('b')
-
                     let shotFired = false;
-
-
                     while (!shotFired) {
                         const updatedHit = hit.map(row => [...row]);
-
                         let xTarget = Math.floor(Math.random() * numColumns)
                         let yTarget = Math.floor(Math.random() * numRows)
                         if (updatedHit[1][xTarget][yTarget] === 0) {
                             updatedHit[1][xTarget][yTarget] = 1
                             setHit(updatedHit)
-
                             shotFired = true
                         }
                     }
-
 
                     // Use our earlier code to make sure the update happens.
                     updateWhoseTurn(function (updatedValue) {
@@ -183,9 +183,6 @@ function Battleships() {
                     });
                 }
             }
-
-
-
 
             else {
                 setMessage('Not Your Turn!')
@@ -213,6 +210,37 @@ function Battleships() {
     }
 
 
+    function ControlRadioButtons() {
+
+        // See https://chakra-ui.com/docs/components/radio for implementation details.
+        const options = [`Normal`, `Large ${Ammo[0][0]}`, `Scatter ${Ammo[0][1]}`]
+
+        const { getRootProps, getRadioProps } = useRadioGroup({
+            name: 'framework',
+            defaultValue: 'react',
+            onChange: console.log,
+        })
+
+        const group = getRootProps()
+
+        return (
+            <HStack {...group}>
+                {options.map((value) => {
+                    const radio = getRadioProps({ value })
+                    return (
+                        <RadioCardWeapons key={value} {...radio}>
+                            {value}
+                        </RadioCardWeapons>
+                    )
+                })}
+            </HStack>
+        )
+    }
+
+
+
+
+
     // Return the elements
     // IF ON MOBILE RENDER EVERYTHING IN A VERTICAL STACK NOT HORIZONTAL STACK
     return (
@@ -221,6 +249,7 @@ function Battleships() {
             background: theme === "light" ? "white" : "black"
         }}>
             This is the Battleships Practice Project In React
+            Add an info button that displays a pop up
             <HStack height={300}>
                 <Box style={{
                     background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
@@ -235,7 +264,18 @@ function Battleships() {
                         padding={5}>
                         {gridItems[0]}
                     </Grid>
+                    <Box>Add A Grid of 3 Icons For The Weapon Select. Have 3 numbers unerneath with the ammo.
+                        <RadioGroup display onChange={setWeaponType} value={weaponType}>
+                            <Stack spacing={4} direction='row'>
+                                <Radio value='1'>🎯</Radio>
+                                <Radio value='2'>💥{Ammo[0][0]}</Radio>
+                                <Radio value='3'>✨{Ammo[0][1]}</Radio>
+                            </Stack>
+                        </RadioGroup>
+                    </Box>
                 </Box>
+
+
                 <Box >Opponent:
                     <RadioGroup display onChange={setGamemode} value={Gamemode}>
                         <Radio value='1'>CPU</Radio>
@@ -244,11 +284,7 @@ function Battleships() {
                     </RadioGroup>
                 </Box>
                 <Box>Weapons:
-                    <RadioGroup display onChange={setWeaponType} value={weaponType}>
-                        <Radio value='1'>Normal Shot</Radio>
-                        <Radio value='2'>Big Shot: Ammo = {w2Ammo}</Radio>
-                        <Radio value='3'>Scatter Shot: Ammo = {w3Ammo}</Radio>
-                    </RadioGroup>
+
                     <Box width={200}>{message}</Box>
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
                 </Box>
@@ -266,6 +302,15 @@ function Battleships() {
                         padding={5}>
                         {gridItems[1]}
                     </Grid>
+                    <Box>Add A Grid of 3 Icons For The Weapon Select. Have 3 numbers unerneath with the ammo.
+                        <ControlRadioButtons /><RadioGroup display onChange={setWeaponType} value={weaponType}>
+                            <Stack spacing={4} direction='row'>
+                                <Radio value='1'>🎯</Radio>
+                                <Radio value='2'>💥{Ammo[0][0]}</Radio>
+                                <Radio value='3'>✨{Ammo[0][1]}</Radio>
+                            </Stack>
+                        </RadioGroup>
+                    </Box>
                 </Box>
             </HStack>
 
