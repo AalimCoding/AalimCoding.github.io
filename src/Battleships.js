@@ -210,15 +210,17 @@ function Battleships() {
     }
 
 
+
+
     function ControlRadioButtons() {
 
         // See https://chakra-ui.com/docs/components/radio for implementation details.
-        const options = [`Normal`, `Large ${Ammo[0][0]}`, `Scatter ${Ammo[0][1]}`]
+        const options = [`Normal ∞`, `Large ${Ammo[0][0]}`, `Scatter ${Ammo[0][1]}`]
 
         const { getRootProps, getRadioProps } = useRadioGroup({
-            name: 'framework',
-            defaultValue: 'react',
-            onChange: console.log,
+            defaultValue: `Normal ∞`,
+            onChange: setWeaponType(),
+            value: weaponType
         })
 
         const group = getRootProps()
@@ -236,6 +238,8 @@ function Battleships() {
             </HStack>
         )
     }
+
+
 
 
 
@@ -264,7 +268,8 @@ function Battleships() {
                         padding={5}>
                         {gridItems[0]}
                     </Grid>
-                    <Box>Add A Grid of 3 Icons For The Weapon Select. Have 3 numbers unerneath with the ammo.
+                    <Box>
+                        <ControlRadioButtons />
                         <RadioGroup display onChange={setWeaponType} value={weaponType}>
                             <Stack spacing={4} direction='row'>
                                 <Radio value='1'>🎯</Radio>
@@ -302,8 +307,9 @@ function Battleships() {
                         padding={5}>
                         {gridItems[1]}
                     </Grid>
-                    <Box>Add A Grid of 3 Icons For The Weapon Select. Have 3 numbers unerneath with the ammo.
-                        <ControlRadioButtons /><RadioGroup display onChange={setWeaponType} value={weaponType}>
+                    <Box>
+                        <ControlRadioButtons />
+                        <RadioGroup display onChange={setWeaponType} value={weaponType}>
                             <Stack spacing={4} direction='row'>
                                 <Radio value='1'>🎯</Radio>
                                 <Radio value='2'>💥{Ammo[0][0]}</Radio>
