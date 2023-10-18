@@ -14,7 +14,7 @@ function Battleships() {
 
     var areShipsLeft = 1;
     var [turnCount, setTurnCount] = useState(0);
-    var [weaponType, setWeaponType] = useState('1')
+    var [weaponType, setWeaponType] = useState(`Normal ∞`)
     var [Gamemode, setGamemode] = useState('1')
     var [Ammo, setAmmo] = useState([[50, 90], [50, 90]])
     var [whoseTurnIsIt, setWhoseTurnIsIt] = useState(0)
@@ -86,9 +86,9 @@ function Battleships() {
                 // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
                 if (updatedHit[noOfGrid][i][j] === 0) {
 
-                    if (weaponType == '1') { updatedHit[noOfGrid][i][j] = 1 }
+                    if (weaponType == `Normal ∞`) { updatedHit[noOfGrid][i][j] = 1 }
 
-                    if (weaponType == '2' && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
+                    if (weaponType == `Large ${Ammo[0][0]}` && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
                         for (var l = -1; l <= 1; l++) {
                             for (var m = -1; m <= 1; m++) {
                                 //Check that the hit tiles can't be outside the grid.
@@ -106,7 +106,7 @@ function Battleships() {
                         });
                     }
 
-                    if (weaponType === '3' && Ammo[noOfGrid][1] > 0) {  //Hit the original target and another numRows/2 - 1 targets.              
+                    if (weaponType === `Scatter ${Ammo[0][1]}` && Ammo[noOfGrid][1] > 0) {  //Hit the original target and another numRows/2 - 1 targets.              
                         updatedHit[noOfGrid][i][j] = 1
                         for (var targetsToHit = 0; targetsToHit < numRows / 2 - 1; targetsToHit++) {
                             var randomTargetX = Math.floor(Math.random() * numColumns)
@@ -219,7 +219,7 @@ function Battleships() {
 
         const { getRootProps, getRadioProps } = useRadioGroup({
             defaultValue: `Normal ∞`,
-            onChange: setWeaponType(),
+            onChange: setWeaponType,
             value: weaponType
         })
 
@@ -270,13 +270,6 @@ function Battleships() {
                     </Grid>
                     <Box>
                         <ControlRadioButtons />
-                        <RadioGroup display onChange={setWeaponType} value={weaponType}>
-                            <Stack spacing={4} direction='row'>
-                                <Radio value='1'>🎯</Radio>
-                                <Radio value='2'>💥{Ammo[0][0]}</Radio>
-                                <Radio value='3'>✨{Ammo[0][1]}</Radio>
-                            </Stack>
-                        </RadioGroup>
                     </Box>
                 </Box>
 
@@ -292,6 +285,7 @@ function Battleships() {
 
                     <Box width={200}>{message}</Box>
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
+                    It's turn of player {whoseTurnIsIt ? "->" : "<-"}
                 </Box>
 
                 <Box style={{
@@ -309,13 +303,6 @@ function Battleships() {
                     </Grid>
                     <Box>
                         <ControlRadioButtons />
-                        <RadioGroup display onChange={setWeaponType} value={weaponType}>
-                            <Stack spacing={4} direction='row'>
-                                <Radio value='1'>🎯</Radio>
-                                <Radio value='2'>💥{Ammo[0][0]}</Radio>
-                                <Radio value='3'>✨{Ammo[0][1]}</Radio>
-                            </Stack>
-                        </RadioGroup>
                     </Box>
                 </Box>
             </HStack>
