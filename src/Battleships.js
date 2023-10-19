@@ -1,8 +1,7 @@
 import { useTheme } from "./ThemeContext"
-import { useState } from "react";
-import { useRadioGroup } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import RadioCardWeapons from "./RadioCardWeapons";
-import { Box, Grid, GridItem, HStack, Radio, RadioGroup, Stack } from "@chakra-ui/react";
+import { Box, Grid, GridItem, HStack, Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
 
 function Battleships() {
     const { theme } = useTheme();
@@ -11,11 +10,10 @@ function Battleships() {
     const numColumns = Math.sqrt(numGridItems);
     const gridItems = [[], []];
     var [message, setMessage] = useState('');
-
     var areShipsLeft = 1;
     var [turnCount, setTurnCount] = useState(0);
     var [weaponType, setWeaponType] = useState(`Normal ∞`)
-    var [Gamemode, setGamemode] = useState('1')
+    var [Gamemode, setGamemode] = useState('CPU')
     var [Ammo, setAmmo] = useState([[50, 90], [50, 90]])
     var [whoseTurnIsIt, setWhoseTurnIsIt] = useState(0)
 
@@ -67,7 +65,52 @@ function Battleships() {
         }
         return initialShipState;
 
+    }
+    );
+
+
+    const [mysteryTile, setMysteryTile] = useState(() => {
+        const initialMysteryTile = [[], []];
+
+        // Initialize mysteryTile with proper dimensions
+        for (let noOfGrid = 0; noOfGrid < 2; noOfGrid++) {
+            initialMysteryTile[noOfGrid] = [];
+            for (let i = 0; i < numRows; i++) {
+                initialMysteryTile[noOfGrid].push(Array(numColumns).fill(0));
+            }
+        }
+
+        return initialMysteryTile;
     });
+
+    useEffect(() => {
+        const placeMysteryTiles = () => {
+            const updatedMysteryTile = [...mysteryTile];
+
+            const mysteryTileToPlace = [1, 1];
+            for (let noOfGrid = 0; noOfGrid < 2; noOfGrid++) {
+                while (mysteryTileToPlace[noOfGrid] > 0) {
+                    let row = Math.floor(Math.random() * numRows);
+                    let column = Math.floor(Math.random() * numColumns);
+
+                    if (hit[noOfGrid][row][column] === 0) {
+                        updatedMysteryTile[noOfGrid][row][column] = 1;
+                    }
+
+                    mysteryTileToPlace[noOfGrid] -= 1;
+                }
+            }
+
+            setMysteryTile(updatedMysteryTile);
+        };
+
+        placeMysteryTiles();
+    }, []); // Empty dependency array ensures this effect runs once after the initial render
+
+    // ... rest of your component code ...
+
+
+
 
 
 
@@ -79,7 +122,7 @@ function Battleships() {
         if (whoseTurnIsIt == noOfGrid) {
 
             //FIX THIS LINE
-            if (Gamemode == 2 || whoseTurnIsIt == 0) {
+            if (Gamemode == 'Player' || whoseTurnIsIt == 0) {
 
                 const updatedHit = hit.map(row => [...row]);
 
@@ -89,12 +132,12 @@ function Battleships() {
                     if (weaponType == `Normal ∞`) { updatedHit[noOfGrid][i][j] = 1 }
 
                     if (weaponType == `Large ${Ammo[0][0]}` && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
-                        for (var l = -1; l <= 1; l++) {
-                            for (var m = -1; m <= 1; m++) {
+                        for (var rowToCheck = -1; rowToCheck <= 1; rowToCheck++) {
+                            for (var columnToCheck = -1; columnToCheck <= 1; columnToCheck++) {
                                 //Check that the hit tiles can't be outside the grid.
-                                if (i + l >= 0 && i + l < numRows) {
-                                    if (j + m >= 0 && j + m < numColumns) {
-                                        (updatedHit[noOfGrid][i + l][j + m] = 1)
+                                if (i + rowToCheck >= 0 && i + rowToCheck < numRows) {
+                                    if (j + columnToCheck >= 0 && j + columnToCheck < numColumns) {
+                                        (updatedHit[noOfGrid][i + rowToCheck][j + columnToCheck] = 1)
                                     }
                                 }
                             }
@@ -128,13 +171,18 @@ function Battleships() {
                     setTurnCount(turnCount + 1);
                     setHit(updatedHit);
 
+                    
+                    const updatedMysteryTile = [...mysteryTile]
+                    updatedMysteryTile[noOfGrid][i][j] = 0
+                    setMysteryTile(updatedMysteryTile);
+
                     // check if there are any ships left
                     if (areShipsLeft === 1) {
                         // set areShipsLeft to 0 and then check if there are any ships.
                         areShipsLeft = 0
-                        for (let q = 0; q < numColumns; q++) {
-                            for (let r = 0; r < numRows; r++) {
-                                if (ship[noOfGrid][q][r] === 1 && hit[noOfGrid][q][r] === 0) { areShipsLeft = 1 }
+                        for (let columnToCheck = 0; columnToCheck < numColumns; columnToCheck++) {
+                            for (let rowToCheck = 0; rowToCheck < numRows; rowToCheck++) {
+                                if (ship[noOfGrid][columnToCheck][rowToCheck] === 1 && hit[noOfGrid][columnToCheck][rowToCheck] === 0) { areShipsLeft = 1 }
                             }
                         }
                     }
@@ -164,7 +212,7 @@ function Battleships() {
                 // If this makes it the CPU's turn, this code should run  to take the CPU's shot.
 
 
-                if (Gamemode == 1 && whoseTurnIsIt == 1) {
+                if (Gamemode == 'CPU' && whoseTurnIsIt == 1) {
                     let shotFired = false;
                     while (!shotFired) {
                         const updatedHit = hit.map(row => [...row]);
@@ -199,7 +247,7 @@ function Battleships() {
                         w='100%'
                         aspectRatio='1/1'
                         // Set the background to orange if it is hit and theres a boat, set it to blue if its ben hit but no boat is present, or otherwise set it to grey.
-                        bg={ship[noOfGrid][i][j] && hit[noOfGrid][i][j] ? 'orange' : (hit[noOfGrid][i][j] ? 'blue' : 'grey')}
+                        bg={mysteryTile[noOfGrid][i][j] ? 'purple' : (ship[noOfGrid][i][j] && hit[noOfGrid][i][j]) ? 'orange' : (hit[noOfGrid][i][j] ? 'blue' : 'grey')}
                         borderRadius={3}
                         onClick={() => handleClick(noOfGrid, i, j)}
                     />
@@ -253,7 +301,7 @@ function Battleships() {
             background: theme === "light" ? "white" : "black"
         }}>
             This is the Battleships Practice Project In React
-            Add an info button that displays a pop up
+
             <HStack height={300}>
                 <Box style={{
                     background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
@@ -276,8 +324,8 @@ function Battleships() {
 
                 <Box >Opponent:
                     <RadioGroup display onChange={setGamemode} value={Gamemode}>
-                        <Radio value='1'>CPU</Radio>
-                        <Radio value='2'>Player</Radio>
+                        <Radio value='CPU'>CPU</Radio>
+                        <Radio value='Player'>Player</Radio>
 
                     </RadioGroup>
                 </Box>
@@ -286,6 +334,17 @@ function Battleships() {
                     <Box width={200}>{message}</Box>
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
                     It's turn of player {whoseTurnIsIt ? "->" : "<-"}
+                    To do:
+                    Chnage names of variables so code is easier to maintain.
+                    Add unit tests
+                    Separate ammo for players in radio buttons.
+                    Stop radio button selection being cleared if choice isn't normal ammo after shot is fired.
+                    Add mystery tiles that give ammo when hit.
+                    render vertically if on phone, horizontally if on laptop.
+                    Add an info button that displays a pop up explaining the game.
+                    Have error messages pop up that say thigs like out of ammo.
+                    Create a separate function for the location to hit code for reusability.
+
                 </Box>
 
                 <Box style={{

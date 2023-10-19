@@ -20,9 +20,9 @@ function RadioCardWeapons(props) {
         boxShadow='md'
 
         _checked={{
-          bg: 'teal.600',
+          bg: 'orange',
           color: 'white',
-          borderColor: 'teal.600',
+          borderColor: 'white',
         }}
 
         _focus={{
