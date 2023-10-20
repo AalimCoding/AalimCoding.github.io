@@ -12,7 +12,8 @@ function Battleships() {
     var [message, setMessage] = useState('');
     var areShipsLeft = 1;
     var [turnCount, setTurnCount] = useState(0);
-    var [weaponType, setWeaponType] = useState(`Normal ∞`)
+    const [weaponType, setWeaponType] = useState({ 0: 'Normal ∞', 1: 'Normal ∞' });
+
     var [Gamemode, setGamemode] = useState('CPU')
     var [Ammo, setAmmo] = useState([[50, 90], [50, 90]])
     var [whoseTurnIsIt, setWhoseTurnIsIt] = useState(0)
@@ -81,6 +82,8 @@ function Battleships() {
         }
 
         return initialMysteryTile;
+
+
     });
 
     useEffect(() => {
@@ -98,16 +101,17 @@ function Battleships() {
                     }
 
                     mysteryTileToPlace[noOfGrid] -= 1;
+                    setMysteryTile(updatedMysteryTile);
+
                 }
             }
 
-            setMysteryTile(updatedMysteryTile);
+
         };
 
         placeMysteryTiles();
     }, []); // Empty dependency array ensures this effect runs once after the initial render
 
-    // ... rest of your component code ...
 
 
 
@@ -129,15 +133,15 @@ function Battleships() {
                 // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
                 if (updatedHit[noOfGrid][i][j] === 0) {
 
-                    if (weaponType == `Normal ∞`) { updatedHit[noOfGrid][i][j] = 1 }
+                    if (weaponType[noOfGrid]== `Normal ∞`) { updatedHit[noOfGrid][i][j] = 1 }
 
-                    if (weaponType == `Large ${Ammo[0][0]}` && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
-                        for (var rowToCheck = -1; rowToCheck <= 1; rowToCheck++) {
-                            for (var columnToCheck = -1; columnToCheck <= 1; columnToCheck++) {
+                    if (weaponType[noOfGrid] == `Large ${Ammo[noOfGrid][0]}` && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
+                        for (var row = -1; row <= 1; row++) {
+                            for (var column = -1; column <= 1; column++) {
                                 //Check that the hit tiles can't be outside the grid.
-                                if (i + rowToCheck >= 0 && i + rowToCheck < numRows) {
-                                    if (j + columnToCheck >= 0 && j + columnToCheck < numColumns) {
-                                        (updatedHit[noOfGrid][i + rowToCheck][j + columnToCheck] = 1)
+                                if (i + row >= 0 && i + row < numRows) {
+                                    if (j + column >= 0 && j + column < numColumns) {
+                                        (updatedHit[noOfGrid][i + row][j + column] = 1)
                                     }
                                 }
                             }
@@ -149,7 +153,7 @@ function Battleships() {
                         });
                     }
 
-                    if (weaponType === `Scatter ${Ammo[0][1]}` && Ammo[noOfGrid][1] > 0) {  //Hit the original target and another numRows/2 - 1 targets.              
+                    if (weaponType[noOfGrid] === `Scatter ${Ammo[noOfGrid][1]}` && Ammo[noOfGrid][1] > 0) {  //Hit the original target and another numRows/2 - 1 targets.              
                         updatedHit[noOfGrid][i][j] = 1
                         for (var targetsToHit = 0; targetsToHit < numRows / 2 - 1; targetsToHit++) {
                             var randomTargetX = Math.floor(Math.random() * numColumns)
@@ -171,18 +175,23 @@ function Battleships() {
                     setTurnCount(turnCount + 1);
                     setHit(updatedHit);
 
-                    
+
                     const updatedMysteryTile = [...mysteryTile]
                     updatedMysteryTile[noOfGrid][i][j] = 0
                     setMysteryTile(updatedMysteryTile);
+
+
+                    // We want to set the value of the other players weapon type to normal
+
+                    setWeaponType((prevTypes) => ({ ...prevTypes, [noOfGrid == 0 ? 1 : 0]: `Normal ∞` }))
 
                     // check if there are any ships left
                     if (areShipsLeft === 1) {
                         // set areShipsLeft to 0 and then check if there are any ships.
                         areShipsLeft = 0
-                        for (let columnToCheck = 0; columnToCheck < numColumns; columnToCheck++) {
-                            for (let rowToCheck = 0; rowToCheck < numRows; rowToCheck++) {
-                                if (ship[noOfGrid][columnToCheck][rowToCheck] === 1 && hit[noOfGrid][columnToCheck][rowToCheck] === 0) { areShipsLeft = 1 }
+                        for (let column = 0; column < numColumns; column++) {
+                            for (let row = 0; row < numRows; row++) {
+                                if (ship[noOfGrid][column][row] === 1 && hit[noOfGrid][column][row] === 0) { areShipsLeft = 1 }
                             }
                         }
                     }
@@ -260,16 +269,17 @@ function Battleships() {
 
 
 
-    function ControlRadioButtons() {
+    function ControlRadioButtons({ noOfGrid }) {
 
         // See https://chakra-ui.com/docs/components/radio for implementation details.
-        const options = [`Normal ∞`, `Large ${Ammo[0][0]}`, `Scatter ${Ammo[0][1]}`]
+        const options = [`Normal ∞`, `Large ${Ammo[noOfGrid][0]}`, `Scatter ${Ammo[noOfGrid][1]}`]
 
         const { getRootProps, getRadioProps } = useRadioGroup({
-            defaultValue: `Normal ∞`,
-            onChange: setWeaponType,
-            value: weaponType
-        })
+            defaultValue: weaponType[noOfGrid],
+            onChange: (value) => setWeaponType((prevTypes) => ({ ...prevTypes, [noOfGrid]: value })),
+            value: weaponType[noOfGrid],
+        });
+
 
         const group = getRootProps()
 
@@ -317,7 +327,7 @@ function Battleships() {
                         {gridItems[0]}
                     </Grid>
                     <Box>
-                        <ControlRadioButtons />
+                        <ControlRadioButtons noOfGrid={0} />
                     </Box>
                 </Box>
 
@@ -338,11 +348,10 @@ function Battleships() {
                     Chnage names of variables so code is easier to maintain.
                     Add unit tests
                     Separate ammo for players in radio buttons.
-                    Stop radio button selection being cleared if choice isn't normal ammo after shot is fired.
                     Add mystery tiles that give ammo when hit.
                     render vertically if on phone, horizontally if on laptop.
                     Add an info button that displays a pop up explaining the game.
-                    Have error messages pop up that say thigs like out of ammo.
+                    Prevent radio buttons being selected if no ammo.
                     Create a separate function for the location to hit code for reusability.
 
                 </Box>
@@ -361,7 +370,7 @@ function Battleships() {
                         {gridItems[1]}
                     </Grid>
                     <Box>
-                        <ControlRadioButtons />
+                        <ControlRadioButtons noOfGrid={1} />
                     </Box>
                 </Box>
             </HStack>
