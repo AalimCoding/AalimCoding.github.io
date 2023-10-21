@@ -345,9 +345,9 @@ function Battleships() {
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
                     It's turn of player {whoseTurnIsIt ? "->" : "<-"}
                     To do:
-                    Chnage names of variables so code is easier to maintain.
+                    
                     Add unit tests
-                    Separate ammo for players in radio buttons.
+                    
                     Add mystery tiles that give ammo when hit.
                     render vertically if on phone, horizontally if on laptop.
                     Add an info button that displays a pop up explaining the game.
