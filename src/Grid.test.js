@@ -8,10 +8,9 @@ jest.mock("./ThemeContext", () => ({
 }));
 
 test("Check grid tiles update when hit", () => {
-  render(
-
+  render(<ThemeProvider>
       <Battleships />
- 
+    </ThemeProvider>
   );
 
   // find a specific grid tile by role

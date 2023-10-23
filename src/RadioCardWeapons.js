@@ -28,7 +28,7 @@ function RadioCardWeapons(props) {
         _focus={{
           boxShadow: 'outline',
         }}
-        
+
         px={5}
         py={3}
       >

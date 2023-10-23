@@ -15,7 +15,7 @@ function Battleships() {
     const [weaponType, setWeaponType] = useState({ 0: 'Normal ∞', 1: 'Normal ∞' });
 
     var [Gamemode, setGamemode] = useState('CPU')
-    var [Ammo, setAmmo] = useState([[50, 90], [50, 90]])
+    var [Ammo, setAmmo] = useState([[1, 1], [1, 1]])
     var [whoseTurnIsIt, setWhoseTurnIsIt] = useState(0)
 
     function updateWhoseTurn(callback) {
@@ -133,7 +133,7 @@ function Battleships() {
                 // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
                 if (updatedHit[noOfGrid][i][j] === 0) {
 
-                    if (weaponType[noOfGrid]== `Normal ∞`) { updatedHit[noOfGrid][i][j] = 1 }
+                    if (weaponType[noOfGrid] == `Normal ∞`) { updatedHit[noOfGrid][i][j] = 1 }
 
                     if (weaponType[noOfGrid] == `Large ${Ammo[noOfGrid][0]}` && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
                         for (var row = -1; row <= 1; row++) {
@@ -269,32 +269,32 @@ function Battleships() {
 
 
 
-    function ControlRadioButtons({ noOfGrid }) {
 
-        // See https://chakra-ui.com/docs/components/radio for implementation details.
-        const options = [`Normal ∞`, `Large ${Ammo[noOfGrid][0]}`, `Scatter ${Ammo[noOfGrid][1]}`]
+
+    // See https://chakra-ui.com/docs/components/radio for implementation details.
+    function ControlRadioButtons({ noOfGrid, Ammo }) {
+        const options = [`Normal ∞`, `Large ${Ammo[noOfGrid][0]}`, `Scatter ${Ammo[noOfGrid][1]}`];
 
         const { getRootProps, getRadioProps } = useRadioGroup({
-            defaultValue: weaponType[noOfGrid],
+            defaultValue: `Normal ∞`,
             onChange: (value) => setWeaponType((prevTypes) => ({ ...prevTypes, [noOfGrid]: value })),
-            value: weaponType[noOfGrid],
+            value: weaponType[noOfGrid]
         });
 
-
-        const group = getRootProps()
+        const group = getRootProps();
 
         return (
             <HStack {...group}>
                 {options.map((value) => {
-                    const radio = getRadioProps({ value })
+                    const radio = getRadioProps({ value });
                     return (
-                        <RadioCardWeapons key={value} {...radio}>
+                        <RadioCardWeapons key={value} {...radio} isDisabled={!Ammo[noOfGrid][0] && value.includes('Large') || !Ammo[noOfGrid][1] && value.includes('Scatter')}>
                             {value}
                         </RadioCardWeapons>
-                    )
+                    );
                 })}
             </HStack>
-        )
+        );
     }
 
 
@@ -327,7 +327,7 @@ function Battleships() {
                         {gridItems[0]}
                     </Grid>
                     <Box>
-                        <ControlRadioButtons noOfGrid={0} />
+                        <ControlRadioButtons noOfGrid={0} Ammo={Ammo}/>
                     </Box>
                 </Box>
 
@@ -345,9 +345,9 @@ function Battleships() {
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
                     It's turn of player {whoseTurnIsIt ? "->" : "<-"}
                     To do:
-                    
+
                     Add unit tests
-                    
+
                     Add mystery tiles that give ammo when hit.
                     render vertically if on phone, horizontally if on laptop.
                     Add an info button that displays a pop up explaining the game.
@@ -370,7 +370,7 @@ function Battleships() {
                         {gridItems[1]}
                     </Grid>
                     <Box>
-                        <ControlRadioButtons noOfGrid={1} />
+                        <ControlRadioButtons noOfGrid={1} Ammo={Ammo}/>
                     </Box>
                 </Box>
             </HStack>
