@@ -10,6 +10,7 @@ import { ThemeProvider } from './ThemeContext';
 import { ChakraProvider } from '@chakra-ui/react'
 import ProjectsPreview from './Homepage';
 
+
 function App() {
   return (
     <div className="App">

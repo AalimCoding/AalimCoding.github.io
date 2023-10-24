@@ -1,6 +1,8 @@
 import { useTheme } from "./ThemeContext"
 import { useState, useEffect } from "react";
 import RadioCardWeapons from "./RadioCardWeapons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { Box, Grid, GridItem, HStack, Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
 
 function Battleships() {
@@ -339,7 +341,11 @@ function Battleships() {
 
                     </RadioGroup>
                 </Box>
-                <Box>Weapons:
+                <Box>
+                    <FontAwesomeIcon icon={faCircleInfo} size="2x" style={{
+                            background: theme === "light" ? "white" : "black",
+                            color: theme === "light" ? "black" : "white",
+                        }} />
 
                     <Box width={200}>{message}</Box>
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
@@ -350,9 +356,7 @@ function Battleships() {
 
                     Add mystery tiles that give ammo when hit.
                     render vertically if on phone, horizontally if on laptop.
-                    Add an info button that displays a pop up explaining the game.
-                    Prevent radio buttons being selected if no ammo.
-                    Create a separate function for the location to hit code for reusability.
+                    Add an info button that displays a pop up explaining the game. Make sure it doesn't close the battleships game.
 
                 </Box>
 
