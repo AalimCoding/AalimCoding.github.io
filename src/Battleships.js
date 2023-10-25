@@ -314,6 +314,30 @@ function Battleships() {
         }}>
             This is the Battleships Practice Project In React
 
+
+            <Box>This box is a placeholder the info box explaining the rules of Battleships
+                Battleships is a 10x10 grid based game in which it is your job to destroy the battleships of your oponent.
+                To do this, you must destroy all the tiles which their battleships occupy by choosing a weapon type and then selecting a tile to target.
+
+
+
+                <HStack >Types of Tile:
+                    <Box>Grey Tiles: These tiles have not yet been hit.</Box>
+                    <Box>Purple Tiles: These tiles have not yet been hit, and reward ammo when hit.</Box>
+                    <Box>Blue Tiles: These tiles represent the empty ocean.</Box>
+                    <Box>Orange Tiles: These tiles represent part of a boat on fire!</Box>
+                </HStack>
+
+                <HStack >Types of Weapon:
+                    <Box>Normal: Hits only the selected tile. Infinite ammo.</Box>
+                    <Box>Large: Hits the selected tile and all adjacent tiles. Finite ammo.</Box>
+                    <Box>Scatter: Hits the selected tile, and some other tiles at random. Finite ammo.</Box>
+
+                </HStack>
+
+            </Box>
+
+
             <HStack height={300}>
                 <Box style={{
                     background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
@@ -329,7 +353,7 @@ function Battleships() {
                         {gridItems[0]}
                     </Grid>
                     <Box>
-                        <ControlRadioButtons noOfGrid={0} Ammo={Ammo}/>
+                        <ControlRadioButtons noOfGrid={0} Ammo={Ammo} />
                     </Box>
                 </Box>
 
@@ -343,9 +367,9 @@ function Battleships() {
                 </Box>
                 <Box>
                     <FontAwesomeIcon icon={faCircleInfo} size="2x" style={{
-                            background: theme === "light" ? "white" : "black",
-                            color: theme === "light" ? "black" : "white",
-                        }} />
+                        background: theme === "light" ? "white" : "black",
+                        color: theme === "light" ? "black" : "white",
+                    }} />
 
                     <Box width={200}>{message}</Box>
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
@@ -374,7 +398,7 @@ function Battleships() {
                         {gridItems[1]}
                     </Grid>
                     <Box>
-                        <ControlRadioButtons noOfGrid={1} Ammo={Ammo}/>
+                        <ControlRadioButtons noOfGrid={1} Ammo={Ammo} />
                     </Box>
                 </Box>
             </HStack>
