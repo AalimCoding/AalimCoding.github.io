@@ -4,9 +4,13 @@ import RadioCardWeapons from "./RadioCardWeapons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { Box, Grid, GridItem, HStack, Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
+import BattleshipsInfo from "./BattleshipsInfo";
 
 function Battleships() {
     const { theme } = useTheme();
+
+    var [showInfo, setShowInfo] = useState(false);
+
     const numGridItems = 100;
     const numRows = Math.sqrt(numGridItems);
     const numColumns = Math.sqrt(numGridItems);
@@ -313,29 +317,7 @@ function Battleships() {
             background: theme === "light" ? "white" : "black"
         }}>
             This is the Battleships Practice Project In React
-
-
-            <Box>This box is a placeholder the info box explaining the rules of Battleships
-                Battleships is a 10x10 grid based game in which it is your job to destroy the battleships of your oponent.
-                To do this, you must destroy all the tiles which their battleships occupy by choosing a weapon type and then selecting a tile to target.
-
-
-
-                <HStack >Types of Tile:
-                    <Box>Grey Tiles: These tiles have not yet been hit.</Box>
-                    <Box>Purple Tiles: These tiles have not yet been hit, and reward ammo when hit.</Box>
-                    <Box>Blue Tiles: These tiles represent the empty ocean.</Box>
-                    <Box>Orange Tiles: These tiles represent part of a boat on fire!</Box>
-                </HStack>
-
-                <HStack >Types of Weapon:
-                    <Box>Normal: Hits only the selected tile. Infinite ammo.</Box>
-                    <Box>Large: Hits the selected tile and all adjacent tiles. Finite ammo.</Box>
-                    <Box>Scatter: Hits the selected tile, and some other tiles at random. Finite ammo.</Box>
-
-                </HStack>
-
-            </Box>
+            <BattleshipsInfo showInfo={showInfo} />
 
 
             <HStack height={300}>
@@ -365,11 +347,16 @@ function Battleships() {
 
                     </RadioGroup>
                 </Box>
-                <Box>
-                    <FontAwesomeIcon icon={faCircleInfo} size="2x" style={{
-                        background: theme === "light" ? "white" : "black",
-                        color: theme === "light" ? "black" : "white",
-                    }} />
+                <Box onClick={() => {
+                    setShowInfo(!showInfo)
+
+                }}>
+                    <FontAwesomeIcon icon={faCircleInfo} size="2x"
+                        style={{
+                            background: theme === "light" ? "white" : "black",
+                            color: theme === "light" ? "black" : "white",
+                        }}
+                    />
 
                     <Box width={200}>{message}</Box>
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
@@ -377,7 +364,7 @@ function Battleships() {
                     To do:
 
                     Add unit tests
-
+                    Display a mini crown next to the winning player.
                     Add mystery tiles that give ammo when hit.
                     render vertically if on phone, horizontally if on laptop.
                     Add an info button that displays a pop up explaining the game. Make sure it doesn't close the battleships game.
