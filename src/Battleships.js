@@ -88,36 +88,37 @@ function Battleships() {
         }
 
         return initialMysteryTile;
-
-
     });
 
-    useEffect(() => {
-        const placeMysteryTiles = () => {
-            const updatedMysteryTile = [...mysteryTile];
 
-            const mysteryTileToPlace = [1, 1];
-            for (let noOfGrid = 0; noOfGrid < 2; noOfGrid++) {
-                while (mysteryTileToPlace[noOfGrid] > 0) {
-                    let row = Math.floor(Math.random() * numRows);
-                    let column = Math.floor(Math.random() * numColumns);
 
-                    if (hit[noOfGrid][row][column] === 0) {
-                        updatedMysteryTile[noOfGrid][row][column] = 1;
-                    }
+    
+    const placeMysteryTiles = () => {
+        // Create a new mystery tile state without modifying the existing state to prevent two re-renders occuring, and thus the erroneous creation of two rather than one, mystery tile.
+        const updatedMysteryTile = mysteryTile.map(grid => grid.map(row => [...row]));
 
-                    mysteryTileToPlace[noOfGrid] -= 1;
-                    setMysteryTile(updatedMysteryTile);
+        const mysteryTilesToPlace = 1; // Number of mystery tiles to be placed on each grid
 
+        for (let noOfGrid = 0; noOfGrid < 2; noOfGrid++) {
+            let tilesPlaced = 0;
+            while (tilesPlaced < mysteryTilesToPlace) {
+                let row = Math.floor(Math.random() * numRows);
+                let column = Math.floor(Math.random() * numColumns);
+
+                if (updatedMysteryTile[noOfGrid][row][column] === 0) {
+                    updatedMysteryTile[noOfGrid][row][column] = 1;
+                    tilesPlaced++;
                 }
             }
+        }
 
+        setMysteryTile(updatedMysteryTile);
+    };
 
-        };
-
+    useEffect(() => {
+        console.log("useEffect runs!");
         placeMysteryTiles();
-    }, []); // Empty dependency array ensures this effect runs once after the initial render
-
+    }, []);
 
 
 
