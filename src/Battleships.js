@@ -92,20 +92,21 @@ function Battleships() {
 
 
 
-    
+
     const placeMysteryTiles = () => {
         // Create a new mystery tile state without modifying the existing state to prevent two re-renders occuring, and thus the erroneous creation of two rather than one, mystery tile.
         const updatedMysteryTile = mysteryTile.map(grid => grid.map(row => [...row]));
 
         const mysteryTilesToPlace = 1; // Number of mystery tiles to be placed on each grid
-
+        const updatedHit = hit.map(row => [...row]);
         for (let noOfGrid = 0; noOfGrid < 2; noOfGrid++) {
             let tilesPlaced = 0;
+
             while (tilesPlaced < mysteryTilesToPlace) {
                 let row = Math.floor(Math.random() * numRows);
                 let column = Math.floor(Math.random() * numColumns);
 
-                if (updatedMysteryTile[noOfGrid][row][column] === 0) {
+                if (updatedMysteryTile[noOfGrid][row][column] === 0 && updatedHit[noOfGrid][row][column] === 0) {
                     updatedMysteryTile[noOfGrid][row][column] = 1;
                     tilesPlaced++;
                 }
@@ -116,7 +117,6 @@ function Battleships() {
     };
 
     useEffect(() => {
-        console.log("useEffect runs!");
         placeMysteryTiles();
     }, []);
 
@@ -184,8 +184,15 @@ function Battleships() {
 
 
                     const updatedMysteryTile = [...mysteryTile]
-                    updatedMysteryTile[noOfGrid][i][j] = 0
-                    setMysteryTile(updatedMysteryTile);
+                    if (updatedMysteryTile[noOfGrid][i][j] == 1) {
+                        updatedMysteryTile[noOfGrid][i][j] = 0
+                        console.log('a')
+
+                        placeMysteryTiles();
+
+
+                    }
+
 
 
                     // We want to set the value of the other players weapon type to normal
