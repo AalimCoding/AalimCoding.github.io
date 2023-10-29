@@ -184,14 +184,27 @@ function Battleships() {
 
 
                     const updatedMysteryTile = [...mysteryTile]
+
+
+                    
                     if (updatedMysteryTile[noOfGrid][i][j] == 1) {
                         updatedMysteryTile[noOfGrid][i][j] = 0
-                        console.log('a')
+
+
+                        setAmmo(prevAmmo => {
+                            const updatedAmmo = [...prevAmmo];
+                            console.log('ammo updates')
+                            updatedAmmo[noOfGrid][Math.floor(Math.random() * 2)] += 1;
+                            return updatedAmmo;
+                        });
 
                         placeMysteryTiles();
 
 
                     }
+                    /*New mystery tiles now created when current tile is
+hit. The other grid also generates an extra mystery tile.
+This should help ensure the game is fair.*/
 
 
 
