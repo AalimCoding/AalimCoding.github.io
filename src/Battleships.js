@@ -2,7 +2,7 @@ import { useTheme } from "./ThemeContext"
 import { useState, useEffect } from "react";
 import RadioCardWeapons from "./RadioCardWeapons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faCrown } from "@fortawesome/free-solid-svg-icons";
 import { Box, Grid, GridItem, HStack, Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
 import BattleshipsInfo from "./BattleshipsInfo";
 
@@ -186,7 +186,7 @@ function Battleships() {
                     const updatedMysteryTile = [...mysteryTile]
 
 
-                    
+
                     if (updatedMysteryTile[noOfGrid][i][j] == 1) {
                         updatedMysteryTile[noOfGrid][i][j] = 0
 
@@ -342,10 +342,16 @@ This should help ensure the game is fair.*/
 
 
             <HStack height={300}>
+
                 <Box style={{
                     background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
                     color: theme === "light" ? "white" : "black"
                 }}>Your Targets
+                    <FontAwesomeIcon icon={faCrown} size="2x"
+                        style={{
+                            background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
+                            color: theme === "light" ? "white" : "black"
+                        }} />
                     <Grid width={300}
                         height={300}
                         templateColumns='repeat(10, 1fr)'
@@ -362,6 +368,7 @@ This should help ensure the game is fair.*/
 
 
                 <Box >Opponent:
+
                     <RadioGroup display onChange={setGamemode} value={Gamemode}>
                         <Radio value='CPU'>CPU</Radio>
                         <Radio value='Player'>Player</Radio>
@@ -396,6 +403,11 @@ This should help ensure the game is fair.*/
                     background: whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"),
                     color: theme === "light" ? "white" : "black"
                 }}>Your Opponent's Targets
+                    <FontAwesomeIcon icon={faCrown} size="2x"
+                        style={{
+                            background: whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"),
+                            color: theme === "light" ? "white" : "black"
+                        }} />
                     <Grid width={300}
                         height={300}
                         templateColumns='repeat(10, 1fr)'
