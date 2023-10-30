@@ -2,7 +2,7 @@ import { useTheme } from "./ThemeContext"
 import { useState, useEffect } from "react";
 import RadioCardWeapons from "./RadioCardWeapons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faCrown } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faCrown, faGear } from "@fortawesome/free-solid-svg-icons";
 import { Box, Grid, GridItem, HStack, Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
 import BattleshipsInfo from "./BattleshipsInfo";
 
@@ -22,12 +22,24 @@ function Battleships() {
 
     var [Gamemode, setGamemode] = useState('CPU')
     var [Ammo, setAmmo] = useState([[1, 1], [1, 1]])
+    var [winner, setWinner] = useState([0, 0])
     var [whoseTurnIsIt, setWhoseTurnIsIt] = useState(0)
 
     function updateWhoseTurn(callback) {
         whoseTurnIsIt = whoseTurnIsIt === 0 ? 1 : 0;
         callback(whoseTurnIsIt);
     }
+
+
+    // Function to update the winner state
+    const updateWinner = (noOfGrid) => {
+        // Create a copy of the original array
+        const updatedWinner = [...winner];
+        // Update the specific index with 1
+        updatedWinner[noOfGrid] = 1;
+        // Update the state with the new array
+        setWinner(updatedWinner);
+    };
 
     // Set up an array to check if each co-ordinate has been hit. Initially fill the array with zeroes.
 
@@ -129,7 +141,7 @@ function Battleships() {
     // Define a handleClick function
 
     function handleClick(noOfGrid, i, j) {
-
+        console.log(winner)
         if (whoseTurnIsIt == noOfGrid) {
 
             //FIX THIS LINE
@@ -223,9 +235,15 @@ This should help ensure the game is fair.*/
                         }
                     }
                     // Check if any battleships are left, and otherwise display victory message.
-                    setMessage(areShipsLeft > 0 ? message : 'Well done, all battleships destroyed!')
+
+                    if (areShipsLeft == 0) {
+                        setMessage(areShipsLeft > 0 ? message : 'Well done, all battleships destroyed!')
 
 
+
+
+                        updateWinner(noOfGrid)
+                    }
 
 
                     //This segement of code makes sure that whoseTurnIsIt updates before we check its value below.
@@ -350,7 +368,7 @@ This should help ensure the game is fair.*/
                     <FontAwesomeIcon icon={faCrown} size="2x"
                         style={{
                             background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
-                            color: theme === "light" ? "white" : "black"
+                            color: "yellow"
                         }} />
                     <Grid width={300}
                         height={300}
@@ -375,6 +393,13 @@ This should help ensure the game is fair.*/
 
                     </RadioGroup>
                 </Box>
+
+                <FontAwesomeIcon icon={faGear} size="2x"
+                        style={{
+                            background: theme === "light" ? "white" : "black",
+                            color: theme === "light" ? "black" : "white",
+                        }}
+                    />
                 <Box onClick={() => {
                     setShowInfo(!showInfo)
 
@@ -390,12 +415,9 @@ This should help ensure the game is fair.*/
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
                     It's turn of player {whoseTurnIsIt ? "->" : "<-"}
                     To do:
-
+                        Add settings button where you can change single and two player and customise rules.
                     Add unit tests
-                    Display a mini crown next to the winning player.
-                    Add mystery tiles that give ammo when hit.
                     render vertically if on phone, horizontally if on laptop.
-                    Add an info button that displays a pop up explaining the game. Make sure it doesn't close the battleships game.
 
                 </Box>
 
@@ -406,7 +428,7 @@ This should help ensure the game is fair.*/
                     <FontAwesomeIcon icon={faCrown} size="2x"
                         style={{
                             background: whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"),
-                            color: theme === "light" ? "white" : "black"
+                            color: "yellow"
                         }} />
                     <Grid width={300}
                         height={300}
