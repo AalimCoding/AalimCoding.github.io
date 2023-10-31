@@ -368,7 +368,7 @@ This should help ensure the game is fair.*/
                     <FontAwesomeIcon icon={faCrown} size="2x"
                         style={{
                             background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
-                            color: "yellow"
+                            color: winner[0] ==  1 ? "yellow" : (whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"))
                         }} />
                     <Grid width={300}
                         height={300}
@@ -415,7 +415,7 @@ This should help ensure the game is fair.*/
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
                     It's turn of player {whoseTurnIsIt ? "->" : "<-"}
                     To do:
-                        Add settings button where you can change single and two player and customise rules.
+                    Add settings button where you can change single and two player and customise rules.
                     Add unit tests
                     render vertically if on phone, horizontally if on laptop.
 
@@ -428,7 +428,7 @@ This should help ensure the game is fair.*/
                     <FontAwesomeIcon icon={faCrown} size="2x"
                         style={{
                             background: whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"),
-                            color: "yellow"
+                            color: winner[1] ==  1 ? "yellow" : (whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"))
                         }} />
                     <Grid width={300}
                         height={300}
