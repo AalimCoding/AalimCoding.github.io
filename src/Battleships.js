@@ -5,11 +5,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faCrown, faGear } from "@fortawesome/free-solid-svg-icons";
 import { Box, Grid, GridItem, HStack, Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
 import BattleshipsInfo from "./BattleshipsInfo";
+import BattleshipsSettings from "./BattleshipsSettings";
 
 function Battleships() {
     const { theme } = useTheme();
 
     var [showInfo, setShowInfo] = useState(false);
+    var [showSettings, setShowSettings] = useState(false);
 
     const numGridItems = 100;
     const numRows = Math.sqrt(numGridItems);
@@ -355,9 +357,10 @@ This should help ensure the game is fair.*/
             color: theme === "light" ? "black" : "white",
             background: theme === "light" ? "white" : "black"
         }}>
-            This is the Battleships Practice Project In React
+            
             <BattleshipsInfo showInfo={showInfo} />
 
+            <BattleshipsSettings showSettings={showSettings} Gamemode={Gamemode} setGamemode={setGamemode} />
 
             <HStack height={300}>
 
@@ -385,14 +388,11 @@ This should help ensure the game is fair.*/
                 </Box>
 
 
-                <Box >Opponent:
 
-                    <RadioGroup display onChange={setGamemode} value={Gamemode}>
-                        <Radio value='CPU'>CPU</Radio>
-                        <Radio value='Player'>Player</Radio>
+                <Box onClick={() => {
+                    setShowSettings(!showSettings)
 
-                    </RadioGroup>
-                </Box>
+                }}>
 
                 <FontAwesomeIcon icon={faGear} size="2x"
                         style={{
@@ -400,6 +400,8 @@ This should help ensure the game is fair.*/
                             color: theme === "light" ? "black" : "white",
                         }}
                     />
+                    </Box>
+
                 <Box onClick={() => {
                     setShowInfo(!showInfo)
 
@@ -415,8 +417,7 @@ This should help ensure the game is fair.*/
                     <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
                     It's turn of player {whoseTurnIsIt ? "->" : "<-"}
                     To do:
-                    Add settings button where you can change single and two player and customise rules.
-                    Add unit tests
+                    Add unit tests.
                     render vertically if on phone, horizontally if on laptop.
 
                 </Box>
