@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import RadioCardWeapons from "./RadioCardWeapons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faCrown, faGear } from "@fortawesome/free-solid-svg-icons";
-import { Box, Grid, GridItem, HStack, Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
+import { Box, Grid, GridItem, HStack, useRadioGroup } from "@chakra-ui/react";
 import BattleshipsInfo from "./BattleshipsInfo";
 import BattleshipsSettings from "./BattleshipsSettings";
 
@@ -357,12 +357,41 @@ This should help ensure the game is fair.*/
             color: theme === "light" ? "black" : "white",
             background: theme === "light" ? "white" : "black"
         }}>
-            
+            <HStack height={200}>
+                <Box width={200}>{message}</Box>
+                <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
+                It's turn of player {whoseTurnIsIt ? "->" : "<-"}
+                To do:
+                Add unit tests.
+                render vertically if on phone, horizontally if on laptop.
+
+                <Box onClick={() => { setShowSettings(!showSettings) }}>
+
+                    <FontAwesomeIcon icon={faGear} size="2x"
+                        style={{
+                            background: theme === "light" ? "white" : "black",
+                            color: theme === "light" ? "black" : "white",
+                        }} />
+                </Box>
+
+                <Box onClick={() => {
+                    setShowInfo(!showInfo)
+                }}>
+                    <FontAwesomeIcon icon={faCircleInfo} size="2x"
+                        style={{
+                            background: theme === "light" ? "white" : "black",
+                            color: theme === "light" ? "black" : "white",
+                        }} />
+                </Box>
+            </HStack>
+
+
+
             <BattleshipsInfo showInfo={showInfo} />
 
             <BattleshipsSettings showSettings={showSettings} Gamemode={Gamemode} setGamemode={setGamemode} />
 
-            <HStack height={300}>
+            <HStack height={500}>
 
                 <Box style={{
                     background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
@@ -371,7 +400,7 @@ This should help ensure the game is fair.*/
                     <FontAwesomeIcon icon={faCrown} size="2x"
                         style={{
                             background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
-                            color: winner[0] ==  1 ? "yellow" : (whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"))
+                            color: winner[0] == 1 ? "yellow" : (whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"))
                         }} />
                     <Grid width={300}
                         height={300}
@@ -379,7 +408,7 @@ This should help ensure the game is fair.*/
                         templateRows='repeat(10, 1fr)'
                         gap={2}
                         background={"blue"}
-                        padding={5}>
+                        padding={4}>
                         {gridItems[0]}
                     </Grid>
                     <Box>
@@ -389,38 +418,7 @@ This should help ensure the game is fair.*/
 
 
 
-                <Box onClick={() => {
-                    setShowSettings(!showSettings)
 
-                }}>
-
-                <FontAwesomeIcon icon={faGear} size="2x"
-                        style={{
-                            background: theme === "light" ? "white" : "black",
-                            color: theme === "light" ? "black" : "white",
-                        }}
-                    />
-                    </Box>
-
-                <Box onClick={() => {
-                    setShowInfo(!showInfo)
-
-                }}>
-                    <FontAwesomeIcon icon={faCircleInfo} size="2x"
-                        style={{
-                            background: theme === "light" ? "white" : "black",
-                            color: theme === "light" ? "black" : "white",
-                        }}
-                    />
-
-                    <Box width={200}>{message}</Box>
-                    <Box width={200}>{'\n Turns Taken: ' + turnCount}</Box>
-                    It's turn of player {whoseTurnIsIt ? "->" : "<-"}
-                    To do:
-                    Add unit tests.
-                    render vertically if on phone, horizontally if on laptop.
-
-                </Box>
 
                 <Box style={{
                     background: whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"),
@@ -429,7 +427,7 @@ This should help ensure the game is fair.*/
                     <FontAwesomeIcon icon={faCrown} size="2x"
                         style={{
                             background: whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"),
-                            color: winner[1] ==  1 ? "yellow" : (whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"))
+                            color: winner[1] == 1 ? "yellow" : (whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"))
                         }} />
                     <Grid width={300}
                         height={300}
@@ -437,7 +435,7 @@ This should help ensure the game is fair.*/
                         templateRows='repeat(10, 1fr)'
                         gap={2}
                         background={"blue"}
-                        padding={5}>
+                        padding={4}>
                         {gridItems[1]}
                     </Grid>
                     <Box>
