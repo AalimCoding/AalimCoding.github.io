@@ -335,7 +335,7 @@ This should help ensure the game is fair.*/
                 {options.map((value) => {
                     const radio = getRadioProps({ value });
                     return (
-                        <RadioCardWeapons key={value} {...radio} isDisabled={!Ammo[noOfGrid][0] && value.includes('Large') || !Ammo[noOfGrid][1] && value.includes('Scatter')}>
+                        <RadioCardWeapons key={value} {...radio} isDisabled={!Ammo[noOfGrid][0] && value.includes('Large') || !Ammo[noOfGrid][1] && value.includes('Scatter') || (whoseTurnIsIt != noOfGrid)}>
                             {value}
                         </RadioCardWeapons>
                     );
