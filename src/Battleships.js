@@ -21,7 +21,6 @@ function Battleships() {
     var areShipsLeft = 1;
     var [turnCount, setTurnCount] = useState(0);
     const [weaponType, setWeaponType] = useState({ 0: 'Normal ∞', 1: 'Normal ∞' });
-
     var [Gamemode, setGamemode] = useState('CPU')
     var [Ammo, setAmmo] = useState([[1, 1], [1, 1]])
     var [winner, setWinner] = useState([0, 0])
@@ -31,6 +30,25 @@ function Battleships() {
         whoseTurnIsIt = whoseTurnIsIt === 0 ? 1 : 0;
         callback(whoseTurnIsIt);
     }
+
+    function checkMysteryTile(noOfGrid, i, j) {
+        const updatedMysteryTile = [...mysteryTile]
+        if (updatedMysteryTile[noOfGrid][i][j] == 1) {
+            updatedMysteryTile[noOfGrid][i][j] = 0
+
+            setAmmo(prevAmmo => {
+                const updatedAmmo = [...prevAmmo];
+                console.log('ammo updates')
+                updatedAmmo[noOfGrid][Math.floor(Math.random() * 2)] += 1;
+                return updatedAmmo;
+            });
+
+            placeMysteryTiles();
+        }
+    }
+
+
+
 
 
     // Function to update the winner state
@@ -154,68 +172,64 @@ function Battleships() {
                 // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
                 if (updatedHit[noOfGrid][i][j] === 0) {
 
-                    if (weaponType[noOfGrid] == `Normal ∞`) { updatedHit[noOfGrid][i][j] = 1 }
+                    if (weaponType[noOfGrid] == `Normal ∞`) {
+                        updatedHit[noOfGrid][i][j] = 1;
+                        setHit(updatedHit);
+                        checkMysteryTile(noOfGrid, i, j)
+                    }
 
                     if (weaponType[noOfGrid] == `Large ${Ammo[noOfGrid][0]}` && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
+                        setAmmo(prevAmmo => {
+                            const updatedAmmo = [...prevAmmo];
+                            updatedAmmo[noOfGrid][0] -= 1;
+                            return updatedAmmo;
+                        });
                         for (var row = -1; row <= 1; row++) {
                             for (var column = -1; column <= 1; column++) {
                                 //Check that the hit tiles can't be outside the grid.
                                 if (i + row >= 0 && i + row < numRows) {
                                     if (j + column >= 0 && j + column < numColumns) {
                                         (updatedHit[noOfGrid][i + row][j + column] = 1)
+                                        setHit(updatedHit);
+                                        checkMysteryTile(noOfGrid, i + row, j + column)
                                     }
                                 }
                             }
                         }
-                        setAmmo(prevAmmo => {
-                            const updatedAmmo = [...prevAmmo];
-                            updatedAmmo[noOfGrid][0] -= 1;
-                            return updatedAmmo;
-                        });
+
                     }
 
                     if (weaponType[noOfGrid] === `Scatter ${Ammo[noOfGrid][1]}` && Ammo[noOfGrid][1] > 0) {  //Hit the original target and another numRows/2 - 1 targets.              
-                        updatedHit[noOfGrid][i][j] = 1
-                        for (var targetsToHit = 0; targetsToHit < numRows / 2 - 1; targetsToHit++) {
-                            var randomTargetX = Math.floor(Math.random() * numColumns)
-                            var randomTargetY = Math.floor(Math.random() * numRows)
-                            updatedHit[noOfGrid][randomTargetX][randomTargetY] = 1
-                        }
                         setAmmo(prevAmmo => {
                             const updatedAmmo = [...prevAmmo];
                             updatedAmmo[noOfGrid][1] -= 1;
                             return updatedAmmo;
                         });
+                        updatedHit[noOfGrid][i][j] = 1
+                        for (var targetsToHit = 0; targetsToHit < numRows / 2 - 1; targetsToHit++) {
+                            var randomTargetX = Math.floor(Math.random() * numColumns)
+                            var randomTargetY = Math.floor(Math.random() * numRows)
+                            updatedHit[noOfGrid][randomTargetX][randomTargetY] = 1
+                            setHit(updatedHit);
+                            checkMysteryTile(noOfGrid, randomTargetX, randomTargetY)
+                        }
+
+
+
+
                     }
 
                     // If there is no ammo for the selected weapon, we only hit the one slected tile.
                     else {
                         updatedHit[noOfGrid][i][j] = 1
+                        setHit(updatedHit);
                     }
 
                     setTurnCount(turnCount + 1);
-                    setHit(updatedHit);
-
-
-                    const updatedMysteryTile = [...mysteryTile]
 
 
 
-                    if (updatedMysteryTile[noOfGrid][i][j] == 1) {
-                        updatedMysteryTile[noOfGrid][i][j] = 0
 
-
-                        setAmmo(prevAmmo => {
-                            const updatedAmmo = [...prevAmmo];
-                            console.log('ammo updates')
-                            updatedAmmo[noOfGrid][Math.floor(Math.random() * 2)] += 1;
-                            return updatedAmmo;
-                        });
-
-                        placeMysteryTiles();
-
-
-                    }
                     /*New mystery tiles now created when current tile is
 hit. The other grid also generates an extra mystery tile.
 This should help ensure the game is fair.*/
