@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faCrown, faGear } from "@fortawesome/free-solid-svg-icons";
 import { Box, Grid, GridItem, HStack, useRadioGroup } from "@chakra-ui/react";
 import BattleshipsInfo from "./BattleshipsInfo";
+import TargetGrid from "./BattleshipsTargetGrid";
 import BattleshipsSettings from "./BattleshipsSettings";
 
 function Battleships() {
@@ -48,9 +49,7 @@ function Battleships() {
     }
 
 
-
-
-
+    
     // Function to update the winner state
     const updateWinner = (noOfGrid) => {
         // Create a copy of the original array
@@ -273,12 +272,6 @@ This should help ensure the game is fair.*/
 
 
 
-
-
-
-
-
-
                 // If this makes it the CPU's turn, this code should run  to take the CPU's shot.
 
 
@@ -406,56 +399,9 @@ This should help ensure the game is fair.*/
             <BattleshipsSettings showSettings={showSettings} Gamemode={Gamemode} setGamemode={setGamemode} />
 
             <HStack height={500}>
+                <TargetGrid noOfGrid={0} theme={theme} whoseTurnIsIt={whoseTurnIsIt} winner={winner} gridItems={gridItems} Ammo={Ammo} />
+                <TargetGrid noOfGrid={1} theme={theme} whoseTurnIsIt={whoseTurnIsIt} winner={winner} gridItems={gridItems} Ammo={Ammo} />
 
-                <Box style={{
-                    background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
-                    color: theme === "light" ? "white" : "black"
-                }}>Your Targets
-                    <FontAwesomeIcon icon={faCrown} size="2x"
-                        style={{
-                            background: whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"),
-                            color: winner[0] == 1 ? "yellow" : (whoseTurnIsIt === 0 ? 'green' : (theme === "light" ? "black" : "white"))
-                        }} />
-                    <Grid width={300}
-                        height={300}
-                        templateColumns='repeat(10, 1fr)'
-                        templateRows='repeat(10, 1fr)'
-                        gap={2}
-                        background={"blue"}
-                        padding={4}>
-                        {gridItems[0]}
-                    </Grid>
-                    <Box>
-                        <ControlRadioButtons noOfGrid={0} Ammo={Ammo} />
-                    </Box>
-                </Box>
-
-
-
-
-
-                <Box style={{
-                    background: whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"),
-                    color: theme === "light" ? "white" : "black"
-                }}>Your Opponent's Targets
-                    <FontAwesomeIcon icon={faCrown} size="2x"
-                        style={{
-                            background: whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"),
-                            color: winner[1] == 1 ? "yellow" : (whoseTurnIsIt === 1 ? 'green' : (theme === "light" ? "black" : "white"))
-                        }} />
-                    <Grid width={300}
-                        height={300}
-                        templateColumns='repeat(10, 1fr)'
-                        templateRows='repeat(10, 1fr)'
-                        gap={2}
-                        background={"blue"}
-                        padding={4}>
-                        {gridItems[1]}
-                    </Grid>
-                    <Box>
-                        <ControlRadioButtons noOfGrid={1} Ammo={Ammo} />
-                    </Box>
-                </Box>
             </HStack>
 
         </div>
