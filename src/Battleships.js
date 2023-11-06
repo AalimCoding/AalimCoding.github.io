@@ -8,6 +8,7 @@ import BattleshipsInfo from "./BattleshipsInfo";
 import TargetGrid from "./BattleshipsTargetGrid";
 import BattleshipsSettings from "./BattleshipsSettings";
 
+
 function Battleships() {
     const { theme } = useTheme();
 
@@ -325,35 +326,6 @@ This should help ensure the game is fair.*/
 
 
 
-    // See https://chakra-ui.com/docs/components/radio for implementation details.
-    function ControlRadioButtons({ noOfGrid, Ammo }) {
-        const options = [`Normal ∞`, `Large ${Ammo[noOfGrid][0]}`, `Scatter ${Ammo[noOfGrid][1]}`];
-
-        const { getRootProps, getRadioProps } = useRadioGroup({
-            defaultValue: `Normal ∞`,
-            onChange: (value) => setWeaponType((prevTypes) => ({ ...prevTypes, [noOfGrid]: value })),
-            value: weaponType[noOfGrid]
-        });
-
-        const group = getRootProps();
-
-        return (
-            <HStack {...group}>
-                {options.map((value) => {
-                    const radio = getRadioProps({ value });
-                    return (
-                        <RadioCardWeapons key={value} {...radio} isDisabled={!Ammo[noOfGrid][0] && value.includes('Large') || !Ammo[noOfGrid][1] && value.includes('Scatter') || (whoseTurnIsIt != noOfGrid)}>
-                            {value}
-                        </RadioCardWeapons>
-                    );
-                })}
-            </HStack>
-        );
-    }
-
-
-
-
 
 
 
@@ -399,8 +371,8 @@ This should help ensure the game is fair.*/
             <BattleshipsSettings showSettings={showSettings} Gamemode={Gamemode} setGamemode={setGamemode} />
 
             <HStack height={500}>
-                <TargetGrid noOfGrid={0} theme={theme} whoseTurnIsIt={whoseTurnIsIt} winner={winner} gridItems={gridItems} Ammo={Ammo} />
-                <TargetGrid noOfGrid={1} theme={theme} whoseTurnIsIt={whoseTurnIsIt} winner={winner} gridItems={gridItems} Ammo={Ammo} />
+                <TargetGrid noOfGrid={0} theme={theme} whoseTurnIsIt={whoseTurnIsIt} winner={winner} gridItems={gridItems} Ammo={Ammo} setWeaponType={setWeaponType} weaponType={weaponType} />
+                <TargetGrid noOfGrid={1} theme={theme} whoseTurnIsIt={whoseTurnIsIt} winner={winner} gridItems={gridItems} Ammo={Ammo} setWeaponType={setWeaponType} weaponType={weaponType} />
 
             </HStack>
 

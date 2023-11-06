@@ -2,10 +2,11 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import { Grid, Box } from '@chakra-ui/react';
+import { ControlRadioButtons } from "./ControlRadioButtons";
 
 
 
-const TargetGrid = ({ noOfGrid, theme, whoseTurnIsIt, winner, gridItems, Ammo }) => {
+const TargetGrid = ({ noOfGrid, theme, whoseTurnIsIt, winner, gridItems, Ammo ,setWeaponType, weaponType}) => {
   return (
     <Box
       style={{
@@ -26,7 +27,7 @@ const TargetGrid = ({ noOfGrid, theme, whoseTurnIsIt, winner, gridItems, Ammo })
         {gridItems[noOfGrid]}
       </Grid>
       <Box>
-        <ControlRadioButtons noOfGrid={noOfGrid} Ammo={Ammo} />
+        <ControlRadioButtons noOfGrid={noOfGrid} Ammo={Ammo} setWeaponType={setWeaponType} weaponType={weaponType[noOfGrid]}  whoseTurnIsIt={whoseTurnIsIt}/>
       </Box>
     </Box>
   );

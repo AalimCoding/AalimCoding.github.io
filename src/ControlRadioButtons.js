@@ -1,16 +1,9 @@
-import { useTheme } from "./ThemeContext"
-import { useState, useEffect } from "react";
 import RadioCardWeapons from "./RadioCardWeapons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faCrown, faGear } from "@fortawesome/free-solid-svg-icons";
-import { Box, Grid, GridItem, HStack, useRadioGroup } from "@chakra-ui/react";
-import BattleshipsInfo from "./BattleshipsInfo";
-import TargetGrid from "./BattleshipsTargetGrid";
-import BattleshipsSettings from "./BattleshipsSettings";
+import {  HStack, useRadioGroup } from "@chakra-ui/react";
 
 
 // See https://chakra-ui.com/docs/components/radio for implementation details.
-function ControlRadioButtons({ noOfGrid, Ammo }) {
+export function ControlRadioButtons({ setWeaponType,weaponType,whoseTurnIsIt,noOfGrid, Ammo }) {
     const options = [`Normal ∞`, `Large ${Ammo[noOfGrid][0]}`, `Scatter ${Ammo[noOfGrid][1]}`];
 
     const { getRootProps, getRadioProps } = useRadioGroup({
