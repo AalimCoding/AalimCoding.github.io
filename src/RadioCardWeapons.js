@@ -1,6 +1,4 @@
-
-import { Box } from "@chakra-ui/react"
-import { useRadio } from "@chakra-ui/react"
+import { Box,useRadio } from "@chakra-ui/react"
 
 
 function RadioCardWeapons(props) {
@@ -31,6 +29,7 @@ function RadioCardWeapons(props) {
 
         px={5}
         py={3}
+        colorScheme="orange"
       >
         {props.children}
       </Box>

@@ -1,9 +1,8 @@
 import { useTheme } from "./ThemeContext"
 import { useState, useEffect } from "react";
-import RadioCardWeapons from "./RadioCardWeapons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faCrown, faGear } from "@fortawesome/free-solid-svg-icons";
-import { Box, Grid, GridItem, HStack, useRadioGroup } from "@chakra-ui/react";
+import { faCircleInfo, faGear } from "@fortawesome/free-solid-svg-icons";
+import { Box, GridItem, HStack } from "@chakra-ui/react";
 import BattleshipsInfo from "./BattleshipsInfo";
 import TargetGrid from "./BattleshipsTargetGrid";
 import BattleshipsSettings from "./BattleshipsSettings";
@@ -35,7 +34,7 @@ function Battleships() {
 
     function checkMysteryTile(noOfGrid, i, j) {
         const updatedMysteryTile = [...mysteryTile]
-        if (updatedMysteryTile[noOfGrid][i][j] == 1) {
+        if (updatedMysteryTile[noOfGrid][i][j] === 1) {
             updatedMysteryTile[noOfGrid][i][j] = 0
 
             setAmmo(prevAmmo => {
@@ -50,7 +49,7 @@ function Battleships() {
     }
 
 
-    
+
     // Function to update the winner state
     const updateWinner = (noOfGrid) => {
         // Create a copy of the original array
@@ -162,23 +161,23 @@ function Battleships() {
 
     function handleClick(noOfGrid, i, j) {
         console.log(winner)
-        if (whoseTurnIsIt == noOfGrid) {
+        if (whoseTurnIsIt === noOfGrid) {
 
             //FIX THIS LINE
-            if (Gamemode == 'Player' || whoseTurnIsIt == 0) {
+            if (Gamemode === 'Player' || whoseTurnIsIt === 0) {
 
                 const updatedHit = hit.map(row => [...row]);
 
                 // By checking that updatedHit[i][j] === 0 , we prevent already hit spots to be hit again.
                 if (updatedHit[noOfGrid][i][j] === 0) {
 
-                    if (weaponType[noOfGrid] == `Normal ∞`) {
+                    if (weaponType[noOfGrid] === `Normal ∞`) {
                         updatedHit[noOfGrid][i][j] = 1;
                         setHit(updatedHit);
                         checkMysteryTile(noOfGrid, i, j)
                     }
 
-                    if (weaponType[noOfGrid] == `Large ${Ammo[noOfGrid][0]}` && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
+                    if (weaponType[noOfGrid] === `Large ${Ammo[noOfGrid][0]}` && Ammo[noOfGrid][0] > 0) {//Hit everything within a one tile radius.
                         setAmmo(prevAmmo => {
                             const updatedAmmo = [...prevAmmo];
                             updatedAmmo[noOfGrid][0] -= 1;
@@ -206,6 +205,8 @@ function Battleships() {
                             return updatedAmmo;
                         });
                         updatedHit[noOfGrid][i][j] = 1
+                        setHit(updatedHit);
+                        checkMysteryTile(noOfGrid, i, j)
                         for (var targetsToHit = 0; targetsToHit < numRows / 2 - 1; targetsToHit++) {
                             var randomTargetX = Math.floor(Math.random() * numColumns)
                             var randomTargetY = Math.floor(Math.random() * numRows)
@@ -223,6 +224,7 @@ function Battleships() {
                     else {
                         updatedHit[noOfGrid][i][j] = 1
                         setHit(updatedHit);
+                        checkMysteryTile(noOfGrid, i, j);
                     }
 
                     setTurnCount(turnCount + 1);
@@ -238,7 +240,7 @@ This should help ensure the game is fair.*/
 
                     // We want to set the value of the other players weapon type to normal
 
-                    setWeaponType((prevTypes) => ({ ...prevTypes, [noOfGrid == 0 ? 1 : 0]: `Normal ∞` }))
+                    setWeaponType((prevTypes) => ({ ...prevTypes, [noOfGrid === 0 ? 1 : 0]: `Normal ∞` }))
 
                     // check if there are any ships left
                     if (areShipsLeft === 1) {
@@ -252,7 +254,7 @@ This should help ensure the game is fair.*/
                     }
                     // Check if any battleships are left, and otherwise display victory message.
 
-                    if (areShipsLeft == 0) {
+                    if (areShipsLeft === 0) {
                         setMessage(areShipsLeft > 0 ? message : 'Well done, all battleships destroyed!')
 
 
@@ -276,7 +278,7 @@ This should help ensure the game is fair.*/
                 // If this makes it the CPU's turn, this code should run  to take the CPU's shot.
 
 
-                if (Gamemode == 'CPU' && whoseTurnIsIt == 1) {
+                if (Gamemode === 'CPU' && whoseTurnIsIt === 1) {
                     let shotFired = false;
                     while (!shotFired) {
                         const updatedHit = hit.map(row => [...row]);
