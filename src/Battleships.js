@@ -315,6 +315,7 @@ This should help ensure the game is fair.*/
                         // Set the background to orange if it is hit and theres a boat, set it to blue if its ben hit but no boat is present, or otherwise set it to grey.
                         bg={mysteryTile[noOfGrid][i][j] ? 'purple' : (ship[noOfGrid][i][j] && hit[noOfGrid][i][j]) ? 'orange' : (hit[noOfGrid][i][j] ? 'blue' : 'grey')}
                         borderRadius={3}
+                        data-testid={`grid-cell-${noOfGrid}-${i}-${j}`} // Add a data-testid attribute
                         onClick={() => handleClick(noOfGrid, i, j)}
                     />
 

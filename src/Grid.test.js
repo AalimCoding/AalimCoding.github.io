@@ -3,23 +3,10 @@ import { render, fireEvent, screen } from "@testing-library/react";
 import Battleships from "./Battleships";
 import { ThemeProvider } from "./ThemeContext";
 
-jest.mock("./ThemeContext", () => ({
-  useTheme: jest.fn().mockReturnValue({ theme: "light" }),
-}));
-
-test("Check grid tiles update when hit", () => {
-  render(<ThemeProvider>
-      <Battleships />
-    </ThemeProvider>
-  );
-
-  // find a specific grid tile by role
-  const gridTile = screen.getByRole('gridcell');
-
-  // click the grid tile
-  fireEvent.click(gridTile);
-
-  // assert the background color of the grid tile after click
-  expect(gridTile).toHaveStyle("background-color: blue");
-
+test("clicking grid cell updates state", () => {
+  render(<ThemeProvider><Battleships /></ThemeProvider>);
+  const gridCell = screen.getByTestId("grid-cell-0-0-0"); // Find the grid cell element using data-testid
+  fireEvent.click(gridCell); // Click the grid cell
+  const updatedGridCell = screen.getByTestId("grid-cell-0-0-0"); // Find the grid cell again after the click event
+  expect(updatedGridCell).toHaveStyle("background-color: blue"); // Check the background color of the grid cell after click
 });

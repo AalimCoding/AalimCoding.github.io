@@ -29,7 +29,7 @@ function RadioCardWeapons(props) {
 
         px={5}
         py={3}
-        colorScheme="orange"
+
       >
         {props.children}
       </Box>

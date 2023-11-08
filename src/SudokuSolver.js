@@ -1,10 +1,17 @@
+import SudokuGrid from "./SudokuGrid";
 import { useTheme } from "./ThemeContext"
 
 
-function SudokuSolver(){
+function SudokuSolver() {
     const { theme } = useTheme();
-    return(
-        <div>This is the SudokuSolver</div>
+    return (
+        <div>This is the SudokuSolver
+
+
+            <SudokuGrid />
+
+
+        </div>
     )
 }
 
