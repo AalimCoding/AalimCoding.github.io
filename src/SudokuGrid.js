@@ -11,9 +11,9 @@ function SudokuGrid() {
       SudokuValues[i].push([0])
     }
   }
-  function handleClick(Box, Item) {
+  function handleClick(row, column) {
 
-    SudokuValues[Box][Item] = 1
+    SudokuValues[row][column] = 1
   }
 
 
@@ -22,8 +22,28 @@ function SudokuGrid() {
     for (let i = 0; i < gridSize; i++) {
       const boxItems = [];
       for (let j = 0; j < itemsPerBox; j++) {
-        const itemId = `Box ${i + 1} Item ${j + 1}`;
-        boxItems.push(<GridItem aspectRatio='1/1' key={itemId} id={itemId} onClick={() => handleClick(i, j)}>{SudokuValues[i][j]}</GridItem>); // Use id instead of ID
+        const itemId = `Box ${i + 1} ItemInBox ${j + 1} Row ${Math.floor(j / 3) + 3 * (i % 3)} Column${(j % 3) + Math.floor(3 * i) + 1}`;
+        const box = i + 1
+        const itemInBox = j+ 1
+        const row = Math.floor((itemInBox-1)/3) + 3*(Math.floor((box-1)/3)) + 1
+        const column = Math.floor((itemInBox-1)%3) + 3*((box-1)%3) + 1//(itemInBox % 3) + Math.floor(3 * box);
+        
+
+
+        boxItems.push(
+          <GridItem
+            row={row}
+            column={column}
+            box={box}
+            itemInBox = {itemInBox}
+            aspectRatio='1/1'
+            key={itemId}
+            id={itemId}
+            onClick={() => handleClick(row, column)}>
+            {row}.{column}
+          </GridItem>
+        );
+
       }
       const boxId = `Box ${i + 1}`;
       gridItems.push(
