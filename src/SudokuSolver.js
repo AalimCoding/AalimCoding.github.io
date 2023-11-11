@@ -13,6 +13,8 @@ function SudokuSolver() {
 
             <SudokuGrid />
 
+            Add a 'click to solve'  button component
+
 
         </div>
     )
