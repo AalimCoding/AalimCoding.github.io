@@ -13,14 +13,15 @@ function SudokuGrid() {
   });
 
   function handleClick(row, column) {
-    console.log("Clicked on", row, column);
     setSudokuValues((prevValues) => {
-      const newValues = [...prevValues];
+      const newValues = prevValues.map((rowValues) => [...rowValues]);
+
       if (newValues[row][column] < 9) {
         newValues[row][column] += 1;
       } else {
         newValues[row][column] = 0;
       }
+
       return newValues;
     });
   }
@@ -44,10 +45,11 @@ function SudokuGrid() {
           aspectRatio="1/1"
           key={itemId}
           id={itemId}
+          bg = {SudokuValues[row][column] === 0 ? "red" : "green"}
           onClick={() => handleClick(row, column)}
           style={{ cursor: "pointer" }}
         >
-          {row}.{column}.{SudokuValues[row][column]}
+          {SudokuValues[row][column]}
         </GridItem>
       );
     }
