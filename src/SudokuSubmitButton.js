@@ -10,8 +10,12 @@ function SudokuSubmitButton() {
         <div>
 
             <Button
-                colorScheme='teal'
+                // colorScheme='teal'
                 variant='outline'
+                style={{
+                    background: theme === "light" ? "white" : "black",
+                    color: theme === "light" ? "black" : "white",
+                }}
             /*  isLoading
              loadingText='Submitting' */
             >

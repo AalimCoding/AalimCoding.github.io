@@ -1,7 +1,9 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import { useState } from "react";
+import { useTheme } from "./ThemeContext"
 
 function SudokuGrid() {
+  const { theme } = useTheme();
   const gridSize = 9; // Number of boxes in the grid
   const itemsPerBox = 9; // Number of items per box
 
@@ -45,9 +47,12 @@ function SudokuGrid() {
           aspectRatio="1/1"
           key={itemId}
           id={itemId}
-          bg = {SudokuValues[row][column] === 0 ? "red" : "green"}
           onClick={() => handleClick(row, column)}
-          style={{ cursor: "pointer" }}
+        
+          style={{cursor: "pointer" ,
+            background: SudokuValues[row][column] !== 0 ? "green" : theme === "light" ? "white" : "black",
+            color: theme === "light" ? "black" : "white",
+        }}
         >
           {SudokuValues[row][column]}
         </GridItem>
@@ -63,7 +68,10 @@ function SudokuGrid() {
         templateColumns="repeat(3, 1fr)"
         templateRows="repeat(3, 1fr)"
         gap={5}
-        bg="yellow"
+        style={{
+          background: theme === "light" ? "white" : "black",
+          color: theme === "light" ? "black" : "white",
+      }}
       >
         {boxItems}
       </Grid>
@@ -76,7 +84,10 @@ function SudokuGrid() {
       templateColumns="repeat(3, 1fr)"
       templateRows="repeat(3, 1fr)"
       gap={10}
-      bg="green"
+      style={{
+        background: theme === "light" ? "white" : "black",
+        color: theme === "light" ? "black" : "white",
+    }}
     >
       {gridItems}
     </Grid>
