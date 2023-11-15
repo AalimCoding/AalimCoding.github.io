@@ -50,7 +50,22 @@ function SudokuGrid() {
           onClick={() => handleClick(row, column)}
         
           style={{cursor: "pointer" ,
-            background: SudokuValues[row][column] !== 0 ? "green" : theme === "light" ? "white" : "black",
+            background: 
+            SudokuValues[row][column] === 1 ? "#FA9189":
+            SudokuValues[row][column] === 2 ? "#FCAE7C":
+            SudokuValues[row][column] === 3 ? "#FFE699":
+            SudokuValues[row][column] === 4 ? "#D1FF99":
+            SudokuValues[row][column] === 5 ? "#B3F5BC":
+            SudokuValues[row][column] === 6 ? "#D6F6FF":
+            SudokuValues[row][column] === 7 ? "#9FD1FF":
+            SudokuValues[row][column] === 8 ? "#E2CBF7":
+            SudokuValues[row][column] === 9 ? "#D1BDFF":
+            
+            
+            
+            theme === "light" ? "white" : "black",
+
+
             color: theme === "light" ? "black" : "white",
         }}
         >
