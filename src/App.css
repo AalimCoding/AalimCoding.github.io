@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+::selection {
+  color: black;
+  background: #b8d8be;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
