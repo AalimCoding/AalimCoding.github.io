@@ -7,10 +7,13 @@ import BattleshipsInfo from "./BattleshipsInfo";
 import TargetGrid from "./BattleshipsTargetGrid";
 import BattleshipsSettings from "./BattleshipsSettings";
 
-
+// Define the main functional component Battleships
 function Battleships() {
+    // Retrieve theme from ThemeContext using useTheme hook
     const { theme } = useTheme();
 
+    // Initialize various state variables using useState hook
+    // (showInfo, showSettings, message, turnCount, weaponType, etc.)
     var [showInfo, setShowInfo] = useState(false);
     var [showSettings, setShowSettings] = useState(false);
 
@@ -27,11 +30,14 @@ function Battleships() {
     var [winner, setWinner] = useState([0, 0])
     var [whoseTurnIsIt, setWhoseTurnIsIt] = useState(0)
 
+    // Function to update the state of whoseTurnIsIt
     function updateWhoseTurn(callback) {
+        // Update whoseTurnIsIt state based on the current value
         whoseTurnIsIt = whoseTurnIsIt === 0 ? 1 : 0;
         callback(whoseTurnIsIt);
     }
 
+    // Function to check a mystery tile and update the state accordingly
     function checkMysteryTile(noOfGrid, i, j) {
         const updatedMysteryTile = [...mysteryTile]
         if (updatedMysteryTile[noOfGrid][i][j] === 1) {
@@ -59,6 +65,8 @@ function Battleships() {
         // Update the state with the new array
         setWinner(updatedWinner);
     };
+
+    // Initialize state variables for hit, ship, mysteryTile using useState with initial values
 
     // Set up an array to check if each co-ordinate has been hit. Initially fill the array with zeroes.
 
@@ -123,7 +131,7 @@ function Battleships() {
 
 
 
-
+    // Function to place mystery tiles on the grid
     const placeMysteryTiles = () => {
         // Create a new mystery tile state without modifying the existing state to prevent two re-renders occuring, and thus the erroneous creation of two rather than one, mystery tile.
         const updatedMysteryTile = mysteryTile.map(grid => grid.map(row => [...row]));
@@ -147,6 +155,7 @@ function Battleships() {
         setMysteryTile(updatedMysteryTile);
     };
 
+    // UseEffect to place mystery tiles when the component mounts
     useEffect(() => {
         placeMysteryTiles();
     }, []);
@@ -157,7 +166,7 @@ function Battleships() {
 
 
 
-    // Define a handleClick function
+    // Define handleClick function to handle grid cell clicks
 
     function handleClick(noOfGrid, i, j) {
         console.log(winner)
@@ -383,4 +392,5 @@ This should help ensure the game is fair.*/
     )
 }
 
+// Export the Battleships component
 export default Battleships
