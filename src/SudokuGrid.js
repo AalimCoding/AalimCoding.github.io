@@ -133,8 +133,7 @@ function SudokuGrid() {
 
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
-        if (SudokuValues[row][column] = 1) {
-
+        if (SudokuValues[row][column] == 1) {
           for (var x = 0; x < 9; x++) {
             possibleSudokuValues[row][x] = possibleSudokuValues[row][x].filter(value => value !== 1)
             possibleSudokuValues[x][column] = possibleSudokuValues[x][column].filter(value => value !== 1)

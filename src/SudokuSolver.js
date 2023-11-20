@@ -1,5 +1,4 @@
 import SudokuGrid from "./SudokuGrid";
-import SudokuSubmitButton from "./SudokuSubmitButton";
 import { useTheme } from "./ThemeContext"
 
 
@@ -19,7 +18,6 @@ function SudokuSolver() {
 
             <SudokuGrid />
 
-            <SudokuSubmitButton/>
 
 
         </div>
