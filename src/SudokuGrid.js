@@ -133,12 +133,29 @@ function SudokuGrid() {
 
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
-        if (SudokuValues[row][column] == 1) {
+        for (var valueToCheck = 1; valueToCheck  <= 9; valueToCheck ++) {
+        if (SudokuValues[row][column] == valueToCheck ) {
           for (var x = 0; x < 9; x++) {
-            possibleSudokuValues[row][x] = possibleSudokuValues[row][x].filter(value => value !== 1)
-            possibleSudokuValues[x][column] = possibleSudokuValues[x][column].filter(value => value !== 1)
+            possibleSudokuValues[row][x] = possibleSudokuValues[row][x].filter(value => value !== valueToCheck)
+            possibleSudokuValues[x][column] = possibleSudokuValues[x][column].filter(value => value !== valueToCheck)
           }
         }
+      }
+
+
+// Set the value in the Sudoku Grid based on the following conditions:
+// 1. A cell has only one possible value.
+if (possibleSudokuValues[row][column][0].length==1) 
+{//The 0 i to get inside the array
+
+  var prevBoxItems = {...gridItems};
+  prevBoxItems[row][column]=possibleSudokuValues[row][column][0]
+  setSudokuValues(prevBoxItems)
+
+}
+  
+
+
       }
     }
   }
