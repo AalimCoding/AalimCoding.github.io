@@ -133,27 +133,40 @@ function SudokuGrid() {
 
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
-        for (var valueToCheck = 1; valueToCheck  <= 9; valueToCheck ++) {
-        if (SudokuValues[row][column] == valueToCheck ) {
-          for (var x = 0; x < 9; x++) {
-            possibleSudokuValues[row][x] = possibleSudokuValues[row][x].filter(value => value !== valueToCheck)
-            possibleSudokuValues[x][column] = possibleSudokuValues[x][column].filter(value => value !== valueToCheck)
+        for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
+          if (SudokuValues[row][column] == valueToCheck) {
+            for (var x = 0; x < 9; x++) {
+
+              // Make sure that I dont update the cell with the value in it.
+              if (SudokuValues[row][x] != valueToCheck) {
+                possibleSudokuValues[row][x] = possibleSudokuValues[row][x].filter(value => value !== valueToCheck)
+              }
+              if (SudokuValues[x][column] != valueToCheck) {
+                possibleSudokuValues[x][column] = possibleSudokuValues[x][column].filter(value => value !== valueToCheck)
+              }
+            }
           }
         }
-      }
 
 
-// Set the value in the Sudoku Grid based on the following conditions:
-// 1. A cell has only one possible value.
-if (possibleSudokuValues[row][column][0].length==1) 
-{//The 0 i to get inside the array
+        // Set the value in the Sudoku Grid based on the following conditions:
+        // 1. A cell has only one possible value.
+        if (possibleSudokuValues[row][column].length == 1) {
+          
+          // Ensure there's only one possible value in the array for this cell
+          const newValue = possibleSudokuValues[row][column][0];
 
-  var prevBoxItems = {...gridItems};
-  prevBoxItems[row][column]=possibleSudokuValues[row][column][0]
-  setSudokuValues(prevBoxItems)
+          // Create a copy of the Sudoku grid
+          const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
 
-}
-  
+          // Update the value in the Sudoku grid
+          newSudokuValues[row][column] = newValue;
+
+          // Set the updated Sudoku grid
+          setSudokuValues(newSudokuValues);
+
+        }
+
 
 
       }
