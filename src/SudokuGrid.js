@@ -128,6 +128,9 @@ function SudokuGrid() {
     // THIS IS THE FUNCTION THAT CHECKS IF AN ANSWER IS VALID FOR A CELL
 
 
+    //OPTIMISE CODE BY IMMEDIATELY SETTING POSSIBLE VALUE TO ACTUAL VALUE 
+    // IF WE HAVE IT , AND THEN IGNORING CASES WHERE ARRAY LENGTH IS 1.
+
     console.log(possibleSudokuValues)
 
 
@@ -151,8 +154,8 @@ function SudokuGrid() {
 
         // Set the value in the Sudoku Grid based on the following conditions:
         // 1. A cell has only one possible value.
-        if (possibleSudokuValues[row][column].length == 1) {
-          
+        if (possibleSudokuValues[row][column].length === 1) {
+
           // Ensure there's only one possible value in the array for this cell
           const newValue = possibleSudokuValues[row][column][0];
 
@@ -165,6 +168,39 @@ function SudokuGrid() {
           // Set the updated Sudoku grid
           setSudokuValues(newSudokuValues);
 
+        }
+
+
+
+        //2. Only one box in a row or column can have a specific value
+        for (var rowToCheck = 0; rowToCheck < 9; rowToCheck++) {
+          for (var valueToCheckInRow = 1; valueToCheckInRow <= 9; valueToCheckInRow++) {
+          var validInRow = 0
+          var validPosition = -1; // Initialize position to an invalid value
+
+          for (var columnToCheck = 0; columnToCheck < 9; columnToCheck++) {
+            
+
+              if (valueToCheck in possibleSudokuValues[rowToCheck][columnToCheck]) {
+                validInRow += 1
+              validPosition = columnToCheck
+              }
+            }
+
+            if (validInRow === 1) {
+
+              // Create a copy of the Sudoku grid
+              const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
+
+              // Update the value in the Sudoku grid
+              newSudokuValues[rowToCheck][validPosition] = valueToCheckInRow;
+
+              // Set the updated Sudoku grid
+              setSudokuValues(newSudokuValues);
+
+              break
+            }
+          }
         }
 
 
