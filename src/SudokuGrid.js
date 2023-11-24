@@ -68,22 +68,27 @@ function SudokuGrid() {
           box={box}
           itemInBox={itemInBox}
           aspectRatio="1/1"
+          rounded={'20px'}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"          
           key={itemId}
           id={itemId}
           onClick={() => handleClick(row, column)}
 
           style={{
             cursor: "pointer",
+            
             background:
-              SudokuValues[row][column] === 1 ? "#FA9189" :
-                SudokuValues[row][column] === 2 ? "#FCAE7C" :
-                  SudokuValues[row][column] === 3 ? "#FFE699" :
-                    SudokuValues[row][column] === 4 ? "#D1FF99" :
-                      SudokuValues[row][column] === 5 ? "#B3F5BC" :
-                        SudokuValues[row][column] === 6 ? "#D6F6FF" :
-                          SudokuValues[row][column] === 7 ? "#9FD1FF" :
-                            SudokuValues[row][column] === 8 ? "#E2CBF7" :
-                              SudokuValues[row][column] === 9 ? "#D1BDFF" :
+            SudokuValues[row][column] === 1 ? "#FF6B6B" :
+            SudokuValues[row][column] === 2 ? "#FFA06B" :
+              SudokuValues[row][column] === 3 ? "#FFD56B" :
+                SudokuValues[row][column] === 4 ? "#BCFF6B" :
+                  SudokuValues[row][column] === 5 ? "#6BFFB8" :
+                    SudokuValues[row][column] === 6 ? "#6BD4FF" :
+                      SudokuValues[row][column] === 7 ? "#6B9CFF" :
+                        SudokuValues[row][column] === 8 ? "#B86BFF" :
+                          SudokuValues[row][column] === 9 ? "#FF6BDA" :
 
 
 
@@ -172,7 +177,7 @@ function SudokuGrid() {
 
 
 
-        //2. Only one box in a row or column can have a specific value
+        //2. Only one box in a row can have a specific value
         for (var rowToCheck = 0; rowToCheck < 9; rowToCheck++) {
           for (var valueToCheckInRow = 1; valueToCheckInRow <= 9; valueToCheckInRow++) {
           var validInRow = 0
@@ -204,6 +209,16 @@ function SudokuGrid() {
         }
 
 
+        // 3. Only one value in  a column can have a specific value
+
+
+
+
+        //4. Only one value in a box can have a specific value.
+
+
+
+        //5. A value must be within a certain row/column in another box, and therefore cannot be in that row/column in our box.
 
       }
     }
