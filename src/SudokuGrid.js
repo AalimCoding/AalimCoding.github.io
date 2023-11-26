@@ -3,6 +3,7 @@ import { Grid, GridItem, Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 
+
 /* I use Chakra UI Buttons. For docs go to:
 https://chakra-ui.com/docs/components/button/usage */
 
@@ -14,13 +15,12 @@ function SudokuGrid() {
   const itemsPerBox = 9; // Number of items per box
 
 
-  var possibleSudokuValues = []
-  for (var i = 0; i < 9; i++) {
-    possibleSudokuValues.push([])
-    for (var j = 0; j < 9; j++) {
-      possibleSudokuValues[i].push([1, 2, 3, 4, 5, 6, 7, 8, 9])
-    }
-  }
+  const [possibleSudokuValues, setPossibleSudokuValues] = useState(() => {
+    const initialPossibleValues = Array.from({ length: gridSize }, () =>
+      Array(itemsPerBox).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    );
+    return initialPossibleValues;
+  });
 
   // Initializing the Sudoku grid with initial values using useState hook
   const [SudokuValues, setSudokuValues] = useState(() => {
@@ -89,10 +89,7 @@ function SudokuGrid() {
                             SudokuValues[row][column] === 8 ? "#B86BFF" :
                               SudokuValues[row][column] === 9 ? "#FF6BDA" :
 
-
-
                                 theme === "light" ? "white" : "black",
-
 
             color:
               SudokuValues[row][column] !== 0 ? "black" :
@@ -136,29 +133,53 @@ function SudokuGrid() {
     // IF WE HAVE IT , AND THEN IGNORING CASES WHERE ARRAY LENGTH IS 1.
 
     console.log(possibleSudokuValues)
+    var updatedPossibleValues = [...possibleSudokuValues]
 
     // UPDATE POSSIBLE VALUES
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
 
- //If we know the value of a cell, we can set its possible value to be the value of the cell, as it must be that value.
-          if (SudokuValues[row][column] !== 0) {
-          possibleSudokuValues[row][column] = [];
+        //If we know the value of a cell, we can set its possible value to be the value of the cell, as it must be that value.
+        if (SudokuValues[row][column] !== 0) {
+          updatedPossibleValues[row][column] = [];
 
-          possibleSudokuValues[row][column].push(SudokuValues[row][column]);
+          updatedPossibleValues[row][column].push(SudokuValues[row][column]);
 
-          }
-          
+        }
+
+
+        // If a cell has a given value, no cell in the same row or column can have that value
         for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
           if (SudokuValues[row][column] === valueToCheck) {
             for (var x = 0; x < 9; x++) {
 
               // Make sure that I dont update the cell with the value in it.
               if (SudokuValues[row][x] !== valueToCheck) {
-                possibleSudokuValues[row][x] = possibleSudokuValues[row][x].filter(value => value !== valueToCheck)
+                updatedPossibleValues[row][x] = updatedPossibleValues[row][x].filter(value => value !== valueToCheck)
               }
               if (SudokuValues[x][column] !== valueToCheck) {
-                possibleSudokuValues[x][column] = possibleSudokuValues[x][column].filter(value => value !== valueToCheck)
+                updatedPossibleValues[x][column] = updatedPossibleValues[x][column].filter(value => value !== valueToCheck)
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+    //If a cell has a given value, no cell in the same box can have that value.
+    for (var row = 0; row < 9; row++) {
+      for (var column = 0; column < 9; column++) {
+        if (SudokuValues[row][column] !== 0) {
+          const boxStartRow = Math.floor(row / 3) * 3;
+          const boxStartColumn = Math.floor(column / 3) * 3;
+
+          for (var i = boxStartRow; i < boxStartRow + 3; i++) {
+            for (var j = boxStartColumn; j < boxStartColumn + 3; j++) {
+              if (i !== row || j !== column) {
+                updatedPossibleValues[i][j] = updatedPossibleValues[i][j].filter(
+                  value => value !== SudokuValues[row][column]
+                );
               }
             }
           }
@@ -168,21 +189,31 @@ function SudokuGrid() {
 
 
 
+    setPossibleSudokuValues(updatedPossibleValues)
 
 
-    const updatedValues = [...SudokuValues.map((rowValues) => [...rowValues])];
+
+
+
+
+
+
+
+
+
     // SET THE NEW VALUES
     // Set the value in the Sudoku Grid based on the following conditions:
     // 1. A cell has only one possible value.
-    onlyPossibleValueForCell(updatedValues)
+    onlyPossibleValueForCell()
 
 
 
     //2. Only one box in a row can have a specific value
-    onlyValueInRow(updatedValues)
+    onlyValueInRow()
 
 
     // 3. Only one value in  a column can have a specific value
+    onlyValueInColumn()
 
 
 
@@ -196,7 +227,7 @@ function SudokuGrid() {
 
   }
 
-  function onlyPossibleValueForCell(updatedValues) {
+  function onlyPossibleValueForCell() {
     for (let row = 0; row < 9; row++) {
       for (let column = 0; column < 9; column++) {
         if (possibleSudokuValues[row][column].length === 1) {
@@ -219,7 +250,7 @@ function SudokuGrid() {
   }
 
 
-  function onlyValueInRow(updatedValues) {
+  function onlyValueInRow() {
     for (let column = 0; column < 9; column++) {
       for (var rowToCheck = 0; rowToCheck < 9; rowToCheck++) {
         for (var valueToCheckInRow = 1; valueToCheckInRow <= 9; valueToCheckInRow++) {
@@ -246,12 +277,48 @@ function SudokuGrid() {
             // Set the updated Sudoku grid
             setSudokuValues(newSudokuValues);
 
-            return; //Exit the function after updating a single cell
+            break;//Exit the function after updating a single cell
           }
         }
       }
     }
   }
+
+
+  function onlyValueInColumn() {
+    for (let row = 0; row < 9; row++) {
+      for (var columnToCheck = 0; columnToCheck < 9; columnToCheck++) {
+        for (var valueToCheckInColumn = 1; valueToCheckInColumn <= 9; valueToCheckInColumn++) {
+          var validInColumn = 0
+          var validPosition = -1; // Initialize position to an invalid value
+
+          for (var rowToCheck = 0; rowToCheck < 9; rowToCheck++) {
+
+
+            if (possibleSudokuValues[rowToCheck][columnToCheck].includes(valueToCheckInColumn)) {
+              validInColumn++
+              validPosition = rowToCheck
+            }
+          }
+
+          if (validInColumn === 1 && validPosition !== -1) {
+
+            // Create a copy of the Sudoku grid
+            const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
+
+            // Update the value in the Sudoku grid
+            newSudokuValues[validPosition][columnToCheck] = valueToCheckInColumn;
+
+            // Set the updated Sudoku grid
+            setSudokuValues(newSudokuValues);
+
+            break;//Exit the function after updating a single cell
+          }
+        }
+      }
+    }
+  }
+
   console.log(possibleSudokuValues)
 
 
@@ -271,9 +338,6 @@ function SudokuGrid() {
       >
         {gridItems}
       </Grid>
-
-
-
 
 
       <Button
