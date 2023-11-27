@@ -1,14 +1,19 @@
 // Importing necessary components and hooks from Chakra UI and React
-import { Grid, GridItem, Button } from "@chakra-ui/react";
+import { Grid, GridItem, Button,Box } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTheme } from "./ThemeContext";
-
+import SudokuInfo from "./SudokuInfo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo, faGear } from "@fortawesome/free-solid-svg-icons";
 
 /* I use Chakra UI Buttons. For docs go to:
 https://chakra-ui.com/docs/components/button/usage */
 
 
 function SudokuGrid() {
+
+  var [showInfo, setShowInfo] = useState(false);
+
   // Getting the current theme using the useTheme hook
   const { theme } = useTheme();
   const gridSize = 9; // Number of boxes in the grid
@@ -353,6 +358,16 @@ function SudokuGrid() {
         This is the Sudoku submit button component
       </Button>
 
+      <Box onClick={() => {
+                    setShowInfo(!showInfo)
+                }}>
+                    <FontAwesomeIcon icon={faCircleInfo} size="2x"
+                        style={{
+                            background: theme === "light" ? "white" : "black",
+                            color: theme === "light" ? "black" : "white",
+                        }} />
+                </Box>
+      <SudokuInfo showInfo={showInfo} />
 
 
     </div>
