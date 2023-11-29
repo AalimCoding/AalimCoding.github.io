@@ -1,5 +1,5 @@
 // Importing necessary components and hooks from Chakra UI and React
-import { Grid, GridItem, Button,Box } from "@chakra-ui/react";
+import { Grid, GridItem, Button, Box } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 import SudokuInfo from "./SudokuInfo";
@@ -224,7 +224,7 @@ function SudokuGrid() {
 
 
     //4. Only one value in a box can have a specific value.
-
+    onlyValueInBox()
 
 
     //5. A value must be within a certain row/column in another box, and therefore cannot be in that row/column in our box.
@@ -324,6 +324,46 @@ function SudokuGrid() {
     }
   }
 
+  function onlyValueInBox() {
+    for (let row = 0; row < 9; row++) {
+      for (var column = 0; column < 9; column++) {
+        for (var valueToCheckInBox = 1; valueToCheckInBox <= 9; valueToCheckInBox++) {
+          var validInBox = 0
+          var validPosition = -1; // Initialize position to an invalid value
+
+          const boxStartRow = Math.floor(row / 3) * 3;
+          const boxStartColumn = Math.floor(column / 3) * 3;
+
+          for (var i = boxStartRow; i < boxStartRow + 3; i++) {
+            for (var j = boxStartColumn; j < boxStartColumn + 3; j++) {
+
+
+
+              if (possibleSudokuValues[i][j].includes(valueToCheckInBox)) {
+                validInBox++
+                let validI = i
+                let validJ = j
+              }
+            }
+            if (validInBox === 1 && validPosition !== -1) {
+
+              // Create a copy of the Sudoku grid
+              const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
+
+              // Update the value in the Sudoku grid
+              newSudokuValues[i][j] = valueToCheckInBox;
+
+              // Set the updated Sudoku grid
+              setSudokuValues(newSudokuValues);
+
+              break;//Exit the function after updating a single cell
+            }
+          }
+        }
+      }
+    }
+  }
+
   console.log(possibleSudokuValues)
 
 
@@ -359,33 +399,33 @@ function SudokuGrid() {
       </Button>
 
       <Box onClick={() => {
-                    setShowInfo(!showInfo)
-                }}>
-                    <FontAwesomeIcon icon={faCircleInfo} size="2x"
-                        style={{
-                            background: theme === "light" ? "white" : "black",
-                            color: theme === "light" ? "black" : "white",
-                        }} />
-                </Box>
+        setShowInfo(!showInfo)
+      }}>
+        <FontAwesomeIcon icon={faCircleInfo} size="2x"
+          style={{
+            background: theme === "light" ? "white" : "black",
+            color: theme === "light" ? "black" : "white",
+          }} />
+      </Box>
       <SudokuInfo showInfo={showInfo} />
 
 
 
       <Box onClick={() => {
-                    setSudokuValues([
-                      [0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0,0]
-                    ])
-                }}>
-                    
-                Click To Reset Grid</Box>
+        setSudokuValues([
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ])
+      }}>
+
+        Click To Reset Grid</Box>
 
     </div>
   );
