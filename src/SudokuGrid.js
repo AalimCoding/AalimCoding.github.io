@@ -228,7 +228,7 @@ function SudokuGrid() {
 
 
     //5. A value must be within a certain row/column in another box, and therefore cannot be in that row/column in our box.
-
+    impliedPlacementInBox()
 
   }
 
@@ -253,7 +253,6 @@ function SudokuGrid() {
       }
     }
   }
-
 
   function onlyValueInRow() {
     for (let column = 0; column < 9; column++) {
@@ -288,7 +287,6 @@ function SudokuGrid() {
       }
     }
   }
-
 
   function onlyValueInColumn() {
     for (let row = 0; row < 9; row++) {
@@ -326,43 +324,54 @@ function SudokuGrid() {
 
   function onlyValueInBox() {
     for (let row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
-        for (var valueToCheckInBox = 1; valueToCheckInBox <= 9; valueToCheckInBox++) {
-          var validInBox = 0
-          var validPosition = -1; // Initialize position to an invalid value
+      for (let column = 0; column < 9; column++) {
+        for (let valueToCheckInBox = 0; valueToCheckInBox < 9; valueToCheckInBox++) {
+          let validInBox = 0;
+          let validI = -1;
+          let validJ = -1;
 
           const boxStartRow = Math.floor(row / 3) * 3;
           const boxStartColumn = Math.floor(column / 3) * 3;
 
-          for (var i = boxStartRow; i < boxStartRow + 3; i++) {
-            for (var j = boxStartColumn; j < boxStartColumn + 3; j++) {
-
-
-
+          for (let i = boxStartRow; i < boxStartRow + 3; i++) {
+            for (let j = boxStartColumn; j < boxStartColumn + 3; j++) {
               if (possibleSudokuValues[i][j].includes(valueToCheckInBox)) {
-                validInBox++
-                let validI = i
-                let validJ = j
+                validInBox++;
+                validI = i;
+                validJ = j;
               }
             }
-            if (validInBox === 1 && validPosition !== -1) {
+          }
 
-              // Create a copy of the Sudoku grid
-              const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
-
-              // Update the value in the Sudoku grid
-              newSudokuValues[i][j] = valueToCheckInBox;
-
-              // Set the updated Sudoku grid
-              setSudokuValues(newSudokuValues);
-
-              break;//Exit the function after updating a single cell
-            }
+          if (validInBox === 1 && validI !== -1 && validJ !== -1) {
+            const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
+            newSudokuValues[validI][validJ] = valueToCheckInBox;
+            setSudokuValues(newSudokuValues);
+            return; // Exit the function after updating a single cell
           }
         }
       }
     }
   }
+
+  function impliedPlacementInBox() {
+
+
+    // for each row in each box
+    for (let boxVertical = 0; boxVertical < 3; boxVertical++) {
+      for (let boxHorizontal = 0; boxHorizontal < 3; boxHorizontal++) {
+        for (let row = 0; row < 3; row++) {
+
+        }
+
+
+      }
+    }
+    //for each column in each box
+  }
+
+
+
 
   console.log(possibleSudokuValues)
 
@@ -426,6 +435,22 @@ function SudokuGrid() {
       }}>
 
         Click To Reset Grid</Box>
+
+              <Box onClick={() => {
+        setSudokuValues([
+          [0, 3, 0, 0, 2, 4, 0, 0, 0],
+          [0, 0, 1, 0, 3, 0, 7, 0, 5],
+          [0, 0, 0, 5, 0, 0, 8, 0, 0],
+          [0, 7, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 4, 0, 8, 0, 0, 5, 7],
+          [0, 1, 0, 7, 0, 0, 9, 0, 0],
+          [0, 0, 6, 0, 4, 0, 3, 0, 0],
+          [0, 5, 0, 0, 0, 0, 0, 2, 0],
+          [3, 0, 7, 0, 0, 0, 0, 6, 0]
+        ])
+      }}>
+
+        Click To Use Example Grid</Box>
 
     </div>
   );
