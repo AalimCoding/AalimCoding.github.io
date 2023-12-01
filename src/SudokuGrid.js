@@ -356,22 +356,39 @@ function SudokuGrid() {
 
   function impliedPlacementInBox() {
 
+    for (let possibleAnswer = 0; possibleAnswer < 9; possibleAnswer++) {
+      for (let row = 0; row < 9; row += 3) {
+        for (let column = 0; column < 9; column += 3) {
+          let answerCouldBeInThisRow = 0
+          for (let rowInMiniGrid = 0; rowInMiniGrid < 3; rowInMiniGrid++) {
+            let validAnswerInRow = 0
 
-    // for each row in each box
-    for (let boxVertical = 0; boxVertical < 3; boxVertical++) {
-      for (let boxHorizontal = 0; boxHorizontal < 3; boxHorizontal++) {
-        for (let row = 0; row < 3; row++) {
-
+            for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
+              // fix this so that its if desired answer in grid
+              if (possibleSudokuValues[3 * (row / 3) + rowInMiniGrid][3 * (column / 3) + positionInRow]) {
+                validAnswerInRow += 1
+              }
+            }
+            if (validAnswerInRow != 0) {
+              let rowtoConsider = 3 * (row / 3) + rowInMiniGrid
+              answerCouldBeInThisRow += 1
+            }
+            if (answerCouldBeInThisRow == 1) {
+              for (let otherMiniGrids = 1; otherMiniGrids < 3; otherMiniGrids++) {
+                for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
+                  //NEED TO REMOVE POSSIBLE VALUE FROM THESE POSITIONS
+                  //FIX THE LINE BELOW USING OLD SUDOKU SOLVER FILE FOR HELP
+                  possibleSudokuValues[rowtoConsider][3 * ((column / 3) - otherMiniGrids) + positionInRow]
+                }
+              }
+            }
+          }
         }
 
 
       }
     }
-    //for each column in each box
   }
-
-
-
 
   console.log(possibleSudokuValues)
 
@@ -436,7 +453,7 @@ function SudokuGrid() {
 
         Click To Reset Grid</Box>
 
-              <Box onClick={() => {
+      <Box onClick={() => {
         setSudokuValues([
           [0, 3, 0, 0, 2, 4, 0, 0, 0],
           [0, 0, 1, 0, 3, 0, 7, 0, 5],
