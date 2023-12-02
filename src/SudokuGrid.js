@@ -384,9 +384,39 @@ function SudokuGrid() {
             }
           }
         }
-
-
       }
+
+   
+        for (let row = 0; row < 9; row += 3) {
+          for (let column = 0; column < 9; column += 3) {
+            let answerCouldBeInThisColumn= 0
+            for (let columnInMiniGrid = 0; columnInMiniGrid < 3; columnInMiniGrid++) {
+              let validAnswerInColumn = 0
+
+              for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
+                // fix this so that its if desired answer in grid
+                if (possibleSudokuValues[3 * (row / 3) + positionInColumn][3 * (column / 3) + columnInMiniGrid]) {
+                  validAnswerInColumn += 1
+                }
+              }
+              if (validAnswerInColumn != 0) {
+                let columntoConsider = 3 * (column / 3) + columnInMiniGrid
+                answerCouldBeInThisColumn += 1
+              }
+              if (answerCouldBeInThisColumn == 1) {
+                for (let otherMiniGrids = 1; otherMiniGrids < 3; otherMiniGrids++) {
+                  for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
+                    //NEED TO REMOVE POSSIBLE VALUE FROM THESE POSITIONS
+                    //FIX THE LINE BELOW USING OLD SUDOKU SOLVER FILE FOR HELP
+                    possibleSudokuValues[3 * ((row / 3) - otherMiniGrids) + positionInColumn][columntoConsider]
+                  }
+                }
+              }
+            
+          }
+        }
+      }
+
     }
   }
 
