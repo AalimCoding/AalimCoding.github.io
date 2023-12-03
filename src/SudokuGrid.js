@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 import SudokuInfo from "./SudokuInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faGear } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, /* faGear */ } from "@fortawesome/free-solid-svg-icons";
 
 /* I use Chakra UI Buttons. For docs go to:
 https://chakra-ui.com/docs/components/button/usage */
@@ -173,8 +173,8 @@ function SudokuGrid() {
 
 
     //If a cell has a given value, no cell in the same box can have that value.
-    for (var row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
+    for ( row = 0; row < 9; row++) {
+      for ( column = 0; column < 9; column++) {
         if (SudokuValues[row][column] !== 0) {
           const boxStartRow = Math.floor(row / 3) * 3;
           const boxStartColumn = Math.floor(column / 3) * 3;
@@ -192,18 +192,7 @@ function SudokuGrid() {
       }
     }
 
-
-
     setPossibleSudokuValues(updatedPossibleValues)
-
-
-
-
-
-
-
-
-
 
 
     // SET THE NEW VALUES
@@ -211,21 +200,14 @@ function SudokuGrid() {
     // 1. A cell has only one possible value.
     onlyPossibleValueForCell()
 
-
-
     //2. Only one box in a row can have a specific value
     onlyValueInRow()
-
 
     // 3. Only one value in  a column can have a specific value
     onlyValueInColumn()
 
-
-
-
     //4. Only one value in a box can have a specific value.
     onlyValueInBox()
-
 
     //5. A value must be within a certain row/column in another box, and therefore cannot be in that row/column in our box.
     impliedPlacementInBox()
@@ -354,75 +336,118 @@ function SudokuGrid() {
     }
   }
 
+  let newSudokuValues
+
   function impliedPlacementInBox() {
+    // Create a copy of the Sudoku grid
 
     for (let possibleAnswer = 0; possibleAnswer < 9; possibleAnswer++) {
-      for (let row = 0; row < 9; row += 3) {
-        for (let column = 0; column < 9; column += 3) {
-          let answerCouldBeInThisRow = 0
-          for (let rowInMiniGrid = 0; rowInMiniGrid < 3; rowInMiniGrid++) {
-            let validAnswerInRow = 0
+      newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
 
-            for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
-              // fix this so that its if desired answer in grid
-              if (possibleSudokuValues[3 * (row / 3) + rowInMiniGrid][3 * (column / 3) + positionInRow]) {
-                validAnswerInRow += 1
-              }
-            }
-            if (validAnswerInRow != 0) {
-              let rowtoConsider = 3 * (row / 3) + rowInMiniGrid
-              answerCouldBeInThisRow += 1
-            }
-            if (answerCouldBeInThisRow == 1) {
-              for (let otherMiniGrids = 1; otherMiniGrids < 3; otherMiniGrids++) {
-                for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
-                  //NEED TO REMOVE POSSIBLE VALUE FROM THESE POSITIONS
-                  //FIX THE LINE BELOW USING OLD SUDOKU SOLVER FILE FOR HELP
-                  possibleSudokuValues[rowtoConsider][3 * ((column / 3) - otherMiniGrids) + positionInRow]
-                }
-              }
-            }
-          }
-        }
-      }
 
-   
-        for (let row = 0; row < 9; row += 3) {
-          for (let column = 0; column < 9; column += 3) {
-            let answerCouldBeInThisColumn= 0
-            for (let columnInMiniGrid = 0; columnInMiniGrid < 3; columnInMiniGrid++) {
-              let validAnswerInColumn = 0
+      checkRowsForPlacement(possibleAnswer,newSudokuValues);
 
-              for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
-                // fix this so that its if desired answer in grid
-                if (possibleSudokuValues[3 * (row / 3) + positionInColumn][3 * (column / 3) + columnInMiniGrid]) {
-                  validAnswerInColumn += 1
-                }
-              }
-              if (validAnswerInColumn != 0) {
-                let columntoConsider = 3 * (column / 3) + columnInMiniGrid
-                answerCouldBeInThisColumn += 1
-              }
-              if (answerCouldBeInThisColumn == 1) {
-                for (let otherMiniGrids = 1; otherMiniGrids < 3; otherMiniGrids++) {
-                  for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
-                    //NEED TO REMOVE POSSIBLE VALUE FROM THESE POSITIONS
-                    //FIX THE LINE BELOW USING OLD SUDOKU SOLVER FILE FOR HELP
-                    possibleSudokuValues[3 * ((row / 3) - otherMiniGrids) + positionInColumn][columntoConsider]
-                  }
-                }
-              }
-            
-          }
-        }
-      }
+      checkColumnsForPlacement(possibleAnswer,newSudokuValues);
 
+      setSudokuValues(newSudokuValues);
     }
+    // Set the updated Sudoku grid
+   
   }
 
   console.log(possibleSudokuValues)
 
 
+
+  function checkRowsForPlacement(possibleAnswer,newSudokuValues) {
+    let rowtoConsider = -1
+    for (let row = 0; row < 9; row += 3) {
+      for (let column = 0; column < 9; column += 3) {
+        let answerCouldBeInThisRow = 0
+        for (let rowInMiniGrid = 0; rowInMiniGrid < 3; rowInMiniGrid++) {
+          let validAnswerInRow = 0
+
+          for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
+
+            if (possibleSudokuValues[3 * Math.floor(row / 3) + rowInMiniGrid][3 * Math.floor(column / 3) + positionInRow]) {
+              validAnswerInRow += 1
+            }
+          }
+          if (validAnswerInRow !== 0) {
+            rowtoConsider = 3 * Math.floor(row / 3) + rowInMiniGrid
+            answerCouldBeInThisRow += 1
+            console.log(rowtoConsider)
+          }
+          if (answerCouldBeInThisRow === 1) {
+            for (let otherMiniGrids = 1; otherMiniGrids < 3; otherMiniGrids++) {
+              for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
+
+
+
+
+                // Update the value in the Sudoku grid
+                  // THIS WON'T WORK AS JAVASCRIPT DOESNT LIKE [-1] FOR ARRAYS
+// CHANGE THIS TO UPDATE POSSIBLE VALUES, NOT THE SUDOKU VALUE ITSELF
+
+                  let rightPosition = 3 * (Math.floor(column / 3) - otherMiniGrids) + positionInRow
+                  if (rightPosition<0){rightPosition=9+rightPosition}
+                  console.log("right position is:",rightPosition)
+                newSudokuValues[rowtoConsider][rightPosition] = possibleAnswer;
+
+
+
+
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  function checkColumnsForPlacement(possibleAnswer,newSudokuValues) {
+    let columntoConsider = -1
+    for (let row = 0; row < 9; row += 3) {
+      for (let column = 0; column < 9; column += 3) {
+        let answerCouldBeInThisColumn = 0
+        for (let columnInMiniGrid = 0; columnInMiniGrid < 3; columnInMiniGrid++) {
+          let validAnswerInColumn = 0
+
+          for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
+
+            if (possibleSudokuValues[3 * Math.floor(row / 3) + positionInColumn][3 * Math.floor(column / 3) + columnInMiniGrid]) {
+              validAnswerInColumn += 1
+            }
+          }
+          if (validAnswerInColumn !== 0) {
+            columntoConsider = 3 * Math.floor(column / 3) + columnInMiniGrid
+            answerCouldBeInThisColumn += 1
+          }
+          if (answerCouldBeInThisColumn === 1) {
+            for (let otherMiniGrids = 1; otherMiniGrids < 3; otherMiniGrids++) {
+              for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
+
+
+                // Update the value in the Sudoku grid
+                // THIS WON'T WORK AS JAVASCRIPT DOESNT LIKE [-1] FOR ARRAYS
+
+                let rightPosition =  3 * ((row / 3) - otherMiniGrids) + positionInColumn
+                console.log("right position is:",rightPosition)
+                if (rightPosition<0){rightPosition=9+rightPosition}
+
+                newSudokuValues[rightPosition][columntoConsider] = possibleAnswer;
+
+
+
+              }
+            }
+          }
+
+        }
+      }
+    }
+  }
 
   // Final main Sudoku grid
   return (
