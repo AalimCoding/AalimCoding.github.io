@@ -99,6 +99,7 @@ function SudokuGrid() {
             color:
               SudokuValues[row][column] !== 0 ? "black" :
                 theme === "light" ? "black" : "white",
+                border: "1px solid"
           }}
         >
           {SudokuValues[row][column]}
@@ -110,21 +111,24 @@ function SudokuGrid() {
     // Creating a 3x3 grid for each Sudoku box
     gridItems.push(
       <Grid
+      rounded={'23px'}
         aspectRatio="1/1"
         key={boxId}
         id={boxId}
         templateColumns="repeat(3, 1fr)"
         templateRows="repeat(3, 1fr)"
-        gap={5}
+        //gap={5}
         style={{
           background: theme === "light" ? "white" : "black",
           color: theme === "light" ? "black" : "white",
+          border: "3px solid"
         }}
       >
         {boxItems}
       </Grid>
     );
   }
+
 
 
 

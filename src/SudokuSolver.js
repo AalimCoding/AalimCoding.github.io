@@ -15,6 +15,10 @@ function SudokuSolver() {
             It will fill in as much as possible and then stop. This indicates there are no further definite steps that cna be taken, i.e. there is not wenough information to get to a UNIQUE solution,
             which may sometimes mean there is not enough information to get any solution.
 
+TODO - Select number to click and input this number.
+Select number to see only cells with that vlue highlighted.
+Add messages for each step of solution.
+Add ability to add thermo sudoku or cages.
 
             <SudokuGrid />
 
