@@ -72,7 +72,13 @@ function SudokuGrid() {
           box={box}
           itemInBox={itemInBox}
           aspectRatio="1/1"
-          rounded={'20px'}
+          rounded={
+          itemInBox===1? "20px 0px 0px 0px":
+          itemInBox===3? "0px 20px 0px 0px":
+          itemInBox===7? "0px 0px 0px 20px":
+          itemInBox===9? "0px 0px 20px 0px":
+          "0px 0px 0 px 0px"}
+
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -460,7 +466,7 @@ function SudokuGrid() {
         id="Main Grid"
         templateColumns="repeat(3, 1fr)"
         templateRows="repeat(3, 1fr)"
-        gap={10}
+        gap={5}
         style={{
           background: theme === "light" ? "white" : "black",
           color: theme === "light" ? "black" : "white",
