@@ -19,7 +19,7 @@ TODO - Select number to click and input this number.
 Select number to see only cells with that vlue highlighted.
 Add messages for each step of solution.
 Add ability to add thermo sudoku or cages.
-
+Click to switch between values and posible values
             <SudokuGrid />
 
 

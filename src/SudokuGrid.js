@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 import SudokuInfo from "./SudokuInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, /* faGear */ } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faMagnifyingGlass /* faGear */ } from "@fortawesome/free-solid-svg-icons";
 
 /* I use Chakra UI Buttons. For docs go to:
 https://chakra-ui.com/docs/components/button/usage */
@@ -13,6 +13,7 @@ https://chakra-ui.com/docs/components/button/usage */
 function SudokuGrid() {
 
   var [showInfo, setShowInfo] = useState(false);
+  var [toggleDisplay, setToggleDisplay] = useState(false);
 
   // Getting the current theme using the useTheme hook
   const { theme } = useTheme();
@@ -73,11 +74,11 @@ function SudokuGrid() {
           itemInBox={itemInBox}
           aspectRatio="1/1"
           rounded={
-          itemInBox===1? "20px 0px 0px 0px":
-          itemInBox===3? "0px 20px 0px 0px":
-          itemInBox===7? "0px 0px 0px 20px":
-          itemInBox===9? "0px 0px 20px 0px":
-          "0px 0px 0 px 0px"}
+            itemInBox === 1 ? "20px 0px 0px 0px" :
+              itemInBox === 3 ? "0px 20px 0px 0px" :
+                itemInBox === 7 ? "0px 0px 0px 20px" :
+                  itemInBox === 9 ? "0px 0px 20px 0px" :
+                    "0px 0px 0 px 0px"}
 
           display="flex"
           alignItems="center"
@@ -105,10 +106,10 @@ function SudokuGrid() {
             color:
               SudokuValues[row][column] !== 0 ? "black" :
                 theme === "light" ? "black" : "white",
-                border: "1px solid"
+            border: "1px solid"
           }}
         >
-          {SudokuValues[row][column]}
+          {toggleDisplay ? possibleSudokuValues[row][column] : SudokuValues[row][column]}
         </GridItem>
       );
     }
@@ -117,7 +118,7 @@ function SudokuGrid() {
     // Creating a 3x3 grid for each Sudoku box
     gridItems.push(
       <Grid
-      rounded={'23px'}
+        rounded={'23px'}
         aspectRatio="1/1"
         key={boxId}
         id={boxId}
@@ -183,8 +184,8 @@ function SudokuGrid() {
 
 
     //If a cell has a given value, no cell in the same box can have that value.
-    for ( row = 0; row < 9; row++) {
-      for ( column = 0; column < 9; column++) {
+    for (row = 0; row < 9; row++) {
+      for (column = 0; column < 9; column++) {
         if (SudokuValues[row][column] !== 0) {
           const boxStartRow = Math.floor(row / 3) * 3;
           const boxStartColumn = Math.floor(column / 3) * 3;
@@ -352,24 +353,24 @@ function SudokuGrid() {
     // Create a copy of the Sudoku grid
 
     for (let possibleAnswer = 0; possibleAnswer < 9; possibleAnswer++) {
-      newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
+      newSudokuValues = [...possibleSudokuValues.map((rowValues) => [...rowValues])];
 
 
-      checkRowsForPlacement(possibleAnswer,newSudokuValues);
+      checkRowsForPlacement(possibleAnswer, newSudokuValues);
 
-      checkColumnsForPlacement(possibleAnswer,newSudokuValues);
+      checkColumnsForPlacement(possibleAnswer, newSudokuValues);
 
-      setSudokuValues(newSudokuValues);
+      setPossibleSudokuValues(newSudokuValues);
     }
     // Set the updated Sudoku grid
-   
+
   }
 
   console.log(possibleSudokuValues)
 
 
 
-  function checkRowsForPlacement(possibleAnswer,newSudokuValues) {
+  function checkRowsForPlacement(possibleAnswer, newSudokuValues) {
     let rowtoConsider = -1
     for (let row = 0; row < 9; row += 3) {
       for (let column = 0; column < 9; column += 3) {
@@ -396,14 +397,14 @@ function SudokuGrid() {
 
 
                 // Update the value in the Sudoku grid
-                  // THIS WON'T WORK AS JAVASCRIPT DOESNT LIKE [-1] FOR ARRAYS
-// CHANGE THIS TO UPDATE POSSIBLE VALUES, NOT THE SUDOKU VALUE ITSELF
+                // THIS WON'T WORK AS JAVASCRIPT DOESNT LIKE [-1] FOR ARRAYS
+                // CHANGE THIS TO UPDATE POSSIBLE VALUES, NOT THE SUDOKU VALUE ITSELF
 
-                  let rightPosition = 3 * (Math.floor(column / 3) - otherMiniGrids) + positionInRow
-                  if (rightPosition<0){rightPosition=9+rightPosition}
-                  console.log("right position is:",rightPosition)
-                newSudokuValues[rowtoConsider][rightPosition] = possibleAnswer;
+                let rightPosition = 3 * (Math.floor(column / 3) - otherMiniGrids) + positionInRow
+                if (rightPosition < 0) { rightPosition = 9 + rightPosition }
+                console.log("right position is:", rightPosition)
 
+                newSudokuValues[rowtoConsider][rightPosition] = newSudokuValues[rowtoConsider][rightPosition].filter(value => value !== possibleAnswer)
 
 
 
@@ -416,7 +417,7 @@ function SudokuGrid() {
   }
 
 
-  function checkColumnsForPlacement(possibleAnswer,newSudokuValues) {
+  function checkColumnsForPlacement(possibleAnswer, newSudokuValues) {
     let columntoConsider = -1
     for (let row = 0; row < 9; row += 3) {
       for (let column = 0; column < 9; column += 3) {
@@ -442,11 +443,11 @@ function SudokuGrid() {
                 // Update the value in the Sudoku grid
                 // THIS WON'T WORK AS JAVASCRIPT DOESNT LIKE [-1] FOR ARRAYS
 
-                let rightPosition =  3 * ((row / 3) - otherMiniGrids) + positionInColumn
-                console.log("right position is:",rightPosition)
-                if (rightPosition<0){rightPosition=9+rightPosition}
+                let rightPosition = 3 * ((row / 3) - otherMiniGrids) + positionInColumn
+                console.log("right position is:", rightPosition)
+                if (rightPosition < 0) { rightPosition = 9 + rightPosition }
 
-                newSudokuValues[rightPosition][columntoConsider] = possibleAnswer;
+                newSudokuValues[rightPosition][columntoConsider] = newSudokuValues[rightPosition][columntoConsider].filter(value => value !== possibleAnswer)
 
 
 
@@ -499,6 +500,19 @@ function SudokuGrid() {
           }} />
       </Box>
       <SudokuInfo showInfo={showInfo} />
+
+
+
+      <Box onClick={() => {
+        setToggleDisplay(!toggleDisplay)
+      }}>Click to see possible values
+        <FontAwesomeIcon icon={faMagnifyingGlass} size="2x"
+          style={{
+            background: theme === "light" ? "white" : "black",
+            color: theme === "light" ? "black" : "white",
+          }} />
+      </Box>
+
 
 
 
