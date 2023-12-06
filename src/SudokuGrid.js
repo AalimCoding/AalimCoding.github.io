@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 import SudokuInfo from "./SudokuInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faMagnifyingGlass /* faGear */ } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faMagnifyingGlass,faBrush /* faGear */ } from "@fortawesome/free-solid-svg-icons";
 
 /* I use Chakra UI Buttons. For docs go to:
 https://chakra-ui.com/docs/components/button/usage */
@@ -19,6 +19,21 @@ function SudokuGrid() {
   const { theme } = useTheme();
   const gridSize = 9; // Number of boxes in the grid
   const itemsPerBox = 9; // Number of items per box
+
+  var [themeChoice,setThemeChoice]=useState(0)
+  const themeColours = [
+    ["#FF6B6B", "#FFA06B", "#FFD56B", "#BCFF6B", "#6BFFB8", "#6BD4FF", "#6B9CFF", "#B86BFF", "#FF6BDA"],
+    ["#2E86AB", "#4FADBB", "#72D6D0", "#A0E8D9", "#CAF0F8", "#FFE74C", "#FF5964", "#FFB2B2", "#D7DADB"],
+    ["#FF6B6B", "#FFA07A", "#FFD700", "#FFDAB9", "#F0E68C", "#B0E0E6", "#87CEEB", "#6495ED", "#4169E1"],
+    ["#355C7D", "#6C5B7B", "#C06C84", "#F67280", "#F8B195", "#F7DB4F", "#2EB872", "#4FD1C5", "#4B4A67"],
+    ["#FF9AA2", "#FFB7B2", "#FFDAC1", "#E2F0CB", "#B5EAD7", "#C7CEEA", "#A09ABC", "#6D7993", "#5D576B"],
+    ["#FFD700", "#FF8C00", "#FF4500", "#FF6347", "#FF69B4", "#EE82EE", "#8A2BE2", "#4B0082", "#483D8B"],
+    ["#83D6DE", "#51A3A3", "#2E5077", "#2A363B", "#FFFFF3", "#E8F0FF", "#B8D0E8", "#709FB0", "#3B8EA5"],
+    ["#FF6B6B", "#F9C74F", "#90BE6D", "#43AA8B", "#577590", "#283618", "#FFE66D", "#6D6875", "#A8DADC"],
+    ["#2C3E50", "#E74C3C", "#ECF0F1", "#3498DB", "#2980B9", "#16A085", "#27AE60", "#F39C12", "#F1C40F"],
+    ["#FAD02E", "#F9A602", "#F58F01", "#F56A6A", "#FFBD9E", "#FF725C", "#9A4848", "#50393B", "#3D2629"],
+    ["#020887", "#0D31C2", "#2278FF", "#00BFFF", "#A9E0FF", "#F0FFFF", "#FFE4E1", "#FF7F50", "#FF2400"
+    ]];
 
 
   const [possibleSudokuValues, setPossibleSudokuValues] = useState(() => {
@@ -90,16 +105,17 @@ function SudokuGrid() {
           style={{
             cursor: "pointer",
 
+
             background:
-              SudokuValues[row][column] === 1 ? "#FF6B6B" :
-                SudokuValues[row][column] === 2 ? "#FFA06B" :
-                  SudokuValues[row][column] === 3 ? "#FFD56B" :
-                    SudokuValues[row][column] === 4 ? "#BCFF6B" :
-                      SudokuValues[row][column] === 5 ? "#6BFFB8" :
-                        SudokuValues[row][column] === 6 ? "#6BD4FF" :
-                          SudokuValues[row][column] === 7 ? "#6B9CFF" :
-                            SudokuValues[row][column] === 8 ? "#B86BFF" :
-                              SudokuValues[row][column] === 9 ? "#FF6BDA" :
+              SudokuValues[row][column] === 1 ? themeColours[themeChoice][0] :
+                SudokuValues[row][column] === 2 ? themeColours[themeChoice][1] :
+                  SudokuValues[row][column] === 3 ? themeColours[themeChoice][2] :
+                    SudokuValues[row][column] === 4 ? themeColours[themeChoice][3] :
+                      SudokuValues[row][column] === 5 ? themeColours[themeChoice][4] :
+                        SudokuValues[row][column] === 6 ? themeColours[themeChoice][5] :
+                          SudokuValues[row][column] === 7 ? themeColours[themeChoice][6] :
+                            SudokuValues[row][column] === 8 ? themeColours[themeChoice][7] :
+                              SudokuValues[row][column] === 9 ? themeColours[themeChoice][8] :
 
                                 theme === "light" ? "white" : "black",
 
@@ -507,6 +523,16 @@ function SudokuGrid() {
         setToggleDisplay(!toggleDisplay)
       }}>Click to see possible values
         <FontAwesomeIcon icon={faMagnifyingGlass} size="2x"
+          style={{
+            background: theme === "light" ? "white" : "black",
+            color: theme === "light" ? "black" : "white",
+          }} />
+      </Box>
+
+      <Box onClick={() => {
+        setThemeChoice(themeChoice<themeColours.length?themeChoice++:0)
+      }}>Click to switch theme
+        <FontAwesomeIcon icon={faBrush} size="2x"
           style={{
             background: theme === "light" ? "white" : "black",
             color: theme === "light" ? "black" : "white",
