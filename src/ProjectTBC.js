@@ -1,9 +1,9 @@
 import { useTheme } from "./ThemeContext"
-import { Box, grid } from "@chakra-ui/react";
+/* import { Box, grid } from "@chakra-ui/react"; */
 
-function ProjectTBC(){
+function ProjectTBC() {
     const { theme } = useTheme();
-    return(
+    return (
         <div>This is the ProjectTBC</div>
     )
 }

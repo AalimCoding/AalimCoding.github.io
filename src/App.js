@@ -5,7 +5,7 @@ import ProjectTBC from './ProjectTBC';
 import './App.css';
 import Header from './Header';
 import Footer from './Footer';
-import { HashRouter, BrowserRouter as Router, Route,Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from './ThemeContext';
 import { ChakraProvider } from '@chakra-ui/react'
 import ProjectsPreview from './Homepage';

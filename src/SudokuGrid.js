@@ -1,10 +1,10 @@
 // Importing necessary components and hooks from Chakra UI and React
-import { Grid, GridItem, Button, Box } from "@chakra-ui/react";
+import { Grid, GridItem, Button, Box, HStack ,VStack} from "@chakra-ui/react";
 import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 import SudokuInfo from "./SudokuInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faMagnifyingGlass,faBrush /* faGear */ } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faMagnifyingGlass, faBrush /* faGear */ } from "@fortawesome/free-solid-svg-icons";
 
 /* I use Chakra UI Buttons. For docs go to:
 https://chakra-ui.com/docs/components/button/usage */
@@ -20,7 +20,7 @@ function SudokuGrid() {
   const gridSize = 9; // Number of boxes in the grid
   const itemsPerBox = 9; // Number of items per box
 
-  var [themeChoice,setThemeChoice]=useState(0)
+  var [themeChoice, setThemeChoice] = useState(0)
   const themeColours = [
     ["#FF6B6B", "#FFA06B", "#FFD56B", "#BCFF6B", "#6BFFB8", "#6BD4FF", "#6B9CFF", "#B86BFF", "#FF6BDA"],
     ["#2E86AB", "#4FADBB", "#72D6D0", "#A0E8D9", "#CAF0F8", "#FFE74C", "#FF5964", "#FFB2B2", "#D7DADB"],
@@ -32,8 +32,8 @@ function SudokuGrid() {
     ["#FF6B6B", "#F9C74F", "#90BE6D", "#43AA8B", "#577590", "#283618", "#FFE66D", "#6D6875", "#A8DADC"],
     ["#2C3E50", "#E74C3C", "#ECF0F1", "#3498DB", "#2980B9", "#16A085", "#27AE60", "#F39C12", "#F1C40F"],
     ["#FAD02E", "#F9A602", "#F58F01", "#F56A6A", "#FFBD9E", "#FF725C", "#9A4848", "#50393B", "#3D2629"],
-    ["#020887", "#0D31C2", "#2278FF", "#00BFFF", "#A9E0FF", "#F0FFFF", "#FFE4E1", "#FF7F50", "#FF2400"
-    ]];
+    ["#020887", "#0D31C2", "#2278FF", "#00BFFF", "#A9E0FF", "#F0FFFF", "#FFE4E1", "#FF7F50", "#FF2400"]
+  ];
 
 
   const [possibleSudokuValues, setPossibleSudokuValues] = useState(() => {
@@ -105,8 +105,8 @@ function SudokuGrid() {
           style={{
             cursor: "pointer",
 
-
             background:
+          
               SudokuValues[row][column] === 1 ? themeColours[themeChoice][0] :
                 SudokuValues[row][column] === 2 ? themeColours[themeChoice][1] :
                   SudokuValues[row][column] === 3 ? themeColours[themeChoice][2] :
@@ -478,7 +478,7 @@ function SudokuGrid() {
 
   // Final main Sudoku grid
   return (
-    <div>
+    <div><HStack>
       <Grid
         id="Main Grid"
         templateColumns="repeat(3, 1fr)"
@@ -491,7 +491,19 @@ function SudokuGrid() {
       >
         {gridItems}
       </Grid>
+      <VStack> Current Input Number:
+        <Button>1</Button>
+        <Button>2</Button>
+        <Button>3</Button>
+        <Button>4</Button>
+        <Button>5</Button>
+        <Button>6</Button>
+        <Button>7</Button>
+        <Button>8</Button>
+        <Button>9</Button>
 
+      </VStack>
+      </HStack>
 
       <Button
         variant='outline'
@@ -530,7 +542,7 @@ function SudokuGrid() {
       </Box>
 
       <Box onClick={() => {
-        setThemeChoice(themeChoice<themeColours.length?themeChoice++:0)
+        setThemeChoice(themeChoice < themeColours.length ? themeChoice++ : 0)
       }}>Click to switch theme
         <FontAwesomeIcon icon={faBrush} size="2x"
           style={{
