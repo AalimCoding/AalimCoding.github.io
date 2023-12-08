@@ -478,8 +478,9 @@ function SudokuGrid() {
 
   // Final main Sudoku grid
   return (
-    <div><HStack>
-      <Grid
+    <div><Grid templateColumns='repeat(5,1fr)'>
+      <GridItem colSpan={4}><Grid
+      
         id="Main Grid"
         templateColumns="repeat(3, 1fr)"
         templateRows="repeat(3, 1fr)"
@@ -491,6 +492,7 @@ function SudokuGrid() {
       >
         {gridItems}
       </Grid>
+      </GridItem>
       <VStack> Current Input Number:
         <Button>1</Button>
         <Button>2</Button>
@@ -503,7 +505,7 @@ function SudokuGrid() {
         <Button>9</Button>
 
       </VStack>
-      </HStack>
+      </Grid>
 
       <Button
         variant='outline'
