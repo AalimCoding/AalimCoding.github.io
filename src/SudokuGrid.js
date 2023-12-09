@@ -1,5 +1,5 @@
 // Importing necessary components and hooks from Chakra UI and React
-import { Grid, GridItem, Button, Box, HStack ,VStack} from "@chakra-ui/react";
+import { Grid, GridItem, Button, Box, HStack, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 import SudokuInfo from "./SudokuInfo";
@@ -106,7 +106,7 @@ function SudokuGrid() {
             cursor: "pointer",
 
             background:
-          
+
               SudokuValues[row][column] === 1 ? themeColours[themeChoice][0] :
                 SudokuValues[row][column] === 2 ? themeColours[themeChoice][1] :
                   SudokuValues[row][column] === 3 ? themeColours[themeChoice][2] :
@@ -153,20 +153,7 @@ function SudokuGrid() {
   }
 
 
-
-
-
-
-  function handleButtonClick() {
-    // THIS IS THE FUNCTION THAT CHECKS IF AN ANSWER IS VALID FOR A CELL
-
-
-    //OPTIMISE CODE BY IMMEDIATELY SETTING POSSIBLE VALUE TO ACTUAL VALUE 
-    // IF WE HAVE IT , AND THEN IGNORING CASES WHERE ARRAY LENGTH IS 1.
-
-    console.log(possibleSudokuValues)
-    var updatedPossibleValues = [...possibleSudokuValues]
-
+ function valueInCell(SudokuValues, updatedPossibleValues) {
     // UPDATE POSSIBLE VALUES
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
@@ -178,9 +165,13 @@ function SudokuGrid() {
           updatedPossibleValues[row][column].push(SudokuValues[row][column]);
 
         }
+      }
+    }
+  }
 
-
-        // If a cell has a given value, no cell in the same row or column can have that value
+  function valueInRowOrColumn(SudokuValues, updatedPossibleValues) {
+    for (var row = 0; row < 9; row++) {
+      for (var column = 0; column < 9; column++) {
         for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
           if (SudokuValues[row][column] === valueToCheck) {
             for (var x = 0; x < 9; x++) {
@@ -197,11 +188,12 @@ function SudokuGrid() {
         }
       }
     }
+  }
 
 
-    //If a cell has a given value, no cell in the same box can have that value.
-    for (row = 0; row < 9; row++) {
-      for (column = 0; column < 9; column++) {
+  function valueInBox(SudokuValues, updatedPossibleValues) {
+    for (var row = 0; row < 9; row++) {
+      for (var column = 0; column < 9; column++) {
         if (SudokuValues[row][column] !== 0) {
           const boxStartRow = Math.floor(row / 3) * 3;
           const boxStartColumn = Math.floor(column / 3) * 3;
@@ -218,8 +210,87 @@ function SudokuGrid() {
         }
       }
     }
+  }
+
+
+  function handleButtonClick() {
+    // THIS IS THE FUNCTION THAT CHECKS IF AN ANSWER IS VALID FOR A CELL
+
+
+    //OPTIMISE CODE BY IMMEDIATELY SETTING POSSIBLE VALUE TO ACTUAL VALUE 
+    // IF WE HAVE IT , AND THEN IGNORING CASES WHERE ARRAY LENGTH IS 1.
+
+    console.log(possibleSudokuValues)
+    var updatedPossibleValues = [...possibleSudokuValues]
+
+    /*     // UPDATE POSSIBLE VALUES
+        for (var row = 0; row < 9; row++) {
+          for (var column = 0; column < 9; column++) {
+    
+            //If we know the value of a cell, we can set its possible value to be the value of the cell, as it must be that value.
+            if (SudokuValues[row][column] !== 0) {
+              updatedPossibleValues[row][column] = [];
+    
+              updatedPossibleValues[row][column].push(SudokuValues[row][column]);
+    
+            } */
+    valueInCell(SudokuValues, updatedPossibleValues)
+
+
+    // If a cell has a given value, no cell in the same row or column can have that value
+    /*  for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
+       if (SudokuValues[row][column] === valueToCheck) {
+         for (var x = 0; x < 9; x++) {
+
+           // Make sure that I dont update the cell with the value in it.
+           if (SudokuValues[row][x] !== valueToCheck) {
+             updatedPossibleValues[row][x] = updatedPossibleValues[row][x].filter(value => value !== valueToCheck)
+           }
+           if (SudokuValues[x][column] !== valueToCheck) {
+             updatedPossibleValues[x][column] = updatedPossibleValues[x][column].filter(value => value !== valueToCheck)
+           }
+         }
+       }
+     }
+   }
+ } */
+    valueInRowOrColumn(SudokuValues, updatedPossibleValues)
+
+
+    //If a cell has a given value, no cell in the same box can have that value.
+    /*     for (row = 0; row < 9; row++) {
+          for (column = 0; column < 9; column++) {
+            if (SudokuValues[row][column] !== 0) {
+              const boxStartRow = Math.floor(row / 3) * 3;
+              const boxStartColumn = Math.floor(column / 3) * 3;
+    
+              for (var i = boxStartRow; i < boxStartRow + 3; i++) {
+                for (var j = boxStartColumn; j < boxStartColumn + 3; j++) {
+                  if (i !== row || j !== column) {
+                    updatedPossibleValues[i][j] = updatedPossibleValues[i][j].filter(
+                      value => value !== SudokuValues[row][column]
+                    );
+                  }
+                }
+              }
+            }
+          }
+        } */
+    valueInBox(SudokuValues, updatedPossibleValues)
+
+
+
+
 
     setPossibleSudokuValues(updatedPossibleValues)
+
+
+
+
+
+
+
+
 
 
     // SET THE NEW VALUES
@@ -480,7 +551,7 @@ function SudokuGrid() {
   return (
     <div><Grid templateColumns='repeat(5,1fr)'>
       <GridItem colSpan={4}><Grid
-      
+
         id="Main Grid"
         templateColumns="repeat(3, 1fr)"
         templateRows="repeat(3, 1fr)"
@@ -505,7 +576,7 @@ function SudokuGrid() {
         <Button>9</Button>
 
       </VStack>
-      </Grid>
+    </Grid>
 
       <Button
         variant='outline'
@@ -590,6 +661,23 @@ function SudokuGrid() {
 
     </div>
   );
+}
+
+
+export function valueInCell(SudokuValues, updatedPossibleValues) {
+  // UPDATE POSSIBLE VALUES
+  for (var row = 0; row < 9; row++) {
+    for (var column = 0; column < 9; column++) {
+
+      //If we know the value of a cell, we can set its possible value to be the value of the cell, as it must be that value.
+      if (SudokuValues[row][column] !== 0) {
+        updatedPossibleValues[row][column] = [];
+
+        updatedPossibleValues[row][column].push(SudokuValues[row][column]);
+
+      }
+    }
+  }
 }
 
 export default SudokuGrid;
