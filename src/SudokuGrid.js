@@ -680,4 +680,25 @@ export function valueInCell(SudokuValues, updatedPossibleValues) {
   }
 }
 
+export function valueInRowOrColumn(SudokuValues, updatedPossibleValues) {
+for (var row = 0; row < 9; row++) {
+  for (var column = 0; column < 9; column++) {
+    for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
+      if (SudokuValues[row][column] === valueToCheck) {
+        for (var x = 0; x < 9; x++) {
+
+          // Make sure that I dont update the cell with the value in it.
+          if (SudokuValues[row][x] !== valueToCheck) {
+            updatedPossibleValues[row][x] = updatedPossibleValues[row][x].filter(value => value !== valueToCheck)
+          }
+          if (SudokuValues[x][column] !== valueToCheck) {
+            updatedPossibleValues[x][column] = updatedPossibleValues[x][column].filter(value => value !== valueToCheck)
+          }
+        }
+      }
+    }
+  }
+}
+}
+
 export default SudokuGrid;
