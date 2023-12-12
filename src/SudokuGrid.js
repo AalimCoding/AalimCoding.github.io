@@ -153,7 +153,7 @@ function SudokuGrid() {
   }
 
 
- function valueInCell(SudokuValues, updatedPossibleValues) {
+  function valueInCell(SudokuValues, updatedPossibleValues) {
     // UPDATE POSSIBLE VALUES
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
@@ -681,24 +681,47 @@ export function valueInCell(SudokuValues, updatedPossibleValues) {
 }
 
 export function valueInRowOrColumn(SudokuValues, updatedPossibleValues) {
-for (var row = 0; row < 9; row++) {
-  for (var column = 0; column < 9; column++) {
-    for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
-      if (SudokuValues[row][column] === valueToCheck) {
-        for (var x = 0; x < 9; x++) {
+  for (var row = 0; row < 9; row++) {
+    for (var column = 0; column < 9; column++) {
+      for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
+        if (SudokuValues[row][column] === valueToCheck) {
+          for (var x = 0; x < 9; x++) {
 
-          // Make sure that I dont update the cell with the value in it.
-          if (SudokuValues[row][x] !== valueToCheck) {
-            updatedPossibleValues[row][x] = updatedPossibleValues[row][x].filter(value => value !== valueToCheck)
-          }
-          if (SudokuValues[x][column] !== valueToCheck) {
-            updatedPossibleValues[x][column] = updatedPossibleValues[x][column].filter(value => value !== valueToCheck)
+            // Make sure that I dont update the cell with the value in it.
+            if (SudokuValues[row][x] !== valueToCheck) {
+              updatedPossibleValues[row][x] = updatedPossibleValues[row][x].filter(value => value !== valueToCheck)
+            }
+            if (SudokuValues[x][column] !== valueToCheck) {
+              updatedPossibleValues[x][column] = updatedPossibleValues[x][column].filter(value => value !== valueToCheck)
+            }
           }
         }
       }
     }
   }
 }
+
+
+export function valueInBox(SudokuValues, updatedPossibleValues) {
+  for (var row = 0; row < 9; row++) {
+    for (var column = 0; column < 9; column++) {
+      if (SudokuValues[row][column] !== 0) {
+        const boxStartRow = Math.floor(row / 3) * 3;
+        const boxStartColumn = Math.floor(column / 3) * 3;
+
+        for (var i = boxStartRow; i < boxStartRow + 3; i++) {
+          for (var j = boxStartColumn; j < boxStartColumn + 3; j++) {
+            if (i !== row || j !== column) {
+              updatedPossibleValues[i][j] = updatedPossibleValues[i][j].filter(
+                value => value !== SudokuValues[row][column]
+              );
+            }
+          }
+        }
+      }
+    }
+  }
 }
+
 
 export default SudokuGrid;
