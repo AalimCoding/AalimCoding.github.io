@@ -1,4 +1,4 @@
-import { valueInCell, valueInRowOrColumn,valueInBox } from "./SudokuGrid";
+import { valueInCell, valueInRowOrColumn,valueInBox ,onlyPossibleValueForCell} from "./SudokuGrid";
 
 test("Complete cells have corresponding possible value", () => {
 
@@ -28,7 +28,7 @@ test("Complete cells have corresponding possible value", () => {
 
 
 
-test("Row and columsn correctly updated", () => {
+test("Row and columns correctly updated", () => {
 
   var possibleSudokuValues = Array.from({ length: 9 }, () =>
     Array(9).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -98,9 +98,68 @@ test("Box correctly updated", () => {
   // All the other values in the same cbox have had 2 removed from their possibleValues.
   for (var row = 0; row < 3; row++) {
     for (var column = 0; column < 3; column++) {
-      if (row != 0 && column != 0) { expect(possibleSudokuValues[row][0]).toEqual([1, 3, 4, 5, 6, 7, 8, 9]) }
+      if (row != 0 && column != 0) { expect(possibleSudokuValues[row][column]).toEqual([1, 3, 4, 5, 6, 7, 8, 9]) }
     }
   }
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+test("Set cell value if only one possible value in cells possibleValue array", () => {
+
+  var possibleSudokuValues = Array.from({ length: 9 }, () =>
+    Array(9).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
+  );
+
+  possibleSudokuValues[0][0]=2
+
+  var mockSudokuValues = [
+    [2, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ];
+
+
+  onlyPossibleValueForCell(mockSudokuValues, possibleSudokuValues);
+
+  //Check that the cell we are conidering isn't changed.
+  expect(mockSudokuValues[0][0]).toEqual(2);
+
+  // All the other values ahould not have changed.
+  for (var row = 0; row < 3; row++) {
+    for (var column = 0; column < 3; column++) {
+      if (row != 0 && column != 0) { expect(mockSudokuValues[row][column]).toEqual(0) }
+    }
+  }
+
+
+});
+
+

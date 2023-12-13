@@ -250,7 +250,7 @@ function SudokuGrid() {
     // SET THE NEW VALUES
     // Set the value in the Sudoku Grid based on the following conditions:
     // 1. A cell has only one possible value.
-    onlyPossibleValueForCell()
+    onlyPossibleValueForCell(SudokuValues,possibleSudokuValues)
 
     //2. Only one box in a row can have a specific value
     onlyValueInRow()
@@ -266,7 +266,7 @@ function SudokuGrid() {
 
   }
 
-  function onlyPossibleValueForCell() {
+  function onlyPossibleValueForCell(SudokuValues,possibleSudokuValues) {
     for (let row = 0; row < 9; row++) {
       for (let column = 0; column < 9; column++) {
         if (possibleSudokuValues[row][column].length === 1) {
@@ -680,6 +680,30 @@ export function valueInBox(SudokuValues, updatedPossibleValues) {
             }
           }
         }
+      }
+    }
+  }
+}
+
+
+// TEST DOESN'T HAVE setSudokuValues hook, INSTEAD I JUST DIRECTLY SET SudokuValues = newSudokuValues FOR TESTING.
+export    function onlyPossibleValueForCell(SudokuValues,possibleSudokuValues) {
+  for (let row = 0; row < 9; row++) {
+    for (let column = 0; column < 9; column++) {
+      if (possibleSudokuValues[row][column].length === 1) {
+
+        // Ensure there's only one possible value in the array for this cell
+        const newValue = possibleSudokuValues[row][column][0];
+
+        // Create a copy of the Sudoku grid
+        const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
+
+        // Update the value in the Sudoku grid
+        newSudokuValues[row][column] = newValue;
+
+        // Set the updated Sudoku grid
+        SudokuValues = newSudokuValues;
+
       }
     }
   }
