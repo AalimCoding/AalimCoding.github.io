@@ -223,59 +223,13 @@ function SudokuGrid() {
     console.log(possibleSudokuValues)
     var updatedPossibleValues = [...possibleSudokuValues]
 
-    /*     // UPDATE POSSIBLE VALUES
-        for (var row = 0; row < 9; row++) {
-          for (var column = 0; column < 9; column++) {
-    
-            //If we know the value of a cell, we can set its possible value to be the value of the cell, as it must be that value.
-            if (SudokuValues[row][column] !== 0) {
-              updatedPossibleValues[row][column] = [];
-    
-              updatedPossibleValues[row][column].push(SudokuValues[row][column]);
-    
-            } */
+
     valueInCell(SudokuValues, updatedPossibleValues)
 
 
-    // If a cell has a given value, no cell in the same row or column can have that value
-    /*  for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
-       if (SudokuValues[row][column] === valueToCheck) {
-         for (var x = 0; x < 9; x++) {
-
-           // Make sure that I dont update the cell with the value in it.
-           if (SudokuValues[row][x] !== valueToCheck) {
-             updatedPossibleValues[row][x] = updatedPossibleValues[row][x].filter(value => value !== valueToCheck)
-           }
-           if (SudokuValues[x][column] !== valueToCheck) {
-             updatedPossibleValues[x][column] = updatedPossibleValues[x][column].filter(value => value !== valueToCheck)
-           }
-         }
-       }
-     }
-   }
- } */
     valueInRowOrColumn(SudokuValues, updatedPossibleValues)
 
 
-    //If a cell has a given value, no cell in the same box can have that value.
-    /*     for (row = 0; row < 9; row++) {
-          for (column = 0; column < 9; column++) {
-            if (SudokuValues[row][column] !== 0) {
-              const boxStartRow = Math.floor(row / 3) * 3;
-              const boxStartColumn = Math.floor(column / 3) * 3;
-    
-              for (var i = boxStartRow; i < boxStartRow + 3; i++) {
-                for (var j = boxStartColumn; j < boxStartColumn + 3; j++) {
-                  if (i !== row || j !== column) {
-                    updatedPossibleValues[i][j] = updatedPossibleValues[i][j].filter(
-                      value => value !== SudokuValues[row][column]
-                    );
-                  }
-                }
-              }
-            }
-          }
-        } */
     valueInBox(SudokuValues, updatedPossibleValues)
 
 
@@ -639,6 +593,10 @@ function SudokuGrid() {
           [0, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0]
         ])
+        const initialPossibleValues = Array.from({ length: gridSize }, () =>
+        Array(itemsPerBox).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
+      );
+        setPossibleSudokuValues(initialPossibleValues)
       }}>
 
         Click To Reset Grid</Box>
@@ -655,6 +613,10 @@ function SudokuGrid() {
           [0, 5, 0, 0, 0, 0, 0, 2, 0],
           [3, 0, 7, 0, 0, 0, 0, 6, 0]
         ])
+        const initialPossibleValues = Array.from({ length: gridSize }, () =>
+        Array(itemsPerBox).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
+      );
+        setPossibleSudokuValues(initialPossibleValues)
       }}>
 
         Click To Use Example Grid</Box>

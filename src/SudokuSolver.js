@@ -19,6 +19,7 @@ function SudokuSolver() {
             Select number to see only cells with that vlue highlighted.
             Add messages for each step of solution.
             Add ability to add thermo sudoku or cages.
+        
             
             <SudokuGrid />
 
