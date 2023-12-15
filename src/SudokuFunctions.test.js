@@ -126,13 +126,17 @@ test("Box correctly updated", () => {
 
 
 
-test("Set cell value if only one possible value in cells possibleValue array", () => {
+// beforeEach function to set up initial values before each test
+beforeEach(() => {
+  jest.resetModules(); // Reset modules to clear cached state
+});
 
+test("Set cell value if only one possible value in cells possibleValue array", () => {
   var possibleSudokuValues = Array.from({ length: 9 }, () =>
     Array(9).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
   );
 
-  possibleSudokuValues[0][0]=2
+  possibleSudokuValues[0][0] = [2]; // Assigning a single value, not an array
 
   var mockSudokuValues = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -143,37 +147,35 @@ test("Set cell value if only one possible value in cells possibleValue array", (
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ];
-
 
   onlyPossibleValueForCell(mockSudokuValues, possibleSudokuValues);
 
-  //Check that the cell we are conidering ischanged.
+  // Check that the cell [0][0] has changed to be 2.
   expect(mockSudokuValues[0][0]).toEqual(2);
 
-  // All the other values ahould not have changed.
+  // Ensure all the other values remain unchanged.
   for (var row = 0; row < 9; row++) {
     for (var column = 0; column < 9; column++) {
-      if (row != 0 && column != 0) { expect(mockSudokuValues[row][column]).toEqual(0) }
+      if (!(row === 0 && column === 0)) {
+        expect(mockSudokuValues[row][column]).toEqual(0);
+      }
     }
   }
-
-
 });
 
-
-test("Set cell value if only one cell in the row  has the value in its possibleValue array", () => {
-
+test("Set cell value if only one cell in the row has the value in its possibleValue array", () => {
   var possibleSudokuValues = Array.from({ length: 9 }, () =>
     Array(9).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
   );
 
-  for(var i=1;i<9;i++)
-  {
-    possibleSudokuValues[0][i].filter(value=>value !== 2)
+  // Filter out value 2 from all cells in row 0 except the first one
+  for (var i = 1; i < 9; i++) {
+    possibleSudokuValues[0][i] = possibleSudokuValues[0][i].filter(
+      (value) => value !== 2
+    );
   }
-
 
   var mockSudokuValues = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -184,21 +186,20 @@ test("Set cell value if only one cell in the row  has the value in its possibleV
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ];
-
 
   onlyValueInRow(mockSudokuValues, possibleSudokuValues);
 
-  //Check that the cell [0][0] has changed to be 2.
+  // Check that the cell [0][0] has changed to be 2.
   expect(mockSudokuValues[0][0]).toEqual(2);
 
-  // All the other values ahould not have changed.
+  // Ensure all the other values remain unchanged.
   for (var row = 0; row < 9; row++) {
     for (var column = 0; column < 9; column++) {
-      if (row != 0 && column != 0) { expect(mockSudokuValues[row][column]).toEqual(0) }
+      if (!(row === 0 && column === 0)) {
+        expect(mockSudokuValues[row][column]).toEqual(0);
+      }
     }
   }
-
-
 });

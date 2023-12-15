@@ -270,19 +270,8 @@ function SudokuGrid() {
     for (let row = 0; row < 9; row++) {
       for (let column = 0; column < 9; column++) {
         if (possibleSudokuValues[row][column].length === 1) {
-
-          // Ensure there's only one possible value in the array for this cell
           const newValue = possibleSudokuValues[row][column][0];
-
-          // Create a copy of the Sudoku grid
-          const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
-
-          // Update the value in the Sudoku grid
-          newSudokuValues[row][column] = newValue;
-
-          // Set the updated Sudoku grid
-          setSudokuValues(newSudokuValues);
-
+          SudokuValues[row][column] = newValue; // Update the value directly
         }
       }
     }
@@ -292,30 +281,19 @@ function SudokuGrid() {
     for (let column = 0; column < 9; column++) {
       for (var rowToCheck = 0; rowToCheck < 9; rowToCheck++) {
         for (var valueToCheckInRow = 1; valueToCheckInRow <= 9; valueToCheckInRow++) {
-          var validInRow = 0
-          var validPosition = -1; // Initialize position to an invalid value
-
+          var validInRow = 0;
+          var validPosition = -1;
+  
           for (var columnToCheck = 0; columnToCheck < 9; columnToCheck++) {
-
-
             if (possibleSudokuValues[rowToCheck][columnToCheck].includes(valueToCheckInRow)) {
-              validInRow++
-              validPosition = columnToCheck
+              validInRow++;
+              validPosition = columnToCheck;
             }
           }
-
+  
           if (validInRow === 1 && validPosition !== -1) {
-
-            // Create a copy of the Sudoku grid
-            const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
-
-            // Update the value in the Sudoku grid
-            newSudokuValues[rowToCheck][validPosition] = valueToCheckInRow;
-
-            // Set the updated Sudoku grid
-            setSudokuValues(newSudokuValues);
-
-            break;//Exit the function after updating a single cell
+            SudokuValues[rowToCheck][validPosition] = valueToCheckInRow; // Update directly
+            break;
           }
         }
       }
@@ -686,63 +664,40 @@ export function valueInBox(SudokuValues, updatedPossibleValues) {
 }
 
 
-// TEST DOESN'T HAVE setSudokuValues hook, INSTEAD I JUST DIRECTLY SET SudokuValues = newSudokuValues FOR TESTING.
-export    function onlyPossibleValueForCell(SudokuValues,possibleSudokuValues) {
+export function onlyPossibleValueForCell(SudokuValues, possibleSudokuValues) {
   for (let row = 0; row < 9; row++) {
     for (let column = 0; column < 9; column++) {
       if (possibleSudokuValues[row][column].length === 1) {
-
-        // Ensure there's only one possible value in the array for this cell
         const newValue = possibleSudokuValues[row][column][0];
-
-        // Create a copy of the Sudoku grid
-        const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
-
-        // Update the value in the Sudoku grid
-        newSudokuValues[row][column] = newValue;
-
-        // Set the updated Sudoku grid
-        SudokuValues = newSudokuValues;
-
+        SudokuValues[row][column] = newValue; // Update the value directly
       }
     }
   }
 }
 
-
-export function onlyValueInRow(SudokuValues,possibleSudokuValues) {
+export function onlyValueInRow(SudokuValues, possibleSudokuValues) {
   for (let column = 0; column < 9; column++) {
     for (var rowToCheck = 0; rowToCheck < 9; rowToCheck++) {
       for (var valueToCheckInRow = 1; valueToCheckInRow <= 9; valueToCheckInRow++) {
-        var validInRow = 0
-        var validPosition = -1; // Initialize position to an invalid value
+        var validInRow = 0;
+        var validPosition = -1;
 
         for (var columnToCheck = 0; columnToCheck < 9; columnToCheck++) {
-
-
           if (possibleSudokuValues[rowToCheck][columnToCheck].includes(valueToCheckInRow)) {
-            validInRow++
-            validPosition = columnToCheck
+            validInRow++;
+            validPosition = columnToCheck;
           }
         }
 
         if (validInRow === 1 && validPosition !== -1) {
-
-          // Create a copy of the Sudoku grid
-          const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
-
-          // Update the value in the Sudoku grid
-          newSudokuValues[rowToCheck][validPosition] = valueToCheckInRow;
-
-          // Set the updated Sudoku grid
-         SudokuValues = newSudokuValues;
-
-          break;//Exit the function after updating a single cell
+          SudokuValues[rowToCheck][validPosition] = valueToCheckInRow; // Update directly
+          break;
         }
       }
     }
   }
 }
+
 
 
 export default SudokuGrid;
