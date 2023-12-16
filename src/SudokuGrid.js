@@ -699,5 +699,28 @@ export function onlyValueInRow(SudokuValues, possibleSudokuValues) {
 }
 
 
+export function onlyValueInColumn(SudokuValues, possibleSudokuValues) {
+  for (let row = 0; row < 9; row++) {
+    for (var columnToCheck = 0; columnToCheck < 9; columnToCheck++) {
+      for (var valueToCheckInColumn = 1; valueToCheckInColumn <= 9; valueToCheckInColumn++) {
+        var validInColumn = 0;
+        var validPosition = -1;
+
+        for (var rowToCheck = 0; rowToCheck < 9; rowToCheck++) {
+          if (possibleSudokuValues[rowToCheck][columnToCheck].includes(valueToCheckInColumn)) {
+            validInColumn++;
+            validPosition = rowToCheck;
+          }
+        }
+
+        if (validInColumn=== 1 && validPosition !== -1) {
+          SudokuValues[validPosition][columnToCheck] = valueToCheckInColumn; // Update directly
+          break;
+        }
+      }
+    }
+  }
+}
+
 
 export default SudokuGrid;
