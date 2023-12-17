@@ -1,4 +1,4 @@
-import { valueInCell, valueInRowOrColumn,valueInBox ,onlyPossibleValueForCell,onlyValueInRow, onlyValueInColumn} from "./SudokuGrid";
+import { valueInCell, valueInRowOrColumn, valueInBox, onlyPossibleValueForCell, onlyValueInRow, onlyValueInColumn, onlyValueInBox } from "./SudokuGrid";
 
 test("Complete cells have corresponding possible value", () => {
 
@@ -244,3 +244,49 @@ test("Set cell value if only one cell in the column has the value in its possibl
     }
   }
 });
+
+
+
+
+test("Set cell value if only one cell in the box has the value in its possibleValue array", () => {
+  var possibleSudokuValues = Array.from({ length: 9 }, () =>
+    Array(9).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
+  );
+
+  // Filter out value 2 from all cells in box 1 except the [0][0].
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < 3; j++) {
+      if (i != 0 && j != 0) {
+        possibleSudokuValues[i][j] = possibleSudokuValues[i][j].filter(
+          (value) => value !== 2
+        );
+      }
+    }
+  }
+  var mockSudokuValues = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ];
+
+  onlyValueInBox(mockSudokuValues, possibleSudokuValues);
+
+  // Check that the cell [0][0] has changed to be 2.
+  expect(mockSudokuValues[0][0]).toEqual(2);
+
+  // Ensure all the other values remain unchanged.
+  for (var row = 0; row < 9; row++) {
+    for (var column = 0; column < 9; column++) {
+      if (!(row === 0 && column === 0)) {
+        expect(mockSudokuValues[row][column]).toEqual(0);
+      }
+    }
+  }
+});
+

@@ -581,15 +581,15 @@ function SudokuGrid() {
 
       <Box onClick={() => {
         setSudokuValues([
-          [0, 3, 0, 0, 2, 4, 0, 0, 0],
-          [0, 0, 1, 0, 3, 0, 7, 0, 5],
-          [0, 0, 0, 5, 0, 0, 8, 0, 0],
-          [0, 7, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 4, 0, 8, 0, 0, 5, 7],
-          [0, 1, 0, 7, 0, 0, 9, 0, 0],
-          [0, 0, 6, 0, 4, 0, 3, 0, 0],
-          [0, 5, 0, 0, 0, 0, 0, 2, 0],
-          [3, 0, 7, 0, 0, 0, 0, 6, 0]
+          [0, 3, 2, 0, 0, 0, 5, 0, 7],
+          [7, 0, 5, 2, 1, 8, 0, 0, 0],
+          [0, 0, 6, 0, 0, 3, 0, 0, 4],
+          [3, 0, 8, 0, 6, 2, 0, 4, 5],
+          [0, 0, 9, 1, 8, 0, 0, 7, 0],
+          [0, 0, 0, 0, 0, 4, 2, 9, 0],
+          [0, 8, 4, 0, 3, 1, 0, 0, 0],
+          [2, 0, 7, 0, 4, 9, 0, 0, 0],
+          [0, 1, 0, 0, 0, 7, 4, 5, 9]
         ])
         const initialPossibleValues = Array.from({ length: gridSize }, () =>
         Array(itemsPerBox).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -722,5 +722,36 @@ export function onlyValueInColumn(SudokuValues, possibleSudokuValues) {
   }
 }
 
+export   function onlyValueInBox(SudokuValues, possibleSudokuValues) {
+  for (let row = 0; row < 9; row++) {
+    for (let column = 0; column < 9; column++) {
+      for (let valueToCheckInBox = 0; valueToCheckInBox < 9; valueToCheckInBox++) {
+        let validInBox = 0;
+        let validI = -1;
+        let validJ = -1;
+
+        const boxStartRow = Math.floor(row / 3) * 3;
+        const boxStartColumn = Math.floor(column / 3) * 3;
+
+        for (let i = boxStartRow; i < boxStartRow + 3; i++) {
+          for (let j = boxStartColumn; j < boxStartColumn + 3; j++) {
+            if (possibleSudokuValues[i][j].includes(valueToCheckInBox)) {
+              validInBox++;
+              validI = i;
+              validJ = j;
+            }
+          }
+        }
+
+        if (validInBox === 1 && validI !== -1 && validJ !== -1) {
+
+          SudokuValues[validI][validJ] = valueToCheckInBox;
+      
+         break; // Exit the function after updating a single cell
+        }
+      }
+    }
+  }
+}
 
 export default SudokuGrid;
