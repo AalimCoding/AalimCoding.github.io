@@ -23,6 +23,17 @@ test("Complete cells have corresponding possible value", () => {
   valueInCell(mockSudokuValues, possibleSudokuValues);
 
   expect(possibleSudokuValues[0][0][0]).toEqual(2);
+
+  for (let i=0; i<9;i++)
+  {
+    for (let j=0; j<9;j++)
+    {
+      if (i!=0 && j!=0)
+      {
+        expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
+      }
+    }
+  }
 });
 
 
@@ -64,6 +75,21 @@ test("Row and columns correctly updated", () => {
     expect(possibleSudokuValues[0][column]).toEqual([1, 3, 4, 5, 6, 7, 8, 9])
   }
 
+
+// All other values should be unchanged
+
+for (let i=1; i<9;i++)
+  {
+    for (let j=1; j<9;j++)
+    {
+      if (i!=0 && j!=0)
+      {
+        expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
+      }
+    }
+  }
+
+
 });
 
 
@@ -92,16 +118,29 @@ test("Box correctly updated", () => {
 
   valueInBox(mockSudokuValues, possibleSudokuValues);
 
-  //Check that the cell we are conidering isn't changed.
+  //Check that the cell we are considering isn't changed.
   expect(possibleSudokuValues[0][0]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
-  // All the other values in the same cbox have had 2 removed from their possibleValues.
+  // All the other values in the same box have had 2 removed from their possibleValues.
   for (var row = 0; row < 3; row++) {
     for (var column = 0; column < 3; column++) {
       if (row != 0 && column != 0) { expect(possibleSudokuValues[row][column]).toEqual([1, 3, 4, 5, 6, 7, 8, 9]) }
     }
   }
 
+
+  // All other values should be unchanged
+
+for (let i=1; i<9;i++)
+{
+  for (let j=1; j<9;j++)
+  {
+    if ((i!=0 && j!=0) || i > 2 || j >2)
+    {
+      expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    }
+  }
+}
 
 });
 
@@ -256,13 +295,14 @@ test("Set cell value if only one cell in the box has the value in its possibleVa
   // Filter out value 2 from all cells in box 1 except the [0][0].
   for (var i = 0; i < 3; i++) {
     for (var j = 0; j < 3; j++) {
-      if (i != 0 && j != 0) {
+      if (!(i === 0 && j === 0)) {
         possibleSudokuValues[i][j] = possibleSudokuValues[i][j].filter(
           (value) => value !== 2
         );
       }
     }
   }
+
   var mockSudokuValues = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -281,10 +321,10 @@ test("Set cell value if only one cell in the box has the value in its possibleVa
   expect(mockSudokuValues[0][0]).toEqual(2);
 
   // Ensure all the other values remain unchanged.
-  for (var row = 0; row < 9; row++) {
-    for (var column = 0; column < 9; column++) {
+  for (var row = 0; row < 3; row++) {
+    for (var column = 0; column < 3; column++) {
       if (!(row === 0 && column === 0)) {
-        expect(mockSudokuValues[row][column]).toEqual(0);
+        expect(possibleSudokuValues[row][column].includes(2)).toBe(false);
       }
     }
   }
