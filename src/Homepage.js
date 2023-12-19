@@ -16,8 +16,9 @@ function Homepage() {
 
             <Link to="/WordleStyleGame">
                 <Box style={{
-                    color: theme === "light" ? "white" : "black",
-                    background: theme === "light" ? "black" : "white",
+                    color: theme === "light" ? "black" : "white",
+                    background: theme === "light" ? "white" : "black",
+                    border: "3px solid",
                     borderRadius: 20,
                     padding: 40,
                     margin: 20
@@ -26,8 +27,9 @@ function Homepage() {
 
             <Link to="/Battleships">
                 <Box style={{
-                    color: theme === "light" ? "white" : "black",
-                    background: theme === "light" ? "black" : "white",
+                    color: theme === "light" ? "black" : "white",
+                    background: theme === "light" ? "white" : "black",
+                    border: "3px solid",
                     borderRadius: 20,
                     padding: 40,
                     margin: 20
@@ -36,8 +38,9 @@ function Homepage() {
 
             <Link to="/SudokuSolver">
                 <Box style={{
-                    color: theme === "light" ? "white" : "black",
-                    background: theme === "light" ? "black" : "white",
+                    color: theme === "light" ? "black" : "white",
+                    background: theme === "light" ? "white" : "black",
+                    border: "3px solid",
                     borderRadius: 20,
                     padding: 40,
                     margin: 20
@@ -46,8 +49,9 @@ function Homepage() {
 
             <Link to="/ProjectTBC">
                 <Box style={{
-                    color: theme === "light" ? "white" : "black",
-                    background: theme === "light" ? "black" : "white",
+                    color: theme === "light" ? "black" : "white",
+                    background: theme === "light" ? "white" : "black",
+                    border: "3px solid",
                     borderRadius: 20,
                     padding: 40,
                     margin: 20

@@ -12,13 +12,14 @@ import ProjectsPreview from './Homepage';
 
 
 function App() {
+
   return (
     <div className="App">
       <HashRouter>
         <ThemeProvider>
           <ChakraProvider>
             <Header />
-            <Routes>
+            <Routes        >
               <Route path="/" element={<ProjectsPreview />} />
               <Route path="/WordleStyleGame" element={<WordleStyleGame />} />
               <Route path="/Battleships" element={<Battleships />} />
