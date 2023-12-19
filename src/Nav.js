@@ -36,7 +36,8 @@ function Nav() {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer">
-                        <FontAwesomeIcon icon={icon} size="2x" key={url} style={{
+                        <FontAwesomeIcon icon={icon} size="2x"  data-testid="moon-svg" // Add data-testid for testing
+                        key={url} style={{
                             background: theme === "light" ? "white" : "black",
                             color: theme === "light" ? "black" : "white",
                         }} />

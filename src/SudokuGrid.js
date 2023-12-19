@@ -646,8 +646,8 @@ export function valueInBox(SudokuValues, updatedPossibleValues) {
   for (var row = 0; row < 9; row++) {
     for (var column = 0; column < 9; column++) {
       if (SudokuValues[row][column] !== 0) {
-        const boxStartRow = Math.floor(row / 3) * 3;
-        const boxStartColumn = Math.floor(column / 3) * 3;
+        const boxStartRow = (Math.floor(row / 3)) * 3;
+        const boxStartColumn = (Math.floor(column / 3)) * 3;
 
         for (var i = boxStartRow; i < boxStartRow + 3; i++) {
           for (var j = boxStartColumn; j < boxStartColumn + 3; j++) {
