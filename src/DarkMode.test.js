@@ -1,28 +1,18 @@
-import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
-import Nav from "./Nav";
-import { ThemeProvider } from "./ThemeContext";
+import { render, fireEvent } from '@testing-library/react';
+import DarkModeSwitch from './DarkModeSwitch';
+import { ThemeProvider } from './ThemeContext';
 
-// Mocking ThemeProvider and useTheme context
-jest.mock("./ThemeContext", () => ({
-    useTheme: jest.fn(() => ({ theme: "light" })),
-  }));
-  
-  // ...rest of your test code
-  
-test("clicking grid cell updates state", async () => {
-  render(
+test('Dark mode switch toggles the theme', () => {
+  const { getByTestId } = render(
     <ThemeProvider>
-      <Nav />
+      <DarkModeSwitch />
     </ThemeProvider>
   );
 
-  const moonIcon = await screen.findByTestId("moon-svg");
+  const darkModeSwitch = getByTestId('darkModeSwitch');
+  expect(darkModeSwitch).toHaveStyle('background: white'); // Initial style check
 
-  expect(moonIcon).toBeInTheDocument();
-  expect(moonIcon).toHaveStyle("background: white;");
+  fireEvent.click(darkModeSwitch); // Simulate a click
 
-  fireEvent.click(moonIcon);
-
-  expect(moonIcon).toHaveStyle("background: black;");
+  expect(darkModeSwitch).toHaveStyle('background: black'); // Updated style after click
 });

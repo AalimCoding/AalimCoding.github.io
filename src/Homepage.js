@@ -12,7 +12,7 @@ function Homepage() {
                 display: grid,
                 paddingBottom: 20
 
-            }}>Welcome To My Project Page! Click Below To See My Portfolio!
+            }}><h1>Welcome To My Project Page! Click Below To See My Portfolio!</h1>
 
             <Link to="/WordleStyleGame">
                 <Box style={{
@@ -22,7 +22,7 @@ function Homepage() {
                     borderRadius: 20,
                     padding: 40,
                     margin: 20
-                }}>New Song Everyday - hows much of the lyrics can you fill in ? or guess the book by the quotes</Box>
+                }}><h2>New Song Everyday - hows much of the lyrics can you fill in ? or guess the book by the quotes</h2></Box>
             </Link>
 
             <Link to="/Battleships">
@@ -33,7 +33,7 @@ function Homepage() {
                     borderRadius: 20,
                     padding: 40,
                     margin: 20
-                }}>Battleships</Box>
+                }}><h2>Battleships</h2></Box>
             </Link>
 
             <Link to="/SudokuSolver">
@@ -44,7 +44,7 @@ function Homepage() {
                     borderRadius: 20,
                     padding: 40,
                     margin: 20
-                }}>The Sudoku Solver</Box>
+                }}><h2>The Sudoku Solver</h2></Box>
             </Link>
 
             <Link to="/ProjectTBC">
@@ -55,7 +55,7 @@ function Homepage() {
                     borderRadius: 20,
                     padding: 40,
                     margin: 20
-                }}>Economics Related Project</Box>
+                }}><h2>Economics Related Project</h2></Box>
             </Link>
 
         </div>

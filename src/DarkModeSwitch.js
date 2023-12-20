@@ -9,8 +9,8 @@ function DarkModeSwitch() {
 
     return (
 
-        <label className="DarkModeSwitch">
-        <Box onClick={toggleTheme}  >
+        <label className="DarkModeSwitch">Dark Mode Switch
+        <Box onClick={toggleTheme}  id="darkModeSwitch" data-testid="darkModeSwitch">
             <FontAwesomeIcon icon={faMoon} size="2x"  style={{
                             background: theme === "light" ? "white" : "black",
                             color: theme === "light" ? "black" : "chartreuse",
