@@ -10,9 +10,9 @@ test('Dark mode switch toggles the theme', () => {
   );
 
   const darkModeSwitch = getByTestId('darkModeSwitch');
-  expect(darkModeSwitch).toHaveStyle('background: white'); // Initial style check
+  expect(darkModeSwitch).toHaveStyle('background: white, color: black'); // Initial style check
 
   fireEvent.click(darkModeSwitch); // Simulate a click
 
-  expect(darkModeSwitch).toHaveStyle('background: black'); // Updated style after click
+  expect(darkModeSwitch).toHaveStyle('background: black, color: chartreuse'); // Updated style after click
 });
