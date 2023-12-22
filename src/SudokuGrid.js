@@ -1,5 +1,5 @@
 // Importing necessary components and hooks from Chakra UI and React
-import { Grid, GridItem, Button, Box, HStack, VStack } from "@chakra-ui/react";
+import { Grid, GridItem, Button, Box, HStack, VStack, Radio, Stack, RadioGroup } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 import SudokuInfo from "./SudokuInfo";
@@ -216,11 +216,6 @@ function SudokuGrid() {
   function handleButtonClick() {
     // THIS IS THE FUNCTION THAT CHECKS IF AN ANSWER IS VALID FOR A CELL
 
-
-    //OPTIMISE CODE BY IMMEDIATELY SETTING POSSIBLE VALUE TO ACTUAL VALUE 
-    // IF WE HAVE IT , AND THEN IGNORING CASES WHERE ARRAY LENGTH IS 1.
-
-    console.log(possibleSudokuValues)
     var updatedPossibleValues = [...possibleSudokuValues]
 
 
@@ -250,12 +245,12 @@ function SudokuGrid() {
     // SET THE NEW VALUES
     // Set the value in the Sudoku Grid based on the following conditions:
     // 1. A cell has only one possible value.
-    onlyPossibleValueForCell(SudokuValues,possibleSudokuValues)
+    onlyPossibleValueForCell(SudokuValues, possibleSudokuValues)
 
     //2. Only one box in a row can have a specific value
     onlyValueInRow()
 
-    // 3. Only one value in  a column can have a specific value
+    // 3. Only one value in a column can have a specific value
     onlyValueInColumn()
 
     //4. Only one value in a box can have a specific value.
@@ -266,7 +261,7 @@ function SudokuGrid() {
 
   }
 
-  function onlyPossibleValueForCell(SudokuValues,possibleSudokuValues) {
+  function onlyPossibleValueForCell(SudokuValues, possibleSudokuValues) {
     for (let row = 0; row < 9; row++) {
       for (let column = 0; column < 9; column++) {
         if (possibleSudokuValues[row][column].length === 1) {
@@ -283,14 +278,14 @@ function SudokuGrid() {
         for (var valueToCheckInRow = 1; valueToCheckInRow <= 9; valueToCheckInRow++) {
           var validInRow = 0;
           var validPosition = -1;
-  
+
           for (var columnToCheck = 0; columnToCheck < 9; columnToCheck++) {
             if (possibleSudokuValues[rowToCheck][columnToCheck].includes(valueToCheckInRow)) {
               validInRow++;
               validPosition = columnToCheck;
             }
           }
-  
+
           if (validInRow === 1 && validPosition !== -1) {
             SudokuValues[rowToCheck][validPosition] = valueToCheckInRow; // Update directly
             break;
@@ -385,7 +380,6 @@ function SudokuGrid() {
 
   }
 
-  console.log(possibleSudokuValues)
 
 
 
@@ -496,18 +490,22 @@ function SudokuGrid() {
         {gridItems}
       </Grid>
       </GridItem>
-      <VStack> Current Input Number:
-        <Button>1</Button>
-        <Button>2</Button>
-        <Button>3</Button>
-        <Button>4</Button>
-        <Button>5</Button>
-        <Button>6</Button>
-        <Button>7</Button>
-        <Button>8</Button>
-        <Button>9</Button>
 
-      </VStack>
+
+      <RadioGroup> Current Input Number: FIX THIS USING CUSTOM RADIO BUTTONS
+        <Stack direction="column">
+        <Radio>All</Radio> {/* This is the default selection, allowing you to see all grid cells */}
+          <Radio>1</Radio>
+          <Radio>2</Radio>
+          <Radio>3</Radio>
+          <Radio>4</Radio>
+          <Radio>5</Radio>
+          <Radio>6</Radio>
+          <Radio>7</Radio>
+          <Radio>8</Radio>
+          <Radio>9</Radio>
+        </Stack>
+      </RadioGroup>
     </Grid>
 
       <Button
@@ -517,7 +515,7 @@ function SudokuGrid() {
           color: theme === "light" ? "black" : "white",
         }}
         onClick={handleButtonClick}
-      /*  isLoading
+      /* isLoading
       loadingText='Submitting' */
       >
         This is the Sudoku submit button component
@@ -572,8 +570,8 @@ function SudokuGrid() {
           [0, 0, 0, 0, 0, 0, 0, 0, 0]
         ])
         const initialPossibleValues = Array.from({ length: gridSize }, () =>
-        Array(itemsPerBox).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
-      );
+          Array(itemsPerBox).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
+        );
         setPossibleSudokuValues(initialPossibleValues)
       }}>
 
@@ -592,8 +590,8 @@ function SudokuGrid() {
           [0, 1, 0, 0, 0, 7, 4, 5, 9]
         ])
         const initialPossibleValues = Array.from({ length: gridSize }, () =>
-        Array(itemsPerBox).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
-      );
+          Array(itemsPerBox).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
+        );
         setPossibleSudokuValues(initialPossibleValues)
       }}>
 
@@ -713,7 +711,7 @@ export function onlyValueInColumn(SudokuValues, possibleSudokuValues) {
           }
         }
 
-        if (validInColumn=== 1 && validPosition !== -1) {
+        if (validInColumn === 1 && validPosition !== -1) {
           SudokuValues[validPosition][columnToCheck] = valueToCheckInColumn; // Update directly
           break;
         }
@@ -722,7 +720,7 @@ export function onlyValueInColumn(SudokuValues, possibleSudokuValues) {
   }
 }
 
-export   function onlyValueInBox(SudokuValues, possibleSudokuValues) {
+export function onlyValueInBox(SudokuValues, possibleSudokuValues) {
   for (let row = 0; row < 9; row++) {
     for (let column = 0; column < 9; column++) {
       for (let valueToCheckInBox = 0; valueToCheckInBox < 9; valueToCheckInBox++) {
@@ -746,8 +744,8 @@ export   function onlyValueInBox(SudokuValues, possibleSudokuValues) {
         if (validInBox === 1 && validI !== -1 && validJ !== -1) {
 
           SudokuValues[validI][validJ] = valueToCheckInBox;
-      
-         break; // Exit the function after updating a single cell
+
+          break; // Exit the function after updating a single cell
         }
       }
     }

@@ -50,6 +50,8 @@ function Battleships() {
                 return updatedAmmo;
             });
 
+            setMysteryTile(updatedMysteryTile)
+
             placeMysteryTiles();
         }
     }
