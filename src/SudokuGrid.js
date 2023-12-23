@@ -1,5 +1,5 @@
 // Importing necessary components and hooks from Chakra UI and React
-import { Grid, GridItem, Button, Box, HStack, VStack, Radio, Stack, RadioGroup } from "@chakra-ui/react";
+import { Grid, GridItem, Button, Box, Radio, Stack, RadioGroup } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 import SudokuInfo from "./SudokuInfo";
@@ -172,7 +172,7 @@ function SudokuGrid() {
   function valueInRowOrColumn(SudokuValues, updatedPossibleValues) {
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
-        for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
+        for (let valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
           if (SudokuValues[row][column] === valueToCheck) {
             for (var x = 0; x < 9; x++) {
 
@@ -192,8 +192,8 @@ function SudokuGrid() {
 
 
   function valueInBox(SudokuValues, updatedPossibleValues) {
-    for (var row = 0; row < 9; row++) {
-      for (var column = 0; column < 9; column++) {
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
         if (SudokuValues[row][column] !== 0) {
           const boxStartRow = Math.floor(row / 3) * 3;
           const boxStartColumn = Math.floor(column / 3) * 3;
@@ -491,7 +491,7 @@ function SudokuGrid() {
       </Grid>
       </GridItem>
 
-
+      <GridItem colSpan={1}>
       <RadioGroup> Current Input Number: FIX THIS USING CUSTOM RADIO BUTTONS
         <Stack direction="column">
         <Radio>All</Radio> {/* This is the default selection, allowing you to see all grid cells */}
@@ -506,6 +506,7 @@ function SudokuGrid() {
           <Radio>9</Radio>
         </Stack>
       </RadioGroup>
+      </GridItem>
     </Grid>
 
       <Button
@@ -621,7 +622,7 @@ export function valueInCell(SudokuValues, updatedPossibleValues) {
 export function valueInRowOrColumn(SudokuValues, updatedPossibleValues) {
   for (var row = 0; row < 9; row++) {
     for (var column = 0; column < 9; column++) {
-      for (var valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
+      for (let valueToCheck = 1; valueToCheck <= 9; valueToCheck++) {
         if (SudokuValues[row][column] === valueToCheck) {
           for (var x = 0; x < 9; x++) {
 
@@ -641,8 +642,9 @@ export function valueInRowOrColumn(SudokuValues, updatedPossibleValues) {
 
 
 export function valueInBox(SudokuValues, updatedPossibleValues) {
-  for (var row = 0; row < 9; row++) {
-    for (var column = 0; column < 9; column++) {
+  for (let row = 0; row < 9; row++) {
+    for (let column = 0; column < 9; column++) {
+
       if (SudokuValues[row][column] !== 0) {
         const boxStartRow = (Math.floor(row / 3)) * 3;
         const boxStartColumn = (Math.floor(column / 3)) * 3;
