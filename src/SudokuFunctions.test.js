@@ -131,16 +131,14 @@ test("Box correctly updated", () => {
 
   // All other values should be unchanged
 
-for (let i=1; i<9;i++)
-{
-  for (let j=1; j<9;j++)
-  {
-    if ((i!=0 && j!=0) || i > 2 || j >2)
-    {
-      expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if ((i < 3 || j < 3) || (i >= 3 && j >= 3)) {
+        expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      }
     }
   }
-}
+  
 
 });
 
@@ -330,3 +328,14 @@ test("Set cell value if only one cell in the box has the value in its possibleVa
   }
 });
 
+
+
+
+
+
+
+
+
+
+
+// CREATE TESTS FOR CHECKROWSFORPLACEMENT AND CHECKCOLUMNSFORPLACEMENT

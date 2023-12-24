@@ -197,13 +197,15 @@ function SudokuGrid() {
         if (SudokuValues[row][column] !== 0) {
           const boxStartRow = Math.floor(row / 3) * 3;
           const boxStartColumn = Math.floor(column / 3) * 3;
-
-          for (var i = boxStartRow; i < boxStartRow + 3; i++) {
-            for (var j = boxStartColumn; j < boxStartColumn + 3; j++) {
+          const valueToRemove = SudokuValues[row][column];
+  
+          for (let i = boxStartRow; i < boxStartRow + 3; i++) {
+            for (let j = boxStartColumn; j < boxStartColumn + 3; j++) {
               if (i !== row || j !== column) {
-                updatedPossibleValues[i][j] = updatedPossibleValues[i][j].filter(
-                  value => value !== SudokuValues[row][column]
-                );
+                const index = updatedPossibleValues[i][j].indexOf(valueToRemove);
+                if (index !== -1) {
+                  updatedPossibleValues[i][j].splice(index, 1);
+                }
               }
             }
           }
@@ -211,6 +213,10 @@ function SudokuGrid() {
       }
     }
   }
+  
+
+
+
 
 
   function handleButtonClick() {
@@ -258,6 +264,7 @@ function SudokuGrid() {
 
     //5. A value must be within a certain row/column in another box, and therefore cannot be in that row/column in our box.
     impliedPlacementInBox()
+    //THIS FUNCTION IS BROKEN AND REMOVES THE 8 FROM THE START OF AL BOX ROWS AND COLUMNS
 
   }
 
@@ -363,12 +370,16 @@ function SudokuGrid() {
 
   let newSudokuValues
 
+
+
+
+
+  //FIX THIS!!!!
   function impliedPlacementInBox() {
     // Create a copy of the Sudoku grid
 
     for (let possibleAnswer = 0; possibleAnswer < 9; possibleAnswer++) {
       newSudokuValues = [...possibleSudokuValues.map((rowValues) => [...rowValues])];
-
 
       checkRowsForPlacement(possibleAnswer, newSudokuValues);
 
@@ -384,43 +395,28 @@ function SudokuGrid() {
 
 
   function checkRowsForPlacement(possibleAnswer, newSudokuValues) {
-    let rowtoConsider = -1
     for (let row = 0; row < 9; row += 3) {
       for (let column = 0; column < 9; column += 3) {
-        let answerCouldBeInThisRow = 0
+        let rowtoConsider = -1;
         for (let rowInMiniGrid = 0; rowInMiniGrid < 3; rowInMiniGrid++) {
-          let validAnswerInRow = 0
-
+          let answerCouldBeInThisRow = 0;
           for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
-
-            if (possibleSudokuValues[3 * Math.floor(row / 3) + rowInMiniGrid][3 * Math.floor(column / 3) + positionInRow]) {
-              validAnswerInRow += 1
+            const rowIndex = row + rowInMiniGrid;
+            const colIndex = column + positionInRow;
+  
+            if (!newSudokuValues[rowIndex][colIndex].includes(possibleAnswer)) {
+              answerCouldBeInThisRow++;
+              rowtoConsider = rowIndex;
             }
           }
-          if (validAnswerInRow !== 0) {
-            rowtoConsider = 3 * Math.floor(row / 3) + rowInMiniGrid
-            answerCouldBeInThisRow += 1
-            console.log(rowtoConsider)
-          }
           if (answerCouldBeInThisRow === 1) {
-            for (let otherMiniGrids = 1; otherMiniGrids < 3; otherMiniGrids++) {
-              for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
-
-
-
-
-                // Update the value in the Sudoku grid
-                // THIS WON'T WORK AS JAVASCRIPT DOESNT LIKE [-1] FOR ARRAYS
-                // CHANGE THIS TO UPDATE POSSIBLE VALUES, NOT THE SUDOKU VALUE ITSELF
-
-                let rightPosition = 3 * (Math.floor(column / 3) - otherMiniGrids) + positionInRow
-                if (rightPosition < 0) { rightPosition = 9 + rightPosition }
-                console.log("right position is:", rightPosition)
-
-                newSudokuValues[rowtoConsider][rightPosition] = newSudokuValues[rowtoConsider][rightPosition].filter(value => value !== possibleAnswer)
-
-
-
+            const miniGridStartColumn = Math.floor(column / 3) * 3;
+            for (let otherMiniGrids = 0; otherMiniGrids < 3; otherMiniGrids++) {
+              if (otherMiniGrids !== Math.floor(rowInMiniGrid / 3)) {
+                for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
+                  const rightPosition = miniGridStartColumn + positionInRow;
+                  newSudokuValues[rowtoConsider][rightPosition] = newSudokuValues[rowtoConsider][rightPosition].filter(value => value !== possibleAnswer);
+                }
               }
             }
           }
@@ -428,50 +424,40 @@ function SudokuGrid() {
       }
     }
   }
+  
 
 
   function checkColumnsForPlacement(possibleAnswer, newSudokuValues) {
-    let columntoConsider = -1
     for (let row = 0; row < 9; row += 3) {
       for (let column = 0; column < 9; column += 3) {
-        let answerCouldBeInThisColumn = 0
+        let columntoConsider = -1;
         for (let columnInMiniGrid = 0; columnInMiniGrid < 3; columnInMiniGrid++) {
-          let validAnswerInColumn = 0
-
+          let answerCouldBeInThisColumn = 0;
           for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
-
-            if (possibleSudokuValues[3 * Math.floor(row / 3) + positionInColumn][3 * Math.floor(column / 3) + columnInMiniGrid]) {
-              validAnswerInColumn += 1
+            const rowIndex = row + positionInColumn;
+            const colIndex = column + columnInMiniGrid;
+  
+            if (!newSudokuValues[rowIndex][colIndex].includes(possibleAnswer)) {
+              answerCouldBeInThisColumn++;
+              columntoConsider = colIndex;
             }
           }
-          if (validAnswerInColumn !== 0) {
-            columntoConsider = 3 * Math.floor(column / 3) + columnInMiniGrid
-            answerCouldBeInThisColumn += 1
-          }
           if (answerCouldBeInThisColumn === 1) {
-            for (let otherMiniGrids = 1; otherMiniGrids < 3; otherMiniGrids++) {
-              for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
-
-
-                // Update the value in the Sudoku grid
-                // THIS WON'T WORK AS JAVASCRIPT DOESNT LIKE [-1] FOR ARRAYS
-
-                let rightPosition = 3 * ((row / 3) - otherMiniGrids) + positionInColumn
-                console.log("right position is:", rightPosition)
-                if (rightPosition < 0) { rightPosition = 9 + rightPosition }
-
-                newSudokuValues[rightPosition][columntoConsider] = newSudokuValues[rightPosition][columntoConsider].filter(value => value !== possibleAnswer)
-
-
-
+            const miniGridStartRow = Math.floor(row / 3) * 3;
+            for (let otherMiniGrids = 0; otherMiniGrids < 3; otherMiniGrids++) {
+              if (otherMiniGrids !== Math.floor(columnInMiniGrid / 3)) {
+                for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
+                  const rightPosition = miniGridStartRow + positionInColumn;
+                  newSudokuValues[rightPosition][columntoConsider] = newSudokuValues[rightPosition][columntoConsider].filter(value => value !== possibleAnswer);
+                }
               }
             }
           }
-
         }
       }
     }
   }
+  
 
   // Final main Sudoku grid
   return (
