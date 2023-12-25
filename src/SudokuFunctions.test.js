@@ -1,4 +1,4 @@
-import { valueInCell, valueInRowOrColumn, valueInBox, onlyPossibleValueForCell, onlyValueInRow, onlyValueInColumn, onlyValueInBox } from "./SudokuGrid";
+import { valueInCell, valueInRowOrColumn, checkColumnsForPlacement,valueInBox, onlyPossibleValueForCell, onlyValueInRow, onlyValueInColumn, onlyValueInBox } from "./SudokuGrid";
 
 test("Complete cells have corresponding possible value", () => {
 
@@ -24,12 +24,9 @@ test("Complete cells have corresponding possible value", () => {
 
   expect(possibleSudokuValues[0][0][0]).toEqual(2);
 
-  for (let i=0; i<9;i++)
-  {
-    for (let j=0; j<9;j++)
-    {
-      if (i!=0 && j!=0)
-      {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (i != 0 && j != 0) {
         expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
       }
     }
@@ -76,14 +73,11 @@ test("Row and columns correctly updated", () => {
   }
 
 
-// All other values should be unchanged
+  // All other values should be unchanged
 
-for (let i=1; i<9;i++)
-  {
-    for (let j=1; j<9;j++)
-    {
-      if (i!=0 && j!=0)
-      {
+  for (let i = 1; i < 9; i++) {
+    for (let j = 1; j < 9; j++) {
+      if (i != 0 && j != 0) {
         expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
       }
     }
@@ -138,7 +132,7 @@ test("Box correctly updated", () => {
       }
     }
   }
-  
+
 
 });
 
@@ -339,3 +333,88 @@ test("Set cell value if only one cell in the box has the value in its possibleVa
 
 
 // CREATE TESTS FOR CHECKROWSFORPLACEMENT AND CHECKCOLUMNSFORPLACEMENT
+
+test("checkColumnsForPlacement", () => {
+
+  var possibleSudokuValues = Array.from({ length: 9 }, () =>
+    Array(9).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
+  );
+
+
+  // Filter out value 2 from all the cells in row 1 and 2 in box 7, i.e. columns 7, 8 and 9.
+  for (var i = 0; i < 2; i++) {
+    for (var j = 6; j < 9; j++) {
+      if (!(i === 0 && j === 0)) {
+        possibleSudokuValues[i][j] = possibleSudokuValues[i][j].filter(
+          (value) => value !== 2
+        );
+      }
+    }
+  }
+
+
+  // Answer of 2 Mock Sudoku Values can only be in column 3 for box 7. So we can remove possiblevalue of 2 from box 1 and 4 column 3.
+
+  /* 
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 3, 0, 0, 0, 0, 0, 0, 0],
+  [4, 5, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 2, 0], */
+
+
+  for (let possibleAnswer = 0; possibleAnswer < 9; possibleAnswer++) {
+    newPossibleValues = [...possibleSudokuValues.map((rowValues) => [...rowValues])];
+
+    checkColumnsForPlacement(possibleAnswer, newPossibleValues);
+  }
+
+  // Check that the cells in column 3 for boxes 1 and 4 no longer contain 2.
+  for (let z = 0; z < 6; z++) {
+    expect(newPossibleValues[2][z]).toEqual([1, 3, 4, 5, 6, 7, 8, 9]);
+  }
+
+
+  // Ensure all the other values  we changed remain unchanged.
+  for (let i = 0; i < 2; i++) {
+    for (let j = 6; j < 9; j++) {
+      if (!(i === 0 && j === 0)) {
+        expect(newPossibleValues[i][j]).toEqual([1, 3, 4, 5, 6, 7, 8, 9]);
+      }
+    }
+  }
+
+  // Ensure all other values are unchanged:
+
+  // Values from columns 4 to 9 should be unchnaged.
+  for (let i = 2; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+
+      expect(newPossibleValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    }
+  }
+
+  // Values in columns 1 and 2 upto row 6 should be unchnaged.
+  for (let z = 0; z < 6; z++) {
+    for (let y = 0; y < 2; z++) {
+      expect(newPossibleValues[y][z]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    }
+  }
+
+
+  //Valies in column 3 in box 7 should be unchanged.
+  for (let z = 6; z < 9; z++) {
+
+    expect(newPossibleValues[2][z]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+  }
+
+
+}
+)
+  ;

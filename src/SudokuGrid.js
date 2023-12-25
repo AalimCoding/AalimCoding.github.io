@@ -153,6 +153,7 @@ function SudokuGrid() {
   }
 
 
+
   function valueInCell(SudokuValues, updatedPossibleValues) {
     // UPDATE POSSIBLE VALUES
     for (var row = 0; row < 9; row++) {
@@ -169,6 +170,8 @@ function SudokuGrid() {
     }
   }
 
+
+  
   function valueInRowOrColumn(SudokuValues, updatedPossibleValues) {
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
@@ -191,6 +194,8 @@ function SudokuGrid() {
   }
 
 
+    //TODO FIX THIS FUNCTION - IT REMOVES 8 FROM ALL THE BOXES IN A GRID.
+    // TODO This seems to get rid of the desried value from other boxes in the same row
   function valueInBox(SudokuValues, updatedPossibleValues) {
     for (let row = 0; row < 9; row++) {
       for (let column = 0; column < 9; column++) {
@@ -321,13 +326,13 @@ function SudokuGrid() {
           if (validInColumn === 1 && validPosition !== -1) {
 
             // Create a copy of the Sudoku grid
-            const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
+            const newPossibleValues = [...SudokuValues.map((rowValues) => [...rowValues])];
 
             // Update the value in the Sudoku grid
-            newSudokuValues[validPosition][columnToCheck] = valueToCheckInColumn;
+            newPossibleValues[validPosition][columnToCheck] = valueToCheckInColumn;
 
             // Set the updated Sudoku grid
-            setSudokuValues(newSudokuValues);
+            setSudokuValues(newPossibleValues);
 
             break;//Exit the function after updating a single cell
           }
@@ -336,10 +341,18 @@ function SudokuGrid() {
     }
   }
 
+
+
+
+
+
+
+
+
   function onlyValueInBox() {
     for (let row = 0; row < 9; row++) {
       for (let column = 0; column < 9; column++) {
-        for (let valueToCheckInBox = 0; valueToCheckInBox < 9; valueToCheckInBox++) {
+        for (let valueToCheckInBox = 1; valueToCheckInBox <= 9; valueToCheckInBox++) {
           let validInBox = 0;
           let validI = -1;
           let validJ = -1;
@@ -358,9 +371,9 @@ function SudokuGrid() {
           }
 
           if (validInBox === 1 && validI !== -1 && validJ !== -1) {
-            const newSudokuValues = [...SudokuValues.map((rowValues) => [...rowValues])];
-            newSudokuValues[validI][validJ] = valueToCheckInBox;
-            setSudokuValues(newSudokuValues);
+            const newPossibleValues = [...SudokuValues.map((rowValues) => [...rowValues])];
+            newPossibleValues[validI][validJ] = valueToCheckInBox;
+            setSudokuValues(newPossibleValues);
             return; // Exit the function after updating a single cell
           }
         }
@@ -368,24 +381,37 @@ function SudokuGrid() {
     }
   }
 
-  let newSudokuValues
 
 
 
 
 
-  //FIX THIS!!!!
+
+
+
+
+
+
+  
+
+  let newPossibleValues
+
+
+
+
+
+
   function impliedPlacementInBox() {
     // Create a copy of the Sudoku grid
 
     for (let possibleAnswer = 0; possibleAnswer < 9; possibleAnswer++) {
-      newSudokuValues = [...possibleSudokuValues.map((rowValues) => [...rowValues])];
+      newPossibleValues = [...possibleSudokuValues.map((rowValues) => [...rowValues])];
 
-      checkRowsForPlacement(possibleAnswer, newSudokuValues);
+      checkRowsForPlacement(possibleAnswer, newPossibleValues);
 
-      checkColumnsForPlacement(possibleAnswer, newSudokuValues);
+      checkColumnsForPlacement(possibleAnswer, newPossibleValues);
 
-      setPossibleSudokuValues(newSudokuValues);
+      setPossibleSudokuValues(newPossibleValues);
     }
     // Set the updated Sudoku grid
 
@@ -394,7 +420,7 @@ function SudokuGrid() {
 
 
 
-  function checkRowsForPlacement(possibleAnswer, newSudokuValues) {
+  function checkRowsForPlacement(possibleAnswer, newPossibleValues) {
     for (let row = 0; row < 9; row += 3) {
       for (let column = 0; column < 9; column += 3) {
         let rowtoConsider = -1;
@@ -404,7 +430,7 @@ function SudokuGrid() {
             const rowIndex = row + rowInMiniGrid;
             const colIndex = column + positionInRow;
   
-            if (!newSudokuValues[rowIndex][colIndex].includes(possibleAnswer)) {
+            if (!newPossibleValues[rowIndex][colIndex].includes(possibleAnswer)) {
               answerCouldBeInThisRow++;
               rowtoConsider = rowIndex;
             }
@@ -415,7 +441,7 @@ function SudokuGrid() {
               if (otherMiniGrids !== Math.floor(rowInMiniGrid / 3)) {
                 for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
                   const rightPosition = miniGridStartColumn + positionInRow;
-                  newSudokuValues[rowtoConsider][rightPosition] = newSudokuValues[rowtoConsider][rightPosition].filter(value => value !== possibleAnswer);
+                  newPossibleValues[rowtoConsider][rightPosition] = newPossibleValues[rowtoConsider][rightPosition].filter(value => value !== possibleAnswer);
                 }
               }
             }
@@ -427,7 +453,7 @@ function SudokuGrid() {
   
 
 
-  function checkColumnsForPlacement(possibleAnswer, newSudokuValues) {
+  function checkColumnsForPlacement(possibleAnswer, newPossibleValues) {
     for (let row = 0; row < 9; row += 3) {
       for (let column = 0; column < 9; column += 3) {
         let columntoConsider = -1;
@@ -437,7 +463,7 @@ function SudokuGrid() {
             const rowIndex = row + positionInColumn;
             const colIndex = column + columnInMiniGrid;
   
-            if (!newSudokuValues[rowIndex][colIndex].includes(possibleAnswer)) {
+            if (!newPossibleValues[rowIndex][colIndex].includes(possibleAnswer)) {
               answerCouldBeInThisColumn++;
               columntoConsider = colIndex;
             }
@@ -448,7 +474,7 @@ function SudokuGrid() {
               if (otherMiniGrids !== Math.floor(columnInMiniGrid / 3)) {
                 for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
                   const rightPosition = miniGridStartRow + positionInColumn;
-                  newSudokuValues[rightPosition][columntoConsider] = newSudokuValues[rightPosition][columntoConsider].filter(value => value !== possibleAnswer);
+                  newPossibleValues[rightPosition][columntoConsider] = newPossibleValues[rightPosition][columntoConsider].filter(value => value !== possibleAnswer);
                 }
               }
             }
@@ -734,6 +760,40 @@ export function onlyValueInBox(SudokuValues, possibleSudokuValues) {
           SudokuValues[validI][validJ] = valueToCheckInBox;
 
           break; // Exit the function after updating a single cell
+        }
+      }
+    }
+  }
+}
+
+
+
+
+export   function checkColumnsForPlacement(possibleAnswer, newPossibleValues) {
+  for (let row = 0; row < 9; row += 3) {
+    for (let column = 0; column < 9; column += 3) {
+      let columntoConsider = -1;
+      for (let columnInMiniGrid = 0; columnInMiniGrid < 3; columnInMiniGrid++) {
+        let answerCouldBeInThisColumn = 0;
+        for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
+          const rowIndex = row + positionInColumn;
+          const colIndex = column + columnInMiniGrid;
+
+          if (!newPossibleValues[rowIndex][colIndex].includes(possibleAnswer)) {
+            answerCouldBeInThisColumn++;
+            columntoConsider = colIndex;
+          }
+        }
+        if (answerCouldBeInThisColumn === 1) {
+          const miniGridStartRow = Math.floor(row / 3) * 3;
+          for (let otherMiniGrids = 0; otherMiniGrids < 3; otherMiniGrids++) {
+            if (otherMiniGrids !== Math.floor(columnInMiniGrid / 3)) {
+              for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
+                const rightPosition = miniGridStartRow + positionInColumn;
+                newPossibleValues[rightPosition][columntoConsider] = newPossibleValues[rightPosition][columntoConsider].filter(value => value !== possibleAnswer);
+              }
+            }
+          }
         }
       }
     }
