@@ -229,18 +229,9 @@ function SudokuGrid() {
 
     var updatedPossibleValues = [...possibleSudokuValues]
 
-
     valueInCell(SudokuValues, updatedPossibleValues)
-
-
     valueInRowOrColumn(SudokuValues, updatedPossibleValues)
-
-
     valueInBox(SudokuValues, updatedPossibleValues)
-
-
-
-
 
     setPossibleSudokuValues(updatedPossibleValues)
 

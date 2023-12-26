@@ -1,4 +1,13 @@
-import { valueInCell, valueInRowOrColumn, checkColumnsForPlacement,valueInBox, onlyPossibleValueForCell, onlyValueInRow, onlyValueInColumn, onlyValueInBox } from "./SudokuGrid";
+import {
+  valueInCell,
+  valueInRowOrColumn,
+  checkColumnsForPlacement,
+  valueInBox,
+  onlyPossibleValueForCell,
+  onlyValueInRow,
+  onlyValueInColumn,
+  onlyValueInBox
+} from "./SudokuGrid";
 
 test("Complete cells have corresponding possible value", () => {
 
@@ -24,10 +33,10 @@ test("Complete cells have corresponding possible value", () => {
 
   expect(possibleSudokuValues[0][0][0]).toEqual(2);
 
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      if (i != 0 && j != 0) {
-        expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
+  for (let row = 0; row < 9; row++) {
+    for (let column = 0; column < 9; column++) {
+      if (row != 0 && column != 0) {
+        expect(possibleSudokuValues[row][column]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
       }
     }
   }
@@ -75,10 +84,10 @@ test("Row and columns correctly updated", () => {
 
   // All other values should be unchanged
 
-  for (let i = 1; i < 9; i++) {
-    for (let j = 1; j < 9; j++) {
-      if (i != 0 && j != 0) {
-        expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
+  for (let row = 1; row < 9; row++) {
+    for (let column = 1; column < 9; column++) {
+      if (row != 0 && column != 0) {
+        expect(possibleSudokuValues[row][column]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
       }
     }
   }
@@ -125,10 +134,10 @@ test("Box correctly updated", () => {
 
   // All other values should be unchanged
 
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      if ((i < 3 || j < 3) || (i >= 3 && j >= 3)) {
-        expect(possibleSudokuValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  for (let row = 0; row < 9; row++) {
+    for (let column = 0; column < 9; column++) {
+      if ((row < 3 || column < 3) || (row >= 3 && column >= 3)) {
+        expect(possibleSudokuValues[row][column]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
       }
     }
   }
@@ -159,7 +168,7 @@ test("Box correctly updated", () => {
 
 // beforeEach function to set up initial values before each test
 beforeEach(() => {
-  jest.resetModules(); // Reset modules to clear cached state
+  columnest.resetModules(); // Reset modules to clear cached state
 });
 
 test("Set cell value if only one possible value in cells possibleValue array", () => {
@@ -202,8 +211,8 @@ test("Set cell value if only one cell in the row has the value in its possibleVa
   );
 
   // Filter out value 2 from all cells in row 0 except the first one
-  for (var i = 1; i < 9; i++) {
-    possibleSudokuValues[0][i] = possibleSudokuValues[0][i].filter(
+  for (var row = 1; row < 9; row++) {
+    possibleSudokuValues[0][row] = possibleSudokuValues[0][row].filter(
       (value) => value !== 2
     );
   }
@@ -243,8 +252,8 @@ test("Set cell value if only one cell in the column has the value in its possibl
   );
 
   // Filter out value 2 from all cells in column 0 except the first one
-  for (var i = 1; i < 9; i++) {
-    possibleSudokuValues[i][0] = possibleSudokuValues[i][0].filter(
+  for (var row = 1; row < 9; row++) {
+    possibleSudokuValues[row][0] = possibleSudokuValues[row][0].filter(
       (value) => value !== 2
     );
   }
@@ -285,10 +294,10 @@ test("Set cell value if only one cell in the box has the value in its possibleVa
   );
 
   // Filter out value 2 from all cells in box 1 except the [0][0].
-  for (var i = 0; i < 3; i++) {
-    for (var j = 0; j < 3; j++) {
-      if (!(i === 0 && j === 0)) {
-        possibleSudokuValues[i][j] = possibleSudokuValues[i][j].filter(
+  for (var row = 0; row < 3; row++) {
+    for (var column = 0; column < 3; column++) {
+      if (!(row === 0 && column === 0)) {
+        possibleSudokuValues[row][column] = possibleSudokuValues[i][column].frowlter(
           (value) => value !== 2
         );
       }
@@ -332,7 +341,7 @@ test("Set cell value if only one cell in the box has the value in its possibleVa
 
 
 
-// CREATE TESTS FOR CHECKROWSFORPLACEMENT AND CHECKCOLUMNSFORPLACEMENT
+// TODO CREATE TESTS FOR CHECKROWSFORPLACEMENT AND CHECKCOLUMNSFORPLACEMENT
 
 test("checkColumnsForPlacement", () => {
 
@@ -342,10 +351,10 @@ test("checkColumnsForPlacement", () => {
 
 
   // Filter out value 2 from all the cells in row 1 and 2 in box 7, i.e. columns 7, 8 and 9.
-  for (var i = 0; i < 2; i++) {
-    for (var j = 6; j < 9; j++) {
-      if (!(i === 0 && j === 0)) {
-        possibleSudokuValues[i][j] = possibleSudokuValues[i][j].filter(
+  for (var row = 0; row < 2; row++) {
+    for (var column = 6; column < 9; column++) {
+      if (!(row === 0 && column === 0)) {
+        possibleSudokuValues[row][column] = possibleSudokuValues[row][column].filter(
           (value) => value !== 2
         );
       }
@@ -366,6 +375,7 @@ test("checkColumnsForPlacement", () => {
   [4, 5, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 2, 0], */
 
+  let newPossibleValues
 
   for (let possibleAnswer = 0; possibleAnswer < 9; possibleAnswer++) {
     newPossibleValues = [...possibleSudokuValues.map((rowValues) => [...rowValues])];
@@ -380,10 +390,10 @@ test("checkColumnsForPlacement", () => {
 
 
   // Ensure all the other values  we changed remain unchanged.
-  for (let i = 0; i < 2; i++) {
-    for (let j = 6; j < 9; j++) {
-      if (!(i === 0 && j === 0)) {
-        expect(newPossibleValues[i][j]).toEqual([1, 3, 4, 5, 6, 7, 8, 9]);
+  for (let row = 0; row < 2; row++) {
+    for (let column = 6; column < 9; column++) {
+      if (!(row === 0 && column === 0)) {
+        expect(newPossibleValues[row][column]).toEqual([1, 3, 4, 5, 6, 7, 8, 9]);
       }
     }
   }
@@ -391,26 +401,26 @@ test("checkColumnsForPlacement", () => {
   // Ensure all other values are unchanged:
 
   // Values from columns 4 to 9 should be unchnaged.
-  for (let i = 2; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
+  for (let row = 2; row < 9; row++) {
+    for (let column = 0; column < 9; column++) {
 
-      expect(newPossibleValues[i][j]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      expect(newPossibleValues[row][column]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
     }
   }
 
   // Values in columns 1 and 2 upto row 6 should be unchnaged.
-  for (let z = 0; z < 6; z++) {
-    for (let y = 0; y < 2; z++) {
-      expect(newPossibleValues[y][z]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  for (let row = 0; row < 6; row++) {
+    for (let column = 0; column < 2; column++) {
+      expect(newPossibleValues[row][column]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     }
   }
 
 
   //Valies in column 3 in box 7 should be unchanged.
-  for (let z = 6; z < 9; z++) {
+  for (let column = 6; column < 9; column++) {
 
-    expect(newPossibleValues[2][z]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(newPossibleValues[2][column]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
   }
 
