@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTheme } from "./ThemeContext";
 import SudokuInfo from "./SudokuInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faMagnifyingGlass, faBrush /* faGear */ } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faMagnifyingGlass, faBrush } from "@fortawesome/free-solid-svg-icons";
 
 /* I use Chakra UI Buttons. For docs go to:
 https://chakra-ui.com/docs/components/button/usage */
@@ -171,7 +171,7 @@ function SudokuGrid() {
   }
 
 
-  
+
   function valueInRowOrColumn(SudokuValues, updatedPossibleValues) {
     for (var row = 0; row < 9; row++) {
       for (var column = 0; column < 9; column++) {
@@ -194,8 +194,8 @@ function SudokuGrid() {
   }
 
 
-    //TODO FIX THIS FUNCTION - IT REMOVES 8 FROM ALL THE BOXES IN A GRID.
-    // TODO This seems to get rid of the desried value from other boxes in the same row
+  //TODO FIX THIS FUNCTION - IT REMOVES 8 FROM ALL THE BOXES IN A GRID.
+  // TODO This seems to get rid of the desried value from other boxes in the same row
   function valueInBox(SudokuValues, updatedPossibleValues) {
     for (let row = 0; row < 9; row++) {
       for (let column = 0; column < 9; column++) {
@@ -203,7 +203,7 @@ function SudokuGrid() {
           const boxStartRow = Math.floor(row / 3) * 3;
           const boxStartColumn = Math.floor(column / 3) * 3;
           const valueToRemove = SudokuValues[row][column];
-  
+
           for (let i = boxStartRow; i < boxStartRow + 3; i++) {
             for (let j = boxStartColumn; j < boxStartColumn + 3; j++) {
               if (i !== row || j !== column) {
@@ -218,7 +218,7 @@ function SudokuGrid() {
       }
     }
   }
-  
+
 
 
 
@@ -383,7 +383,7 @@ function SudokuGrid() {
 
 
 
-  
+
 
   let newPossibleValues
 
@@ -420,7 +420,7 @@ function SudokuGrid() {
           for (let positionInRow = 0; positionInRow < 3; positionInRow++) {
             const rowIndex = row + rowInMiniGrid;
             const colIndex = column + positionInRow;
-  
+
             if (!newPossibleValues[rowIndex][colIndex].includes(possibleAnswer)) {
               answerCouldBeInThisRow++;
               rowtoConsider = rowIndex;
@@ -441,7 +441,7 @@ function SudokuGrid() {
       }
     }
   }
-  
+
 
 
   function checkColumnsForPlacement(possibleAnswer, newPossibleValues) {
@@ -453,7 +453,7 @@ function SudokuGrid() {
           for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
             const rowIndex = row + positionInColumn;
             const colIndex = column + columnInMiniGrid;
-  
+
             if (!newPossibleValues[rowIndex][colIndex].includes(possibleAnswer)) {
               answerCouldBeInThisColumn++;
               columntoConsider = colIndex;
@@ -465,6 +465,8 @@ function SudokuGrid() {
               if (otherMiniGrids !== Math.floor(columnInMiniGrid / 3)) {
                 for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
                   const rightPosition = miniGridStartRow + positionInColumn;
+                  console.log(rightPosition)
+                  console.log(columntoConsider)
                   newPossibleValues[rightPosition][columntoConsider] = newPossibleValues[rightPosition][columntoConsider].filter(value => value !== possibleAnswer);
                 }
               }
@@ -474,7 +476,7 @@ function SudokuGrid() {
       }
     }
   }
-  
+
 
   // Final main Sudoku grid
   return (
@@ -495,20 +497,21 @@ function SudokuGrid() {
       </GridItem>
 
       <GridItem colSpan={1}>
-      <RadioGroup> Current Input Number: FIX THIS USING CUSTOM RADIO BUTTONS
-        <Stack direction="column">
-        <Radio>All</Radio> {/* This is the default selection, allowing you to see all grid cells */}
-          <Radio>1</Radio>
-          <Radio>2</Radio>
-          <Radio>3</Radio>
-          <Radio>4</Radio>
-          <Radio>5</Radio>
-          <Radio>6</Radio>
-          <Radio>7</Radio>
-          <Radio>8</Radio>
-          <Radio>9</Radio>
-        </Stack>
-      </RadioGroup>
+        <RadioGroup> 
+          Current Input Number: {/* TODO THIS USING CUSTOM RADIO BUTTONS */}
+          <Stack direction="column">
+            <Radio>All</Radio> {/* This is the default selection, allowing you to see all grid cells */}
+            <Radio>1</Radio>
+            <Radio>2</Radio>
+            <Radio>3</Radio>
+            <Radio>4</Radio>
+            <Radio>5</Radio>
+            <Radio>6</Radio>
+            <Radio>7</Radio>
+            <Radio>8</Radio>
+            <Radio>9</Radio>
+          </Stack>
+        </RadioGroup>
       </GridItem>
     </Grid>
 
@@ -760,28 +763,50 @@ export function onlyValueInBox(SudokuValues, possibleSudokuValues) {
 
 
 
-export   function checkColumnsForPlacement(possibleAnswer, newPossibleValues) {
+export function checkColumnsForPlacement(possibleAnswer, newPossibleValues) {
+  // Loop through the Sudoku grid by 3x3 mini-grids
   for (let row = 0; row < 9; row += 3) {
     for (let column = 0; column < 9; column += 3) {
+      // Initialize variable to track the column where the answer might be placed
       let columntoConsider = -1;
+      
+      // Iterate through each column within the mini-grid
       for (let columnInMiniGrid = 0; columnInMiniGrid < 3; columnInMiniGrid++) {
+        // Initialize counter for possible positions the answer might occupy within a column
         let answerCouldBeInThisColumn = 0;
+        
+        // Check each cell within the column
         for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
+          // Calculate row and column indices for the current cell
           const rowIndex = row + positionInColumn;
           const colIndex = column + columnInMiniGrid;
 
+          // If the cell doesn't contain the possible answer, increment the counter and track the column
           if (!newPossibleValues[rowIndex][colIndex].includes(possibleAnswer)) {
             answerCouldBeInThisColumn++;
             columntoConsider = colIndex;
           }
         }
+        
+        // If there's only one possible position for the answer within the column
         if (answerCouldBeInThisColumn === 1) {
+          // Calculate the starting row of the mini-grid
           const miniGridStartRow = Math.floor(row / 3) * 3;
+          
+          // Iterate through the other mini-grids in the same column but different rows
           for (let otherMiniGrids = 0; otherMiniGrids < 3; otherMiniGrids++) {
+            // Exclude the current mini-grid
             if (otherMiniGrids !== Math.floor(columnInMiniGrid / 3)) {
+              // Iterate through each cell in the column of the different mini-grid
               for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
+                // Calculate the row index within the different mini-grid
                 const rightPosition = miniGridStartRow + positionInColumn;
-                newPossibleValues[rightPosition][columntoConsider] = newPossibleValues[rightPosition][columntoConsider].filter(value => value !== possibleAnswer);
+
+                // Calculate the index to remove the possible answer from the cell
+                const indexToRemove = (otherMiniGrids % 3) * 3 + columntoConsider;
+                
+                // Filter out the possible answer from the cell in the different mini-grid's column
+                newPossibleValues[rightPosition][indexToRemove] = newPossibleValues[rightPosition][indexToRemove].filter(value => value !== possibleAnswer);
               }
             }
           }
@@ -790,5 +815,8 @@ export   function checkColumnsForPlacement(possibleAnswer, newPossibleValues) {
     }
   }
 }
+
+
+
 
 export default SudokuGrid;

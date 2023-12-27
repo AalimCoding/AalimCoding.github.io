@@ -2,7 +2,17 @@
   text-align: center;
 }
 
-::selection {
+h1{color: brown;
+font-size: 40px;
+font-weight: bold;}
+
+p{color: green;
+  font-size: 20px;
+;}
+
+[iteminbox]{font-weight: bold;}
+
+/* ::selection {
   color: black;
   background: #b8d8be;
 }
@@ -41,4 +51,4 @@
     transform: rotate(360deg);
   }
 }
-
+ */

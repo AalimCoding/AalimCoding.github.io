@@ -166,11 +166,6 @@ test("Box correctly updated", () => {
 
 
 
-// beforeEach function to set up initial values before each test
-beforeEach(() => {
-  columnest.resetModules(); // Reset modules to clear cached state
-});
-
 test("Set cell value if only one possible value in cells possibleValue array", () => {
   var possibleSudokuValues = Array.from({ length: 9 }, () =>
     Array(9).fill([1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -297,7 +292,7 @@ test("Set cell value if only one cell in the box has the value in its possibleVa
   for (var row = 0; row < 3; row++) {
     for (var column = 0; column < 3; column++) {
       if (!(row === 0 && column === 0)) {
-        possibleSudokuValues[row][column] = possibleSudokuValues[i][column].frowlter(
+        possibleSudokuValues[row][column] = possibleSudokuValues[row][column].filter(
           (value) => value !== 2
         );
       }
