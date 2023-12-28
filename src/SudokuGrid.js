@@ -66,6 +66,15 @@ function SudokuGrid() {
 
       return newValues;
     });
+
+    //Immediately set the possibleValue to the value of the cell
+    var COPYpossibleSudokuValues = [...possibleSudokuValues]
+    // Add one becasue cell values are zero indexed i.e. 0 to 8 but possibl values are 1 to 9.
+    // If the value is less than 9 we set the possible value to increase with the cell
+    if (SudokuValues[row][column] !== 9) { COPYpossibleSudokuValues[row][column] = [SudokuValues[row][column] + 1] }
+    //Otherwise, if the cell is being reset to 0,i.e. being blank, we want the posible value to reset to default.
+    else { COPYpossibleSudokuValues[row][column] = [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+    setPossibleSudokuValues(COPYpossibleSudokuValues)
   }
 
   // Generating the Sudoku grid items
@@ -391,7 +400,7 @@ function SudokuGrid() {
 
 
 
-
+  //TODO REDO THIS FUNCTION FROM SCRATC//
   function impliedPlacementInBox() {
     // Create a copy of the Sudoku grid
 
@@ -465,8 +474,6 @@ function SudokuGrid() {
               if (otherMiniGrids !== Math.floor(columnInMiniGrid / 3)) {
                 for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
                   const rightPosition = miniGridStartRow + positionInColumn;
-                  console.log(rightPosition)
-                  console.log(columntoConsider)
                   newPossibleValues[rightPosition][columntoConsider] = newPossibleValues[rightPosition][columntoConsider].filter(value => value !== possibleAnswer);
                 }
               }
@@ -497,7 +504,7 @@ function SudokuGrid() {
       </GridItem>
 
       <GridItem colSpan={1}>
-        <RadioGroup> 
+        <RadioGroup>
           Current Input Number: {/* TODO THIS USING CUSTOM RADIO BUTTONS */}
           <Stack direction="column">
             <Radio>All</Radio> {/* This is the default selection, allowing you to see all grid cells */}
@@ -769,12 +776,12 @@ export function checkColumnsForPlacement(possibleAnswer, newPossibleValues) {
     for (let column = 0; column < 9; column += 3) {
       // Initialize variable to track the column where the answer might be placed
       let columntoConsider = -1;
-      
+
       // Iterate through each column within the mini-grid
       for (let columnInMiniGrid = 0; columnInMiniGrid < 3; columnInMiniGrid++) {
         // Initialize counter for possible positions the answer might occupy within a column
         let answerCouldBeInThisColumn = 0;
-        
+
         // Check each cell within the column
         for (let positionInColumn = 0; positionInColumn < 3; positionInColumn++) {
           // Calculate row and column indices for the current cell
@@ -787,12 +794,12 @@ export function checkColumnsForPlacement(possibleAnswer, newPossibleValues) {
             columntoConsider = colIndex;
           }
         }
-        
+
         // If there's only one possible position for the answer within the column
         if (answerCouldBeInThisColumn === 1) {
           // Calculate the starting row of the mini-grid
           const miniGridStartRow = Math.floor(row / 3) * 3;
-          
+
           // Iterate through the other mini-grids in the same column but different rows
           for (let otherMiniGrids = 0; otherMiniGrids < 3; otherMiniGrids++) {
             // Exclude the current mini-grid
@@ -804,7 +811,7 @@ export function checkColumnsForPlacement(possibleAnswer, newPossibleValues) {
 
                 // Calculate the index to remove the possible answer from the cell
                 const indexToRemove = (otherMiniGrids % 3) * 3 + columntoConsider;
-                
+
                 // Filter out the possible answer from the cell in the different mini-grid's column
                 newPossibleValues[rightPosition][indexToRemove] = newPossibleValues[rightPosition][indexToRemove].filter(value => value !== possibleAnswer);
               }
