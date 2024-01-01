@@ -89,6 +89,15 @@ function SudokuGrid() {
       const column = (i % 3) * 3 + (j % 3);
       const itemId = `Box ${box} ItemInBox ${itemInBox} Row ${row} Column ${column}`;
 
+
+      const colorIndex = SudokuValues[row][column] - 1; // Adjusting value to match array indexing (0-based)
+      const backgroundColor = colorIndex >= 0 && colorIndex < 9
+        ? themeColours[themeChoice][colorIndex]
+        : theme === "light"
+          ? "white"
+          : "black";
+
+
       // Creating Sudoku cell components
       boxItems.push(
         <GridItem
@@ -114,20 +123,8 @@ function SudokuGrid() {
           style={{
             cursor: "pointer",
 
-            background:
 
-              SudokuValues[row][column] === 1 ? themeColours[themeChoice][0] :
-                SudokuValues[row][column] === 2 ? themeColours[themeChoice][1] :
-                  SudokuValues[row][column] === 3 ? themeColours[themeChoice][2] :
-                    SudokuValues[row][column] === 4 ? themeColours[themeChoice][3] :
-                      SudokuValues[row][column] === 5 ? themeColours[themeChoice][4] :
-                        SudokuValues[row][column] === 6 ? themeColours[themeChoice][5] :
-                          SudokuValues[row][column] === 7 ? themeColours[themeChoice][6] :
-                            SudokuValues[row][column] === 8 ? themeColours[themeChoice][7] :
-                              SudokuValues[row][column] === 9 ? themeColours[themeChoice][8] :
-
-                                theme === "light" ? "white" : "black",
-
+            background: backgroundColor,
             color:
               SudokuValues[row][column] !== 0 ? "black" :
                 theme === "light" ? "black" : "white",

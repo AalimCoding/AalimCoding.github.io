@@ -19,13 +19,13 @@ export function ControlRadioButtons({ setWeaponType, weaponType, whoseTurnIsIt, 
             {options.map((value) => {
                 const radio = getRadioProps({ value });
                 return (
-                    <RadioCardWeapons key={value} {...radio} 
-                    
-           
+                    <RadioCardWeapons key={value} {...radio}
 
-                    isDisabled={(!Ammo[noOfGrid][0] && value.includes('Large')) || (!Ammo[noOfGrid][1] && value.includes('Scatter')) || (whoseTurnIsIt !== noOfGrid)}>
+
+
+                        isDisabled={(!Ammo[noOfGrid][0] && value.includes('Large')) || (!Ammo[noOfGrid][1] && value.includes('Scatter')) || (whoseTurnIsIt !== noOfGrid)}>
                         {value}
-                        
+
                     </RadioCardWeapons>
                 );
             })}

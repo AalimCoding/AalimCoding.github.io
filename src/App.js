@@ -13,6 +13,7 @@ import ProjectsPreview from './Homepage';
 
 function App() {
 
+  // TODO ADD STREAK CHECKER FOR GITHUB AND LEETCODE
   return (
     <div className="App">
       <HashRouter>
